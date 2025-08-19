@@ -270,11 +270,17 @@
     // ページ切り替え
     function goToStep(stepId, event){
       if(event) event.preventDefault();
-      document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
+      
+      // STEPページだけ非表示にする
+      document.querySelectorAll('.step-page').forEach(p => p.classList.remove("active"));
+      
+      // 指定のページだけ表示
       document.getElementById(stepId).classList.add("active");
+      
       // メニューを閉じる
       document.getElementById("menu").classList.remove("open");
     }
+
 
     function openStory(step) {
       document.getElementById(`story${step}`).style.display = 'flex';
@@ -284,9 +290,14 @@
     }
 
     function goProblem(step, num) {
-      document.querySelectorAll('.step-page, .problem-page').forEach(p => p.style.display='none');
+      // すべての小問題ページだけ非表示
+      document.querySelectorAll('.problem-page').forEach(p => p.style.display='none');
+      // 指定の小問題ページを表示
       document.getElementById(`step${step}-problem${num}`).style.display = 'block';
+      // STEPページは非表示にする
+      document.getElementById(`step${step}`).style.display = 'none';
     }
+
 
     function checkProblemAnswer(step, num) {
       const input = document.getElementById(`answer${step}-${num}`).value.trim();
