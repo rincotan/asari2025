@@ -10,13 +10,22 @@
 
 <div class="page active">
   <h2 id="step-title"></h2>
-  <div class="problem-grid" id="problem-grid"></div>
+  
+  <!-- STEP内の小問ボタン -->
+  <div id="problem-grid"></div>
+  
+  <!-- STEP解答欄 -->
+  <div style="text-align:center; margin-top:20px;">
+    <input type="text" id="step-input" placeholder="このSTEPの答えを入力">
+    <button id="step-submit">決定</button>
+  </div>
 
   <div style="text-align:center; margin-top:20px;">
     <button onclick="goToStep(0)">タイトルに戻る</button>
     <button id="prev-btn">前のSTEPへ</button>
   </div>
 </div>
+
 
 <div class="hamburger" id="hamburger">
   <div></div><div></div><div></div>
