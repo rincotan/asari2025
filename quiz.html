@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>小問題ページ</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="page active" style="text-align:center;">
+  <h2 id="quiz-title"></h2>
+  <img id="quiz-img" src="" alt="" style="max-width:80%; margin:20px 0;">
+  <div>
+    <input type="text" id="quiz-answer" placeholder="答えを入力">
+    <button id="submit-btn">決定</button>
+  </div>
+  <div style="margin-top:20px;">
+    <button onclick="goToStep(stepNum)">STEPに戻る</button>
+    <button onclick="goToStep(0)">タイトルに戻る</button>
+  </div>
+</div>
+
+<div class="hamburger" id="hamburger">
+  <div></div><div></div><div></div>
+</div>
+<div class="menu" id="menu">
+  <a href="#" data-step="0">タイトル</a>
+  <a href="#" data-step="1">STEP1</a>
+  <a href="#" data-step="2" class="locked">STEP2</a>
+  <a href="#" data-step="3" class="locked">STEP3</a>
+</div>
+
+<script src="main.js"></script>
+<script>
+const params = new URLSearchParams(window.location.search);
+const stepNum = parseInt(params.get("step"))||1;
+const quizNum = parseInt(params.get("quiz"))||1;
+
+const quizData={
+  1:{1:{img:"problem1.jpg",ans:"ひろとん"},2:{img:"problem2.jpg",ans:"..."},3:{img:"...",ans:"..."},4:{img:"...",ans:"..."},5:{img:"...",ans:"..."},6:{img:"...",ans:"..."}},
+  2:{1:{img:"...",ans:"あさり"},2:{img:"...",ans:"..."},3:{img:"...",ans:"..."},4:{img:"...",ans:"..."},5:{img:"...",ans:"..."},6:{img:"...",ans:"..."}},
+  3:{1:{img:"...",ans:"えにぐま"},2:{img:"...",ans:"..."},3:{img:"...",ans:"..."},4:{img:"...",ans:"..."},5:{img:"...",ans:"..."},6:{img:"...",ans:"..."}},
+};
+
+document.getElementById("quiz-title").innerText=`STEP${stepNum} 問題${quizNum}`;
+document.getElementById("quiz-img").src = quizData[stepNum][quizNum].img;
+
+document.getElementById("submit-btn").onclick = ()=> {
+  checkQuizAnswer(stepNum, quizNum, quizData[stepNum][quizNum].ans);
+};
+</script>
+</body>
+</html>

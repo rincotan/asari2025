@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>STEPページ</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="page active">
+  <h2 id="step-title"></h2>
+  <div class="problem-grid" id="problem-grid"></div>
+
+  <div style="text-align:center; margin-top:20px;">
+    <button onclick="goToStep(0)">タイトルに戻る</button>
+    <button id="prev-btn">前のSTEPへ</button>
+  </div>
+</div>
+
+<div class="hamburger" id="hamburger">
+  <div></div><div></div><div></div>
+</div>
+<div class="menu" id="menu">
+  <a href="#" data-step="0">タイトル</a>
+  <a href="#" data-step="1">STEP1</a>
+  <a href="#" data-step="2" class="locked">STEP2</a>
+  <a href="#" data-step="3" class="locked">STEP3</a>
+</div>
+
+<script src="main.js"></script>
+<script>
+const params = new URLSearchParams(window.location.search);
+const stepNum = parseInt(params.get("step"))||1;
+const stepData = {1:6,2:6,3:6};
+
+document.getElementById("step-title").innerText=`STEP${stepNum}`;
+document.getElementById("prev-btn").disabled = stepNum===1;
+document.getElementById("prev-btn").onclick=()=>goToStep(stepNum-1);
+
+generateStepButtons(stepNum, stepData[stepNum]);
+
+// アンロック済みSTEP更新
+if(!unlockedStep.includes(stepNum)) {
+  unlockedStep.push(stepNum);
+  localStorage.setItem("unlockedStep", JSON.stringify(unlockedStep));
+}
+</script>
+</body>
+</html>
