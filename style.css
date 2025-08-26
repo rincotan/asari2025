@@ -311,9 +311,22 @@ body.step3 #problem-grid button {
   color: #fff;
 }
 
+.quiz1 {
+  --main-color: #f08080;
+  --hover-color: #f7bfc7;
+}
+.quiz2 {
+  --main-color: #7991ff;
+  --hover-color: #abbaff;
+}
+.quiz3 {
+  --main-color: #ffde59;
+  --hover-color: #fff5ce;
+}
+
 /* 上の番号 */
-#step1-quiz-title {
-  border: 2px solid #f08080;
+#quiz-title {
+  border: 2px solid var(--main-color);
   padding: 10px 20px;
   border-radius: 6px;
   font-size: 24px;
@@ -321,8 +334,8 @@ body.step3 #problem-grid button {
   margin-bottom: 20px;
 }
 
-#quiz-img1 {
-  border: 3px solid #f08080;
+#quiz-img {
+  border: 3px solid var(--main-color);
   padding: 10px;
   margin-bottom: 20px;
   background-color: #fff;
@@ -381,7 +394,7 @@ body.step3 #problem-grid button {
 }
 .hint-btn:hover,
 #hint-btn:hover {
-  background: #f7bfc7;
+  background: var(--hover-color);
   color: #fff;
 }
 
@@ -399,7 +412,7 @@ body.step3 #problem-grid button {
   transition: background 0.2s;
 }
 #close-btn:hover {
-  background: #f7bfc7;
+  background: var(--hover-color);
   color: #fff;
 }
 

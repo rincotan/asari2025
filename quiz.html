@@ -10,35 +10,15 @@
     <!-- <div id="pc-warning">※スマホ専用サイトです。スマートフォンでご利用ください。</div> -->
 
     <div class="page active" style="text-align: center">
-      <h2 id="step1-quiz-title"></h2>
-      <h2 id="step2-quiz-title"></h2>
-      <h2 id="step3-quiz-title"></h2>
-
-      <img
-        id="quiz-img1"
-        src=""
-        alt=""
-        style="max-width: 80%; margin: 20px 0"
-      />
-      <img
-        id="quiz-img2"
-        src=""
-        alt=""
-        style="max-width: 80%; margin: 20px 0"
-      />
-      <img
-        id="quiz-img3"
-        src=""
-        alt=""
-        style="max-width: 80%; margin: 20px 0"
-      />
+      <h2 id="quiz-title"></h2>
+      <img id="quiz-img" src="" alt="" style="max-width: 80%; margin: 20px 0" />
       <div class="input-area">
         <input type="text" id="quiz-answer" placeholder="答えを入力" />
         <button id="submit-btn">決定</button>
         <p id="quiz-answer-result"></p>
       </div>
       <div class="bottom-buttons">
-        <button id="close-btn" onclick="goToStep()">閉じる</button>
+        <button id="close-btn" onclick="goToStep(stepNum)">閉じる</button>
         <button id="hint-btn">ヒント</button>
       </div>
     </div>
@@ -90,10 +70,12 @@
       };
 
       document.getElementById(
-        "step" + stepNum + "-quiz-title"
+        "quiz-title"
       ).innerText = `STEP${stepNum} 問題${quizNum}`;
-      document.getElementById("quiz-img" + stepNum).src =
-        quizData[stepNum][quizNum].img;
+      document.getElementById("quiz-img").src = quizData[stepNum][quizNum].img;
+      document
+        .getElementsByClassName("page")[0]
+        .classList.add(`quiz${stepNum}`);
 
       document.getElementById("submit-btn").onclick = () => {
         checkQuizAnswer("quiz-answer", quizData[stepNum][quizNum].ans);
