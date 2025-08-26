@@ -7,7 +7,8 @@
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
+<!-- <div id="pc-warning">※スマホ専用サイトです。スマートフォンでご利用ください。</div> -->
+ 
 <div class="page active">
   <h2 id="step-title"></h2>
   
@@ -18,11 +19,6 @@
   <div style="text-align:center; margin-top:20px;">
     <input type="text" id="step-input" placeholder="このSTEPの答えを入力">
     <button id="step-submit">決定</button>
-  </div>
-
-  <div style="text-align:center; margin-top:20px;">
-    <button onclick="goToStep(0)">タイトルに戻る</button>
-    <button id="prev-btn">前のSTEPへ</button>
   </div>
 </div>
 
@@ -38,22 +34,5 @@
 </div>
 
 <script src="main.js"></script>
-<script>
-const params = new URLSearchParams(window.location.search);
-const stepNum = parseInt(params.get("step"))||1;
-const stepData = {1:6,2:6,3:6};
-
-document.getElementById("step-title").innerText=`STEP${stepNum}`;
-document.getElementById("prev-btn").disabled = stepNum===1;
-document.getElementById("prev-btn").onclick=()=>goToStep(stepNum-1);
-
-generateStepButtons(stepNum, stepData[stepNum]);
-
-// アンロック済みSTEP更新
-if(!unlockedStep.includes(stepNum)) {
-  unlockedStep.push(stepNum);
-  localStorage.setItem("unlockedStep", JSON.stringify(unlockedStep));
-}
-</script>
 </body>
 </html>

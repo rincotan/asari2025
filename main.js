@@ -1,3 +1,11 @@
+// pc判定＆警告
+window.addEventListener("DOMContentLoaded", ()=>{
+  const pcWarn = document.getElementById("pc-warning");
+  if(window.innerWidth > 600 && pcWarn){
+    pcWarn.style.display = "block";
+    document.body.style.overflow = "hidden";
+  }
+});
 
 // localStorage 初期化
 if(!localStorage.getItem("solvedQuiz")) localStorage.setItem("solvedQuiz","{}");
@@ -11,11 +19,21 @@ window.addEventListener("DOMContentLoaded", ()=>{
   const stepNum = parseInt(params.get("step")) || 1;
 
   const stepTitle = document.getElementById("step-title");
-  stepTitle.innerText = `STEP${stepNum}`;
+  if(stepTitle) stepTitle.innerText = `STEP${stepNum}`;
 
   // ハンバーガー開閉
   document.getElementById("hamburger").addEventListener("click", ()=>{
     document.getElementById("menu").classList.toggle("open");
+  });
+
+  // メニューのロック状態反映
+  document.querySelectorAll(".menu a").forEach(a=>{
+    const targetStep = parseInt(a.dataset.step);
+    if(targetStep > 0 && !unlockedStep.includes(targetStep)){
+      a.classList.add("locked");   // CSSで灰色などに
+    } else {
+      a.classList.remove("locked");
+    }
   });
 
   // 戻る・進むメニュー
@@ -23,13 +41,16 @@ window.addEventListener("DOMContentLoaded", ()=>{
     a.addEventListener("click", e=>{
       e.preventDefault();
       const targetStep = parseInt(a.dataset.step);
-      if(targetStep <= stepNum){
-        // 戻る場合は常にOK
-        window.location.href = targetStep===0?"index.html":`step.html?step=${targetStep}`;
+
+      if(targetStep === 0){
+        window.location.href="index.html";
       } else {
-        const unlockedStep = JSON.parse(localStorage.getItem("unlockedStep")||"[1]");
-        if(unlockedStep.includes(targetStep)) window.location.href=`step.html?step=${targetStep}`;
-        else alert("まだこのSTEPは解放されていません！");
+        const unlocked = JSON.parse(localStorage.getItem("unlockedStep")||"[1]");
+        if(unlocked.includes(targetStep)){
+          window.location.href=`step.html?step=${targetStep}`;
+        } else {
+          alert("まだこのSTEPは解放されていません！");
+        }
       }
     });
   });
@@ -38,25 +59,38 @@ window.addEventListener("DOMContentLoaded", ()=>{
   const stepAnswers = {1:"ひろとん", 2:"あさり", 3:"えにぐま"};
 
   // STEP入力判定
-  document.getElementById("step-submit").addEventListener("click", ()=>{
-    const val = document.getElementById("step-input").value.trim();
-    if(val === stepAnswers[stepNum]){
-      alert("正解！次のSTEPが解放されました。");
+  const submitBtn = document.getElementById("step-submit");
+  if(submitBtn){
+    submitBtn.addEventListener("click", ()=>{
+      const val = document.getElementById("step-input").value.trim();
+      if(val === stepAnswers[stepNum]){
+        alert("正解！次のSTEPが解放されました。");
 
-      // アンロック処理
-      const unlockedStep = JSON.parse(localStorage.getItem("unlockedStep")||"[1]");
-      if(!unlockedStep.includes(stepNum+1)) unlockedStep.push(stepNum+1);
-      localStorage.setItem("unlockedStep", JSON.stringify(unlockedStep));
+        // アンロック処理
+        const unlocked = JSON.parse(localStorage.getItem("unlockedStep")||"[1]");
 
-      // 次のSTEPへ
-      if(stepNum<3) window.location.href=`step.html?step=${stepNum+1}`;
-      else alert("最後のSTEPです！");
-    } else {
-      alert("違います！");
-    }
-  });
+        // 現在のSTEPを記録
+        if(!unlocked.includes(stepNum)) unlocked.push(stepNum);
+
+        // 次のSTEPも解放
+        if(stepNum < 3 && !unlocked.includes(stepNum+1)){
+          unlocked.push(stepNum+1);
+        }
+
+        localStorage.setItem("unlockedStep", JSON.stringify(unlocked));
+
+        // 次のSTEPへ
+        if(stepNum < 3) {
+          window.location.href=`step.html?step=${stepNum+1}`;
+        } else {
+          alert("最後のSTEPです！");
+        }
+      } else {
+        alert("違います！");
+      }
+    });
+  }
 });
-
 
 
 // 戻る系共通
@@ -67,10 +101,12 @@ function goToStep(step){
 
 // STEPページの問題ボタン生成
 function generateStepButtons(stepNum,total){
+  console.log("出てこい１");
   const grid = document.getElementById("problem-grid");
   if(!grid) return;
   grid.innerHTML="";
   for(let i=1;i<=total;i++){
+    console.log("出てこい");
     const btn=document.createElement("button");
     btn.innerText=i;
     btn.onclick = ()=> window.location.href=`quiz.html?step=${stepNum}&quiz=${i}`;
@@ -80,13 +116,38 @@ function generateStepButtons(stepNum,total){
 }
 
 // 小問題の正解判定
-function checkQuizAnswer(stepNum, quizNum, correct){
-  const input = document.getElementById("quiz-answer").value.trim();
-  if(input===correct){
-    alert("正解！");
-    solvedQuiz[`s${stepNum}q${quizNum}`]=true;
-    localStorage.setItem("solvedQuiz", JSON.stringify(solvedQuiz));
-    window.location.href=`step.html?step=${stepNum}`;
-  } else alert("不正解！");
+function checkAnswer(inputId, correct) {
+  const val = document.getElementById(inputId).value.trim();
+  const result = document.getElementById(inputId + "-result");
+  result.textContent = (val === correct) ? "正解！" : "不正解…";
 }
 
+function checkStepAnswer(stepNum, correct) {
+  const val = document.getElementById(`step${stepNum}-answer`).value.trim();
+  if (val === correct) {
+    alert("正解！次のSTEPが解放されました");
+    unlockStep(stepNum + 1);
+  } else {
+    alert("不正解…");
+  }
+}
+
+//これ何
+const params = new URLSearchParams(window.location.search);
+const stepNum = parseInt(params.get("step"))||1;
+const stepData = {1:5,2:6,3:6};
+
+
+const stepTitleElem = document.getElementById("step-title");
+if(stepTitleElem) stepTitleElem.innerText = `STEP${stepNum}`;
+//document.getElementById("prev-btn").disabled = stepNum===1;
+//document.getElementById("prev-btn").onclick=()=>goToStep(stepNum-1);
+
+generateStepButtons(stepNum, stepData[stepNum]);
+
+
+// アンロック済みSTEP更新
+if(!unlockedStep.includes(stepNum)) {
+  unlockedStep.push(stepNum);
+  localStorage.setItem("unlockedStep", JSON.stringify(unlockedStep));
+}

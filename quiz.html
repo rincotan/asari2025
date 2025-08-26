@@ -7,6 +7,7 @@
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
+<!-- <div id="pc-warning">※スマホ専用サイトです。スマートフォンでご利用ください。</div> -->
 
 <div class="page active" style="text-align:center;">
   <h2 id="quiz-title"></h2>
@@ -15,10 +16,7 @@
     <input type="text" id="quiz-answer" placeholder="答えを入力">
     <button id="submit-btn">決定</button>
   </div>
-  <div style="margin-top:20px;">
-    <button onclick="goToStep(stepNum)">STEPに戻る</button>
-    <button onclick="goToStep(0)">タイトルに戻る</button>
-  </div>
+
 </div>
 
 <div class="hamburger" id="hamburger">
@@ -32,15 +30,16 @@
 </div>
 
 <script src="main.js"></script>
+
 <script>
-const params = new URLSearchParams(window.location.search);
-const stepNum = parseInt(params.get("step"))||1;
+//const params = new URLSearchParams(window.location.search);
+//const stepNum = parseInt(params.get("step"))||1;
 const quizNum = parseInt(params.get("quiz"))||1;
 
 const quizData={
-  1:{1:{img:"problem1.jpg",ans:"ひろとん"},2:{img:"problem2.jpg",ans:"..."},3:{img:"...",ans:"..."},4:{img:"...",ans:"..."},5:{img:"...",ans:"..."},6:{img:"...",ans:"..."}},
-  2:{1:{img:"...",ans:"あさり"},2:{img:"...",ans:"..."},3:{img:"...",ans:"..."},4:{img:"...",ans:"..."},5:{img:"...",ans:"..."},6:{img:"...",ans:"..."}},
-  3:{1:{img:"...",ans:"えにぐま"},2:{img:"...",ans:"..."},3:{img:"...",ans:"..."},4:{img:"...",ans:"..."},5:{img:"...",ans:"..."},6:{img:"...",ans:"..."}},
+  1:{1:{img:"images/q11.png",ans:"ひろとん"},2:{img:"images/q12.png",ans:".png"},3:{img:"images/q13.png",ans:".png"},4:{img:"images/q14.png",ans:".png"},5:{img:"images/q15.png",ans:".png"}},
+  2:{1:{img:"images/q21.png",ans:"あさり"},2:{img:"images/q22.png",ans:".png"},3:{img:"images/q23.png",ans:".png"},4:{img:"images/q24.png",ans:".png"},5:{img:"images/q25.png",ans:".png"},6:{img:"images/q26.png",ans:".png"}},
+  3:{1:{img:"images/q31.png",ans:"えにぐま"},2:{img:"images/q32.png",ans:".png"},3:{img:"images/q33.png",ans:".png"},4:{img:"images/q34.png",ans:".png"},5:{img:"images/q35.png",ans:".png"},6:{img:"images/q36.png",ans:".png"}},
 };
 
 document.getElementById("quiz-title").innerText=`STEP${stepNum} 問題${quizNum}`;
@@ -50,5 +49,6 @@ document.getElementById("submit-btn").onclick = ()=> {
   checkQuizAnswer(stepNum, quizNum, quizData[stepNum][quizNum].ans);
 };
 </script>
+
 </body>
 </html>
