@@ -59,7 +59,7 @@ window.addEventListener("DOMContentLoaded", ()=>{
   });
 
   // STEPごとの答え
-  const stepAnswers = {1:"ひろとん", 2:"あさり", 3:"えにぐま"};
+  const stepAnswers = {1:"たいたん", 2:"かぎ", 3:"こめっと06"};
 
   // STEP入力判定
   const submitBtn = document.getElementById("step-submit");
