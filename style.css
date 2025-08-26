@@ -1,9 +1,16 @@
+@font-face {
+  font-family: 'しねきゃぷしょん';
+  src: url('fonts/cinecaption226.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
 /* スマホ専用レイアウト */
 body,
 html {
   margin: 0;
   padding: 0;
-  font-family: sans-serif;
+  font-family: 'しねきゃぷしょん';
   max-width: 480px;
   margin-left: auto;
   margin-right: auto;
@@ -56,6 +63,7 @@ input[type="text"] {
   font-size: 20px;
   border-radius: 0 !important;
   padding: 0;
+  font-family: 'しねきゃぷしょん';
 }
 
 .hamburger {
@@ -107,10 +115,12 @@ input[type="text"] {
   color: #333;
   text-decoration: none;
   border-bottom: 1px solid #eee;
+  font-family: 'しねきゃぷしょん';
 }
 .menu a.locked {
   color: #aaa;
   pointer-events: none;
+  font-family: 'しねきゃぷしょん';
 }
 
 /* PCで開いたときの警告用 */
@@ -127,6 +137,7 @@ input[type="text"] {
   font-size: 1.5em;
   text-align: center;
   padding-top: 40vh;
+  font-family: 'しねきゃぷしょん';
 }
 
 /* STEP1用 */
@@ -151,6 +162,7 @@ body.step3 {
   margin: 24px 0 12px 0;
   color: #fff;
   letter-spacing: 0.1em;
+  font-family: 'しねきゃぷしょん';
 }
 
 body.step1 #step-title {
@@ -174,6 +186,7 @@ body.step3 #step-title {
   color: #333;
   max-width: 90vw;
   box-sizing: border-box;
+  font-family: 'しねきゃぷしょん';
 }
 
 body.step1 .story-box,
@@ -201,9 +214,11 @@ body.step3 .step-message {
   font-weight: bold;
   cursor: pointer;
   transition: background 0.2s, color 0.2s;
+  font-family: 'しねきゃぷしょん';
 }
 .story-btn:hover {
   color: #fff;
+  font-family: 'しねきゃぷしょん';
 }
 
 body.step1 .story-btn {
@@ -252,6 +267,7 @@ body.step3 .story-btn:hover {
   padding: 0;
 
   border-radius: 0 !important;
+  font-family: 'しねきゃぷしょん';
 }
 
 body.step1 #problem-grid button:hover {
@@ -294,6 +310,7 @@ body.step3 #problem-grid button {
   max-width: 220px;
   margin-right: 8px;
   box-sizing: border-box;
+  font-family: 'しねきゃぷしょん';
 }
 #step-submit {
   font-size: 1.1em;
@@ -305,10 +322,12 @@ body.step3 #problem-grid button {
   font-weight: bold;
   cursor: pointer;
   transition: background 0.2s;
+  font-family: 'しねきゃぷしょん';
 }
 #step-submit:hover {
   background: #f7bfc7;
   color: #fff;
+  font-family: 'しねきゃぷしょん';
 }
 
 .quiz1 {
@@ -332,6 +351,7 @@ body.step3 #problem-grid button {
   font-size: 24px;
   font-weight: bold;
   margin-bottom: 20px;
+  font-family: 'しねきゃぷしょん';
 }
 
 #quiz-img {
@@ -351,6 +371,7 @@ body.step3 #problem-grid button {
   border: 2px solid #ccc;
   border-radius: 4px;
   width: 200px;
+  font-family: 'しねきゃぷしょん';
 }
 
 .input-area button {
@@ -361,6 +382,7 @@ body.step3 #problem-grid button {
   background-color: #444;
   color: white;
   cursor: pointer;
+  font-family: 'しねきゃぷしょん';
 }
 
 .bottom-buttons {
@@ -375,6 +397,7 @@ body.step3 #problem-grid button {
   font-size: 16px;
   background-color: #ccc;
   cursor: pointer;
+  font-family: 'しねきゃぷしょん';
 }
 
 /* ヒントボタン */
@@ -391,11 +414,13 @@ body.step3 #problem-grid button {
   font-weight: bold;
   cursor: pointer;
   transition: background 0.2s;
+  font-family: 'しねきゃぷしょん';
 }
 .hint-btn:hover,
 #hint-btn:hover {
   background: var(--hover-color);
   color: #fff;
+  font-family: 'しねきゃぷしょん';
 }
 
 #close-btn {
@@ -410,10 +435,12 @@ body.step3 #problem-grid button {
   font-weight: bold;
   cursor: pointer;
   transition: background 0.2s;
+  font-family: 'しねきゃぷしょん';
 }
 #close-btn:hover {
   background: var(--hover-color);
   color: #fff;
+  font-family: 'しねきゃぷしょん';
 }
 
 /* レスポンシブ */

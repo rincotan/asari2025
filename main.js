@@ -1,3 +1,4 @@
+
 // pc判定＆警告
 window.addEventListener("DOMContentLoaded", () => {
   const pcWarn = document.getElementById("pc-warning");
