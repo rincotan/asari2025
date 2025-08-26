@@ -1,54 +1,104 @@
 <!DOCTYPE html>
 <html lang="ja">
-<head>
-<meta charset="UTF-8">
-<title>小問題ページ</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="stylesheet" href="style.css">
-</head>
-<body>
-<!-- <div id="pc-warning">※スマホ専用サイトです。スマートフォンでご利用ください。</div> -->
+  <head>
+    <meta charset="UTF-8" />
+    <title>小問題ページ</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <!-- <div id="pc-warning">※スマホ専用サイトです。スマートフォンでご利用ください。</div> -->
 
-<div class="page active" style="text-align:center;">
-  <h2 id="quiz-title"></h2>
-  <img id="quiz-img" src="" alt="" style="max-width:80%; margin:20px 0;">
-  <div>
-    <input type="text" id="quiz-answer" placeholder="答えを入力">
-    <button id="submit-btn">決定</button>
-  </div>
+    <div class="page active" style="text-align: center">
+      <h2 id="step1-quiz-title"></h2>
+      <h2 id="step2-quiz-title"></h2>
+      <h2 id="step3-quiz-title"></h2>
 
-</div>
+      <img
+        id="quiz-img1"
+        src=""
+        alt=""
+        style="max-width: 80%; margin: 20px 0"
+      />
+      <img
+        id="quiz-img2"
+        src=""
+        alt=""
+        style="max-width: 80%; margin: 20px 0"
+      />
+      <img
+        id="quiz-img3"
+        src=""
+        alt=""
+        style="max-width: 80%; margin: 20px 0"
+      />
+      <div class="input-area">
+        <input type="text" id="quiz-answer" placeholder="答えを入力" />
+        <button id="submit-btn">決定</button>
+        <p id="quiz-answer-result"></p>
+      </div>
+      <div class="bottom-buttons">
+        <button id="close-btn" onclick="goToStep()">閉じる</button>
+        <button id="hint-btn">ヒント</button>
+      </div>
+    </div>
 
-<div class="hamburger" id="hamburger">
-  <div></div><div></div><div></div>
-</div>
-<div class="menu" id="menu">
-  <a href="#" data-step="0">タイトル</a>
-  <a href="#" data-step="1">STEP1</a>
-  <a href="#" data-step="2" class="locked">STEP2</a>
-  <a href="#" data-step="3" class="locked">STEP3</a>
-</div>
+    <div class="hamburger" id="hamburger">
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
+    <div class="menu" id="menu">
+      <a href="#" data-step="0">タイトル</a>
+      <a href="#" data-step="1">STEP1</a>
+      <a href="#" data-step="2" class="locked">STEP2</a>
+      <a href="#" data-step="3" class="locked">STEP3</a>
+    </div>
 
-<script src="main.js"></script>
+    <script src="main.js"></script>
 
-<script>
-//const params = new URLSearchParams(window.location.search);
-//const stepNum = parseInt(params.get("step"))||1;
-const quizNum = parseInt(params.get("quiz"))||1;
+    <script>
+      //const params = new URLSearchParams(window.location.search);
+      // stepNum = parseInt(params.get("step")) || 1;
+      const quizNum = parseInt(params.get("quiz")) || 1;
+      console.log(stepNum, quizNum);
 
-const quizData={
-  1:{1:{img:"images/q11.png",ans:"とら"},2:{img:"images/q12.png",ans:"にじ"},3:{img:"images/q13.png",ans:"とけい"},4:{img:"images/q14.png",ans:"いえ"},5:{img:"images/q15.png",ans:"ぞう"}},
-  2:{1:{img:"images/q21.png",ans:"かみなり"},2:{img:"images/q22.png",ans:"さなぎ"},3:{img:"images/q23.png",ans:"かみ"},4:{img:"images/q24.png",ans:"さんま"},5:{img:"images/q25.png",ans:"かまきり"},6:{img:"images/q26.png",ans:"かたな"}},
-  3:{1:{img:"images/q31.png",ans:"未定"},2:{img:"images/q32.png",ans:"さい"},3:{img:"images/q33.png",ans:"はんげつ"},4:{img:"images/q34.png",ans:"じんせい"},5:{img:"images/q35.png",ans:"あいこ"},6:{img:"images/q36.png",ans:"未定"}},
-};
+      const quizData = {
+        1: {
+          1: { img: "images/q11.png", ans: "とら" },
+          2: { img: "images/q12.png", ans: "にじ" },
+          3: { img: "images/q13.png", ans: "とけい" },
+          4: { img: "images/q14.png", ans: "いえ" },
+          5: { img: "images/q15.png", ans: "ぞう" },
+        },
+        2: {
+          1: { img: "images/q21.png", ans: "かみなり" },
+          2: { img: "images/q22.png", ans: "さなぎ" },
+          3: { img: "images/q23.png", ans: "かみ" },
+          4: { img: "images/q24.png", ans: "さんま" },
+          5: { img: "images/q25.png", ans: "かまきり" },
+          6: { img: "images/q26.png", ans: "かたな" },
+        },
+        3: {
+          1: { img: "images/q31.png", ans: "未定" },
+          2: { img: "images/q32.png", ans: "さい" },
+          3: { img: "images/q33.png", ans: "はんげつ" },
+          4: { img: "images/q34.png", ans: "じんせい" },
+          5: { img: "images/q35.png", ans: "あいこ" },
+          6: { img: "images/q36.png", ans: "未定" },
+        },
+      };
 
-document.getElementById("quiz-title").innerText=`STEP${stepNum} 問題${quizNum}`;
-document.getElementById("quiz-img").src = quizData[stepNum][quizNum].img;
+      document.getElementById(
+        "step" + stepNum + "-quiz-title"
+      ).innerText = `STEP${stepNum} 問題${quizNum}`;
+      document.getElementById("quiz-img" + stepNum).src =
+        quizData[stepNum][quizNum].img;
 
-document.getElementById("submit-btn").onclick = ()=> {
-  checkQuizAnswer(stepNum, quizNum, quizData[stepNum][quizNum].ans);
-};
-</script>
-
-</body>
+      document.getElementById("submit-btn").onclick = () => {
+        checkQuizAnswer("quiz-answer", quizData[stepNum][quizNum].ans);
+      };
+      console.log(document.getElementById("submit-btn").onclick);
+    </script>
+  </body>
 </html>
