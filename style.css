@@ -305,7 +305,6 @@ body.step3 #problem-grid button {
   font-size: 1.1em;
   padding: 12px;
   border: 2px solid #aaa;
-  border-radius: 8px;
   width: 60vw;
   max-width: 220px;
   margin-right: 8px;
@@ -316,7 +315,6 @@ body.step3 #problem-grid button {
   font-size: 1.1em;
   padding: 10px 24px;
   border: none;
-  border-radius: 8px;
   background: #333;
   color: #fff;
   font-weight: bold;
@@ -359,30 +357,6 @@ body.step3 #problem-grid button {
   padding: 10px;
   margin-bottom: 20px;
   background-color: #fff;
-}
-.input-area {
-  display: flex;
-  gap: 10px;
-  margin-bottom: 20px;
-}
-.input-area input {
-  padding: 8px;
-  font-size: 16px;
-  border: 2px solid #ccc;
-  border-radius: 4px;
-  width: 200px;
-  font-family: 'しねきゃぷしょん';
-}
-
-.input-area button {
-  padding: 8px 16px;
-  font-size: 16px;
-  border: none;
-  border-radius: 4px;
-  background-color: #444;
-  color: white;
-  cursor: pointer;
-  font-family: 'しねきゃぷしょん';
 }
 
 .bottom-buttons {
@@ -454,5 +428,108 @@ body.step3 #problem-grid button {
     min-width: 56px;
     height: 20vw;
     font-size: 3em;
+  }
+}
+
+.input-group {
+  display: flex;
+  width: 100%;
+  max-width: 480px;
+  margin: 24px auto 16px auto;
+  border:2px solid #222;
+  border-radius: 0;
+  overflow: hidden;
+  background: #fff;
+  box-sizing: border-box;
+}
+
+.input-group input[type="text"] {
+  flex: 1 1 0;
+  border: none;
+  outline: none;
+  font-size: 1.2em;
+  padding: 14px 12px;
+  background: #fff;
+  color: #333;
+  border-radius: 0;
+  font-family: 'しねきゃぷしょん', sans-serif;
+  text-align: center;
+  min-width: 0;
+  height: 48px;
+  box-sizing: border-box;
+}
+
+.input-group input[type="text"]::placeholder {
+  color: #aaa;
+  opacity: 1;
+  font-size: 1em;
+  text-align: center;
+}
+
+.input-group button {
+  border: none;
+  background: #444;
+  color: #ffffff;
+  font-size: 1.2em;
+  font-weight: bold;
+  padding: 0 28px;
+  cursor: pointer;
+  border-radius: 0;
+  transition: background 0.2s;
+  font-family: 'しねきゃぷしょん', sans-serif;
+  white-space: nowrap;
+  letter-spacing: 0.05em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 48px;
+  box-sizing: border-box;
+}
+
+.input-group button:hover {
+  background: #222;
+}
+
+/* 既存の個別指定を完全に無効化 */
+input[type="text"],
+#step-input,
+#quiz-answer {
+  border: none !important;
+  border-radius: 0 !important;
+  margin: 0 !important;
+  width: 100% !important;
+  max-width: none !important;
+  box-sizing: border-box !important;
+  font-size: inherit !important;
+  padding: 0 !important;
+  background: none !important;
+}
+
+#step-submit,
+#submit-btn {
+  border: none !important;
+  border-radius: 0 !important;
+  margin: 0 !important;
+  width: auto !important;
+  max-width: none !important;
+  box-sizing: border-box !important;
+  font-size: inherit !important;
+  height: auto !important;
+}
+
+/* レスポンシブ */
+@media (max-width: 600px) {
+  .input-group {
+    max-width: 98vw;
+  }
+  .input-group input[type="text"] {
+    font-size: 1em;
+    padding: 10px 6px;
+    height: 38px;
+  }
+  .input-group button {
+    font-size: 1em;
+    padding: 0 14px;
+    height: 38px;
   }
 }
