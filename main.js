@@ -18,6 +18,9 @@ window.addEventListener("DOMContentLoaded", ()=>{
   const params = new URLSearchParams(window.location.search);
   const stepNum = parseInt(params.get("step")) || 1;
 
+  // bodyにstepクラスを付与
+  document.body.classList.add(`step${stepNum}`);
+
   const stepTitle = document.getElementById("step-title");
   if(stepTitle) stepTitle.innerText = `STEP${stepNum}`;
 
@@ -89,6 +92,12 @@ window.addEventListener("DOMContentLoaded", ()=>{
         alert("違います！");
       }
     });
+  }
+  // ...既存のコード...
+  const pcWarn = document.getElementById("pc-warning");
+  if(window.innerWidth > 600 && pcWarn){
+    pcWarn.style.display = "block";
+    document.body.style.overflow = "hidden";
   }
 });
 
