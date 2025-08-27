@@ -3,7 +3,9 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>マツバツゲーム</title>
+    <title>マルバツゲーム</title>
+    <link rel="stylesheet" href="style.css" />
+
     <style>
       body {
         display: flex;
@@ -35,11 +37,11 @@
 
       .grid-container {
         display: grid;
-        grid-template-columns: repeat(3, 100px);
-        grid-template-rows: repeat(3, 100px);
+        grid-template-columns: repeat(5, 80px);
+        grid-template-rows: repeat(5, 80px);
         border: 2px solid black;
-        width: 300px;
-        height: 300px;
+        width: 400px;
+        height: 400px;
         margin-top: 120px;
         position: relative;
       }
@@ -55,15 +57,15 @@
       }
 
       .circle {
-        width: 70px;
-        height: 70px;
+        width: 56px;
+        height: 56px;
         border: 4px solid red;
         border-radius: 50%;
       }
 
       .cross {
-        width: 70px;
-        height: 70px;
+        width: 56px;
+        height: 56px;
         position: relative;
       }
       .cross::before,
@@ -89,7 +91,7 @@
         font-size: 2em;
         font-weight: bold;
         color: #444;
-        margin: 20px 0 10px;
+        margin: 120px 0 10px;
         text-align: center;
       }
 
@@ -111,13 +113,27 @@
       .retry-btn:active {
         transform: scale(0.95);
       }
+      #canvas {
+        margin-top: 70px;
+        position: absolute;
+        top: 120px; /* grid-container の位置に合わせる */
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 10; /* 確実に前面に */
+        pointer-events: auto; /* Canvas がイベントを受け取る */
+      }
     </style>
   </head>
   <body>
     <div class="header-container">
       <div class="message">まだあなたのことは信用できません</div>
     </div>
-
+    <canvas
+      id="canvas"
+      width="400"
+      height="520"
+      style="border: 1px solid #aaa; position: absolute"
+    ></canvas>
     <div class="grid-container" id="board"></div>
 
     <!-- 勝敗表示 -->
@@ -205,8 +221,16 @@
       // 盤面描画関数
       function renderBoard() {
         boardContainer.innerHTML = "";
+        for (let i = 0; i < 5; i++) {
+          const div = document.createElement("div");
+          div.classList.add("grid-cell");
+          boardContainer.appendChild(div);
+        }
 
         board.forEach((row, x) => {
+          const div = document.createElement("div");
+          div.classList.add("grid-cell");
+          boardContainer.appendChild(div);
           row.forEach((cell, y) => {
             const div = document.createElement("div");
             div.classList.add("grid-cell");
@@ -226,7 +250,15 @@
 
             boardContainer.appendChild(div);
           });
+          const div2 = document.createElement("div");
+          div2.classList.add("grid-cell");
+          boardContainer.appendChild(div2);
         });
+        for (let i = 0; i < 5; i++) {
+          const div = document.createElement("div");
+          div.classList.add("grid-cell");
+          boardContainer.appendChild(div);
+        }
 
         // 勝敗チェック
         const winner = checkWinner(board);
@@ -273,6 +305,201 @@
 
       // 初期描画
       renderBoard();
+    </script>
+    <script>
+      const canvas = document.getElementById("canvas");
+      const ctx = canvas.getContext("2d");
+
+      // まずは塗りつぶし背景を用意（例：黒い板）
+      ctx.fillStyle = "black";
+      ctx.fillRect(0, 0, canvas.width, 400);
+      ctx.clearRect(80, 80, 240, 240);
+
+      let isErasing = false;
+      const eraserSize = 10; // 消しゴム半径
+
+      function erase(x, y) {
+        ctx.save();
+        ctx.globalCompositeOperation = "destination-out"; // 消すモード
+        ctx.beginPath();
+        ctx.arc(x, y, eraserSize, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+      }
+
+      // マウス押したら消しゴムモードON
+      canvas.addEventListener("mousedown", (e) => {
+        isErasing = true;
+        const rect = canvas.getBoundingClientRect();
+        erase(e.clientX - rect.left, e.clientY - rect.top);
+      });
+
+      // 離したらOFF
+      canvas.addEventListener("mouseup", () => {
+        isErasing = false;
+      });
+
+      // 移動中に押されてたら消す
+      canvas.addEventListener("mousemove", (e) => {
+        if (!isErasing) return;
+        const rect = canvas.getBoundingClientRect();
+        erase(e.clientX - rect.left, e.clientY - rect.top);
+      });
+
+      // スマホ対応（タッチ）
+      canvas.addEventListener("touchstart", (e) => {
+        isErasing = true;
+      });
+      canvas.addEventListener("touchend", () => {
+        isErasing = false;
+      });
+      canvas.addEventListener(
+        "touchmove",
+        (e) => {
+          if (!isErasing) return;
+          const rect = canvas.getBoundingClientRect();
+          const touch = e.touches[0];
+          erase(touch.clientX - rect.left, touch.clientY - rect.top);
+          e.preventDefault(); // スクロール抑制
+        },
+        { passive: false }
+      );
+      canvas.addEventListener("click", (e) => {
+        const rect = canvas.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+
+        // ピクセルのRGBA情報を取得
+        const pixel = ctx.getImageData(x, y, 1, 1).data;
+        const alpha = pixel[3]; // 0〜255
+
+        if (alpha > 0) {
+          // まだ塗りつぶされている部分 → canvas側の処理
+          console.log("キャンバスにブロックされました");
+          // e.preventDefault(); // 裏へのクリックを完全に防ぐ
+        } else {
+          console.log("裏の要素にクリックを転送します");
+          // 透明（削られて裏が見える部分）→ 裏にクリックを転送
+          const el = document.elementFromPoint(e.clientX, e.clientY);
+          console.log(el);
+          if (el && el !== canvas) {
+            el.click(); // 裏要素のclickを強制発火
+          }
+        }
+      });
+
+      // マウス座標取得
+      function getMousePos(e) {
+        const rect = canvas.getBoundingClientRect();
+        return {
+          x: e.clientX - rect.left,
+          y: e.clientY - rect.top,
+        };
+      }
+
+      // ドラッグ操作
+      let draggingPiece = null;
+      canvas.addEventListener("mousedown", (e) => {
+        const pos = getMousePos(e);
+        // 駒がクリックされているか判定
+        for (let p of pieces) {
+          const dx = pos.x - p.x;
+          const dy = pos.y - p.y;
+          if (dx * dx + dy * dy <= p.radius * p.radius) {
+            draggingPiece = p;
+            p.dragging = true;
+            return;
+          }
+        }
+        // それ以外なら消しゴム
+        isErasing = true;
+        erase(pos.x, pos.y);
+      });
+
+      canvas.addEventListener("mousemove", (e) => {
+        const pos = getMousePos(e);
+        if (draggingPiece && draggingPiece.dragging) {
+          draggingPiece.x = pos.x;
+          draggingPiece.y = pos.y;
+          draw();
+        } else if (isErasing) {
+          erase(pos.x, pos.y);
+        }
+      });
+
+      canvas.addEventListener("mouseup", () => {
+        if (draggingPiece) draggingPiece.dragging = false;
+        draggingPiece = null;
+        isErasing = false;
+      });
+
+      // タッチ対応
+      canvas.addEventListener("touchstart", (e) => {
+        const touch = e.touches[0];
+        const pos = {
+          x: touch.clientX - canvas.getBoundingClientRect().left,
+          y: touch.clientY - canvas.getBoundingClientRect().top,
+        };
+        for (let p of pieces) {
+          const dx = pos.x - p.x;
+          const dy = pos.y - p.y;
+          if (dx * dx + dy * dy <= p.radius * p.radius) {
+            draggingPiece = p;
+            p.dragging = true;
+            e.preventDefault();
+            return;
+          }
+        }
+        isErasing = true;
+        erase(pos.x, pos.y);
+        e.preventDefault();
+      });
+
+      canvas.addEventListener("touchmove", (e) => {
+        const touch = e.touches[0];
+        const pos = {
+          x: touch.clientX - canvas.getBoundingClientRect().left,
+          y: touch.clientY - canvas.getBoundingClientRect().top,
+        };
+        if (draggingPiece && draggingPiece.dragging) {
+          draggingPiece.x = pos.x;
+          draggingPiece.y = pos.y;
+          draw();
+        } else if (isErasing) {
+          erase(pos.x, pos.y);
+        }
+        e.preventDefault();
+      });
+
+      canvas.addEventListener("touchend", () => {
+        if (draggingPiece) draggingPiece.dragging = false;
+        draggingPiece = null;
+        isErasing = false;
+      });
+
+      const pieces = [
+        { type: "O", x: 50, y: 50, radius: 20, dragging: false },
+        { type: "X", x: 100, y: 50, radius: 20, dragging: false },
+      ];
+
+      pieces.forEach((p) => {
+        if (p.type === "O") {
+          ctx.strokeStyle = "red";
+          ctx.lineWidth = 4;
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+          ctx.stroke();
+        } else if (p.type === "X") {
+          ctx.strokeStyle = "blue";
+          ctx.lineWidth = 4;
+          ctx.beginPath();
+          ctx.moveTo(p.x - p.radius, p.y - p.radius);
+          ctx.lineTo(p.x + p.radius, p.y + p.radius);
+          ctx.moveTo(p.x + p.radius, p.y - p.radius);
+          ctx.lineTo(p.x - p.radius, p.y + p.radius);
+          ctx.stroke();
+        }
+      });
     </script>
   </body>
 </html>
