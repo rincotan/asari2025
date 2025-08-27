@@ -140,11 +140,46 @@ function generateStepButtons(stepNum, total) {
 function checkQuizAnswer(inputId, correct) {
   const val = document.getElementById(inputId).value.trim();
   const result = document.getElementById(inputId + "-result");
-  console.log(correct);
-  if (val === null)
-    val =
-      "回答欄が空になっていた場合は絶対に答えと一致しない文字列をダミーとして入れておきますね";
-  result.textContent = val === correct ? "正解！" : "不正解…";
+  let isCorrect = val === correct;
+  // モーダル表示
+  showResultModal(isCorrect, val, correct);
+}
+
+function showResultModal(isCorrect, val, correct) {
+  const modal = document.getElementById("result-modal");
+  const content = document.getElementById("result-content");
+  const closeBtn = document.getElementById("modal-close-btn");
+  const nextBtn = document.getElementById("modal-next-btn");
+  // 問題番号取得
+  const params = new URLSearchParams(window.location.search);
+  const stepNum = parseInt(params.get("step")) || 1;
+  const quizNum = parseInt(params.get("quiz")) || 1;
+
+  if (isCorrect) {
+    // 正解時
+    content.innerHTML = `
+      <div style="color:#f08080;font-size:2em;font-weight:bold;">正解</div>
+      <img src="images/answer${quizNum}.png" style="width:90%;max-width:220px;margin:10px auto;">
+      <div style="margin-top:10px;">解説やコメントをここに入れられます</div>
+    `;
+    nextBtn.style.display = "";
+    nextBtn.onclick = function() {
+      // 次の問題へ
+      window.location.href = `quiz.html?step=${stepNum}&quiz=${quizNum+1}`;
+    };
+  } else {
+    // 不正解時
+    content.innerHTML = `
+      <div style="color:#7991ff;font-size:2em;font-weight:bold;">不正解</div>
+      <div style="font-size:5em;color:#7991ff;">&#10006;</div>
+      <div style="margin-top:10px;font-weight:bold;">ヒントを見てみよう</div>
+    `;
+    nextBtn.style.display = "none";
+  }
+  modal.style.display = "flex";
+  closeBtn.onclick = function() {
+    modal.style.display = "none";
+  };
 }
 
 function checkStepAnswer(stepNum, correct) {
@@ -211,7 +246,18 @@ window.addEventListener("DOMContentLoaded", function() {
   }
 
   // 閉じるボタン
-  document.getElementById("close-story").onclick = function() {
-    document.getElementById("story-overlay").style.display = "none";
-  };
+  const closeStoryBtn = document.getElementById("close-story");
+  if (closeStoryBtn) {
+    closeStoryBtn.onclick = function() {
+      document.getElementById("story-overlay").style.display = "none";
+    };
+  }
+  // ヒントボタンの表示切替
+  const hintBtn = document.getElementById("hint-btn");
+  const hintArea = document.getElementById("hint-area");
+  if (hintBtn && hintArea) {
+    hintBtn.addEventListener("click", function() {
+      hintArea.style.display = (hintArea.style.display === "none" || hintArea.style.display === "") ? "block" : "none";
+    });
+  }
 });
