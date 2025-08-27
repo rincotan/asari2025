@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>マツバツゲーム</title>
+    <style>
+      body {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        margin: 0;
+        background-color: #f8f8f8;
+        font-family: sans-serif;
+        position: relative;
+      }
+
+      .header-container {
+        position: absolute;
+        top: 0;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        padding: 10px 20px;
+        box-sizing: border-box;
+      }
+
+      .message {
+        margin-left: auto;
+        font-size: 1.2em;
+        color: #333;
+      }
+
+      .grid-container {
+        display: grid;
+        grid-template-columns: repeat(3, 100px);
+        grid-template-rows: repeat(3, 100px);
+        border: 2px solid black;
+        width: 300px;
+        height: 300px;
+        margin-top: 120px;
+        position: relative;
+      }
+
+      .grid-cell {
+        border: 1px solid black;
+        box-sizing: border-box;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 2.5em;
+        font-weight: bold;
+      }
+
+      .circle {
+        width: 70px;
+        height: 70px;
+        border: 4px solid red;
+        border-radius: 50%;
+      }
+
+      .cross {
+        width: 70px;
+        height: 70px;
+        position: relative;
+      }
+      .cross::before,
+      .cross::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 50%;
+        width: 4px;
+        height: 100%;
+        background: blue;
+        transform-origin: center;
+      }
+      .cross::before {
+        transform: translateX(-50%) rotate(45deg);
+      }
+      .cross::after {
+        transform: translateX(-50%) rotate(-45deg);
+      }
+
+      /* 勝敗表示 */
+      .result-message {
+        font-size: 2em;
+        font-weight: bold;
+        color: #444;
+        margin: 20px 0 10px;
+        text-align: center;
+      }
+
+      /* リトライボタン */
+      .retry-btn {
+        background-color: #4caf50;
+        color: white;
+        border: none;
+        padding: 12px 24px;
+        font-size: 1em;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: background 0.3s, transform 0.2s;
+      }
+      .retry-btn:hover {
+        background-color: #45a049;
+        transform: scale(1.05);
+      }
+      .retry-btn:active {
+        transform: scale(0.95);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="header-container">
+      <div class="message">まだあなたのことは信用できません</div>
+    </div>
+
+    <div class="grid-container" id="board"></div>
+
+    <!-- 勝敗表示 -->
+    <p class="result-message" id="result">ゲーム中...</p>
+
+    <!-- リトライボタン -->
+    <button class="retry-btn" onclick="retry()">リトライ</button>
+
+    <script>
+      // 盤面の配列 (O=○, X=×, ""=空き)
+      let board = [
+        ["", "", ""],
+        ["", "X", ""],
+        ["", "", ""],
+      ];
+
+      let x_ = 0,
+        y_ = 0,
+        m_ = 0,
+        b_ = [
+          ["", "", ""],
+          ["", "", ""],
+          ["", "", ""],
+        ];
+
+      function AI(t) {
+        console.log(b_);
+        let winner = checkWinner(b_);
+        if (winner != null) {
+          if (winner === "X") {
+            return 1;
+          } else {
+            return -1;
+          }
+        }
+        let x_r = 0,
+          y_r = 0,
+          m_r = -Infinity;
+        if (t == 1) {
+          m_r = Infinity;
+        }
+        let cnt = 0;
+        for (let i = 0; i <= 2; i++) {
+          for (let j = 0; j <= 2; j++) {
+            if (b_[i][j] != "") {
+              cnt++;
+              continue;
+            }
+            b_[i][j] = t == 0 ? "X" : "O";
+            console.log("うお", i, j);
+            console.log(b_);
+            let ret = AI(1 - t);
+            if (t == 0) {
+              if (ret > m_r) {
+                (x_r = i), (y_r = j);
+                m_r = ret;
+              }
+            } else {
+              if (ret < m_r) {
+                (x_r = i), (y_r = j);
+                m_r = ret;
+              }
+            }
+            b_[i][j] = "";
+          }
+        }
+        (x_ = x_r), (y_ = y_r);
+        m_ = m_r;
+        return m_;
+      }
+      function handleCellClick(x, y) {
+        //ここに実装
+        if (board[x][y] != "" || checkWinner(board)) {
+          return;
+        }
+        board[x][y] = "O";
+        b_ = board.map((row) => [...row]);
+        AI(0);
+        board[x_][y_] = "X";
+        renderBoard();
+      }
+      const boardContainer = document.getElementById("board");
+      const resultEl = document.getElementById("result");
+
+      // 盤面描画関数
+      function renderBoard() {
+        boardContainer.innerHTML = "";
+
+        board.forEach((row, x) => {
+          row.forEach((cell, y) => {
+            const div = document.createElement("div");
+            div.classList.add("grid-cell");
+
+            if (cell === "O") {
+              const circle = document.createElement("div");
+              circle.classList.add("circle");
+              div.appendChild(circle);
+            } else if (cell === "X") {
+              const cross = document.createElement("div");
+              cross.classList.add("cross");
+              div.appendChild(cross);
+            }
+
+            // クリックイベント登録
+            div.addEventListener("click", () => handleCellClick(x, y));
+
+            boardContainer.appendChild(div);
+          });
+        });
+
+        // 勝敗チェック
+        const winner = checkWinner(board);
+        if (winner) {
+          resultEl.textContent = winner + " の勝ち！";
+        } else {
+          resultEl.textContent = "ゲーム中...";
+        }
+      }
+
+      // 勝敗判定
+      function checkWinner(board_) {
+        const lines = [
+          // 横
+          [board_[0][0], board_[0][1], board_[0][2]],
+          [board_[1][0], board_[1][1], board_[1][2]],
+          [board_[2][0], board_[2][1], board_[2][2]],
+          // 縦
+          [board_[0][0], board_[1][0], board_[2][0]],
+          [board_[0][1], board_[1][1], board_[2][1]],
+          [board_[0][2], board_[1][2], board_[2][2]],
+          // 斜め
+          [board_[0][0], board_[1][1], board_[2][2]],
+          [board_[0][2], board_[1][1], board_[2][0]],
+        ];
+
+        for (let line of lines) {
+          if (line[0] && line[0] === line[1] && line[0] === line[2]) {
+            return line[0];
+          }
+        }
+        return null;
+      }
+
+      // リトライ
+      function retry() {
+        board = [
+          ["", "", ""],
+          ["", "X", ""],
+          ["", "", ""],
+        ];
+        renderBoard();
+      }
+
+      // 初期描画
+      renderBoard();
+    </script>
+  </body>
+</html>
