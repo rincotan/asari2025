@@ -8,7 +8,6 @@
 </head>
 <body>
 <!-- <div id="pc-warning">※スマホ専用サイトです。スマートフォンでご利用ください。</div> -->
-
 <div class="page active">
   <h2 id="step-title"></h2>
 
@@ -26,6 +25,39 @@
   <button id="hint-btn">ヒント</button>
 </div>
 
+<!-- Storyオーバーレイ -->
+<div id="story-overlay" style="display:none;">
+  <div class="story-bg"></div>
+  <div class="story-center">
+    <div class="intro-story">
+      <section id="story-section-step1" class="step-story-section">
+        <h2 class="story-title">～STORY～</h2>
+        <div class="story-chat">
+          <div class="chat user">STEP1のストーリー例です。</div>
+          <div class="chat alien">ここにSTEP1の会話を入れてください。</div>
+          <div class="chat user">必要なだけ追加できます。</div>
+        </div>
+      </section>
+      <section id="story-section-step2" class="step-story-section">
+        <h2 class="story-title">～STORY～</h2>
+        <div class="story-chat">
+          <div class="chat user">STEP2のストーリー例です。</div>
+          <div class="chat alien">ここにSTEP2の会話を入れてください。</div>
+        </div>
+      </section>
+      <section id="story-section-step3" class="step-story-section">
+        <h2 class="story-title">～STORY～</h2>
+        <div class="story-chat">
+          <div class="chat user">STEP3のストーリー例です。</div>
+          <div class="chat alien">ここにSTEP3の会話を入れてください。</div>
+        </div>
+      </section>
+      <button id="close-story">✕</button>
+    </div>
+  </div>
+</div>
+
+
 
 <div class="hamburger" id="hamburger">
   <div></div><div></div><div></div>
@@ -36,7 +68,6 @@
   <a href="#" data-step="2" class="locked">STEP2</a>
   <a href="#" data-step="3" class="locked">STEP3</a>
 </div>
-
 <script src="main.js"></script>
 </body>
 </html>

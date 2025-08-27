@@ -1,4 +1,3 @@
-
 // pc判定＆警告
 window.addEventListener("DOMContentLoaded", () => {
   const pcWarn = document.getElementById("pc-warning");
@@ -119,11 +118,6 @@ window.addEventListener("DOMContentLoaded", () => {
   }
 });
 
-// 戻る系共通
-function goToStep(step) {
-  if (step === 0) window.location.href = "index.html";
-  else window.location.href = `step.html?step=${step}`;
-}
 
 // STEPページの問題ボタン生成
 function generateStepButtons(stepNum, total) {
@@ -180,3 +174,44 @@ if (!unlockedStep.includes(stepNum)) {
   unlockedStep.push(stepNum);
   localStorage.setItem("unlockedStep", JSON.stringify(unlockedStep));
 }
+
+function goToStep(step, fromQuiz) {
+  if (step === 0) window.location.href = "index.html";
+  else if (fromQuiz)
+    window.location.href = `step.html?step=${step}&from=quiz`;
+  else
+    window.location.href = `step.html?step=${step}`;
+}
+
+window.addEventListener("DOMContentLoaded", function() {
+  // STEP番号取得
+  const params = new URLSearchParams(window.location.search);
+  const stepNum = parseInt(params.get("step") || "1", 10);
+  const fromQuiz = params.get("from") === "quiz"; 
+
+  // ストーリーオーバーレイの表示関数
+  function showStoryOverlay() {
+    document.getElementById("story-overlay").style.display = "flex";
+    // すべて非表示
+    document.querySelectorAll('.step-story-section').forEach(sec => sec.classList.remove('active'));
+    // 対象だけ表示
+    const target = document.getElementById(`story-section-step${stepNum}`);
+    if(target) target.classList.add('active');
+  }
+
+  // ストーリーを振り返るボタン
+  const storyBtn = document.querySelector('.story-btn');
+  if (storyBtn) {
+    storyBtn.addEventListener('click', showStoryOverlay);
+  }
+
+  // ページ初回表示時のみStory自動表示（from=quizならスキップ）
+  if (!fromQuiz) {
+    showStoryOverlay();
+  }
+
+  // 閉じるボタン
+  document.getElementById("close-story").onclick = function() {
+    document.getElementById("story-overlay").style.display = "none";
+  };
+});
