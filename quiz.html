@@ -273,7 +273,7 @@
         let html = "";
         hints.forEach((hint, i) => {
           html += `<details${i === 0 ? " open" : ""}>
-            <summary>${i === 0 ? "▼" : "▶"} ヒント${i + 1}</summary>
+            <summary>${i === 0 ? "" : ""} ヒント${i + 1}</summary>
             ${hint}
           </details>`;
         });
