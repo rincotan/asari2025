@@ -13,7 +13,7 @@
       <h2 id="quiz-title"></h2>
       <img id="quiz-img" src="" alt="" style="max-width: 80%; margin: 20px 0" />
       <div class="input-group">
-        <input type="text" id="quiz-answer" placeholder="答えを入力" />
+        <input type="text" id="quiz-answer" placeholder="答えをひらがなで入力してください" />
         <button id="submit-btn">決定</button>
       </div>
       <p id="quiz-answer-result"></p>
@@ -45,11 +45,11 @@
 
       const quizData = {
         1: {
-          1: { img: "images/q11.png", ans: "とら" },
-          2: { img: "images/q12.png", ans: "にじ" },
-          3: { img: "images/q13.png", ans: "とけい" },
-          4: { img: "images/q14.png", ans: "いえ" },
-          5: { img: "images/q15.png", ans: "ぞう" },
+          1: { img: "images/q11.png", ans: "とけい" },
+          2: { img: "images/q12.png", ans: "ぞう" },
+          3: { img: "images/q13.png", ans: "いえ" },
+          4: { img: "images/q14.png", ans: "にじ" },
+          5: { img: "images/q15.png", ans: "とら" },
         },
         2: {
           1: { img: "images/q21.png", ans: "かみなり" },
@@ -81,8 +81,6 @@
         checkQuizAnswer("quiz-answer", quizData[stepNum][quizNum].ans);
       };
       console.log(document.getElementById("submit-btn").onclick);
-
-      // ...既存のコード...
 
       // ステップ3小問6だけズーム画像切り替え
       if (stepNum === 3 && quizNum === 6) {

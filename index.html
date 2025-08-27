@@ -8,13 +8,43 @@
 </head>
 <body>
 <!-- <div id="pc-warning">※スマホ専用サイトです。スマートフォンでご利用ください。</div> -->
-
-<div class="page active">
-  <h1 style="text-align:center;">asari2025</h1>
-  <div style="text-align:center; margin-top:50px;">
-    <button onclick="window.location.href='step.html?step=1'">STEP1へ進む</button>
+<!-- 動画オーバーレイ -->
+<div id="video-overlay">
+  <div class="video-bg"></div>
+  <div class="video-center">
+    <video id="intro-video" src="videos/intro.mp4" autoplay playsinline controls></video>
+    <button id="close-video">✕</button>
   </div>
 </div>
+<div class="page active"></div>
+
+<!-- STORYセクション -->
+<section id="story-section">
+  <h2 class="story-title">～STORY～</h2>
+  <div class="story-chat">
+    <div class="chat user">う、宇宙人！？</div>
+    <div class="chat alien">あ！「にんげん」だ！！<br>お願い、僕を助けて！</div>
+    <div class="chat user">しゃべった…<br>助けてってどうしたの？</div>
+    <div class="chat alien">宇宙一周しようと思って土星から来たんだけど<br>気づいたらこの星にいたの。</div>
+    <div class="chat user">「にんげん」がいるってことは<br>ここは地球かな…</div>
+    <div class="chat alien">宇宙一周！？ってことは<br>もしかしてあれに乗ってきたの？</div>
+    <div class="chat alien">そうだよ！でも入れないし、<br>セキュリティも直さなくちゃいけない…</div>
+    <div class="chat alien highlight">そんな時君が来てくれたんだ！お願い！<br><span class="red">土星に帰るお手伝いしてくれない？</span></div>
+    <div class="chat user">わかった、協力するよ！</div>
+    <div class="chat alien">いいの？</div>
+    <div class="chat user">宇宙人にあってみたかったし！</div>
+    <div class="chat alien">ありがとう！君は命の恩人だ～！(泣)</div>
+    <div class="chat user">じゃあえっと…君はなんていうの？</div>
+    <div class="chat alien">僕は…………あれ？</div>
+    <div class="chat user">え…？</div>
+    <div class="chat alien">僕、名前忘れちゃった…</div>
+    <div class="chat user">え～～～～～～～～～～～～！？</div>
+  </div>
+</section>
+
+<div style="text-align:center; margin-top:50px;">
+    <button onclick="window.location.href='step.html?step=1'">STEP1へ進む</button>
+  </div>
 
 <div class="hamburger" id="hamburger">
   <div></div><div></div><div></div>
@@ -27,5 +57,35 @@
 </div>
 
 <script src="main.js"></script>
+<script>
+window.addEventListener("scroll", () => {
+  const story = document.getElementById("story-section");
+  if (!story) return;
+  const trigger = 20;
+  if (window.scrollY > trigger) {
+    story.classList.add("visible");
+  } else {
+    story.classList.remove("visible");
+  }
+});
+
+document.getElementById("close-video").onclick = function() {
+  document.getElementById("video-overlay").style.display = "none";
+  // タイトルコール演出
+  const titleCall = document.createElement("div");
+  titleCall.id = "title-call";
+  titleCall.textContent = "宇宙への帰還";
+  document.body.appendChild(titleCall);
+  setTimeout(() => {
+    titleCall.classList.add("show");
+  }, 50);
+  setTimeout(() => {
+    titleCall.classList.remove("show");
+    setTimeout(() => {
+      titleCall.remove();
+    }, 1000);
+  }, 2000); // 2秒表示
+};
+</script>
 </body>
 </html>
