@@ -33,7 +33,7 @@ window.addEventListener("DOMContentLoaded", () => {
     } else if (stepNum === 2) {
       elem.innerHTML = '宇宙船に書かれた6つの謎と冊子を使い<br>宇宙船の開け方を導け';
     } else if (stepNum === 3) {
-      elem.innerHTML = 'パスワードを忘れた方はこちらの謎';
+      elem.innerHTML = 'パスワードを忘れた方はこちらの謎をお解き';
     }
   });
 
@@ -103,14 +103,15 @@ window.addEventListener("DOMContentLoaded", () => {
         if (stepNum < 3) {
           window.location.href = `step.html?step=${stepNum + 1}`;
         } else {
-          alert("最後のSTEPです！");
+          // STEP3クリア時はlast.htmlへ
+          window.location.href = "last.html";
         }
       } else {
         alert("違います！");
       }
     });
   }
-  // ...既存のコード...
+
   const pcWarn = document.getElementById("pc-warning");
   if (window.innerWidth > 600 && pcWarn) {
     pcWarn.style.display = "block";
