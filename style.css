@@ -763,6 +763,7 @@ h2.speaking-A3-R1 {
   vertical-align: center;
 }
 
+/* 結果モーダル */
 #result-modal {
   position: fixed;
   z-index: 20000;
@@ -807,6 +808,7 @@ h2.speaking-A3-R1 {
   background: #f08080;
 }
 
+/* ヒントエリア */
 #hint-area {
   margin: 18px auto 0 auto;
   max-width: 400px;
