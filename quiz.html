@@ -12,11 +12,11 @@
     <div class="page active" style="text-align: center">
       <h2 id="quiz-title"></h2>
       <img id="quiz-img" src="" alt="" style="max-width: 80%; margin: 20px 0" />
-      <div class="input-area">
+      <div class="input-group">
         <input type="text" id="quiz-answer" placeholder="答えを入力" />
         <button id="submit-btn">決定</button>
-        <p id="quiz-answer-result"></p>
       </div>
+      <p id="quiz-answer-result"></p>
       <div class="bottom-buttons">
         <button id="close-btn" onclick="goToStep(stepNum)">閉じる</button>
         <button id="hint-btn">ヒント</button>
@@ -65,7 +65,7 @@
           3: { img: "images/q33.png", ans: "はんげつ" },
           4: { img: "images/q34.png", ans: "じんせい" },
           5: { img: "images/q35.png", ans: "あいこ" },
-          6: { img: "images/q36.png", ans: "未定" },
+          6: { img: "images/q361.png", ans: "star" },
         },
       };
 
@@ -81,6 +81,35 @@
         checkQuizAnswer("quiz-answer", quizData[stepNum][quizNum].ans);
       };
       console.log(document.getElementById("submit-btn").onclick);
+
+      // ...既存のコード...
+
+      // ステップ3小問6だけズーム画像切り替え
+      if (stepNum === 3 && quizNum === 6) {
+        const zoomImages = [
+          "images/q361.png", // 通常
+          "images/q362.png", // ズーム1
+          "images/q363.png"  // ズーム2
+        ];
+        let zoomLevel = 0;
+        const quizImg = document.getElementById("quiz-img");
+        quizImg.src = zoomImages[zoomLevel];
+        quizImg.style.cursor = "zoom-in";
+        quizImg.onclick = function () {
+          if (zoomLevel < zoomImages.length - 1) {
+            zoomLevel++;
+            quizImg.src = zoomImages[zoomLevel];
+            quizImg.style.cursor = zoomLevel === zoomImages.length - 1 ? "zoom-out" : "zoom-in";
+          } else {
+            // ズームアウト
+            zoomLevel = 0;
+            quizImg.src = zoomImages[zoomLevel];
+            quizImg.style.cursor = "zoom-in";
+          }
+        };
+      }
+
     </script>
+
   </body>
 </html>
