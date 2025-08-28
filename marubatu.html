@@ -1,11 +1,9 @@
 <!DOCTYPE html>
 <html lang="ja">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>マルバツゲーム</title>
-    <link rel="stylesheet" href="style.css" />
-
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>マルバツゲーム - panelState 管理版</title>
     <style>
       body {
         display: flex;
@@ -16,33 +14,27 @@
         margin: 0;
         background-color: #f8f8f8;
         font-family: sans-serif;
-        position: relative;
       }
 
       .header-container {
         position: absolute;
         top: 0;
         width: 100%;
-        display: flex;
-        align-items: center;
         padding: 10px 20px;
         box-sizing: border-box;
       }
-
       .message {
         margin-left: auto;
-        font-size: 1.2em;
+        font-size: 1.1em;
         color: #333;
       }
 
-      .grid-cell {
-        border: 1px solid black;
-        box-sizing: border-box;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        font-size: 2.5em;
-        font-weight: bold;
+      /* ラッパー（grid と panel を重ねる） */
+      #board-wrapper {
+        position: relative;
+        width: 400px;
+        height: 400px;
+        margin-top: 120px;
       }
 
       .grid-container {
@@ -52,49 +44,85 @@
         border: 2px solid black;
         width: 400px;
         height: 400px;
-        margin-top: 120px;
-        position: relative; /* パネルの基準になる */
-        z-index: 1; /* 下側に表示 */
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: 1;
       }
 
+      .grid-cell {
+        width: 80px;
+        height: 80px;
+        box-sizing: border-box;
+        border: 1px solid black;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2.5em;
+        font-weight: bold;
+        user-select: none;
+        background: white;
+        cursor: pointer;
+      }
+
+      /* パネル（grid の上に重ねる） */
       .panel-container {
         display: grid;
         grid-template-columns: repeat(5, 80px);
         grid-template-rows: repeat(5, 80px);
-        border: 2px solid black;
         width: 400px;
         height: 400px;
-        position: absolute; /* grid-container に重ねる */
+        position: absolute;
         top: 0;
         left: 0;
-        z-index: 2; /* grid-container の上に表示 */
-        pointer-events: none; /* クリックを下の grid-container に通す場合 */
+        z-index: 2;
+        pointer-events: none; /* デフォルト透過、個々の .square が pointer-events:auto を持つ */
       }
 
       .panel-cell {
-        border: 1px solid black;
+        width: 80px;
+        height: 80px;
         box-sizing: border-box;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        font-size: 2.5em;
-        font-weight: bold;
+        position: relative;
+      }
+
+      /* cover（緑四角）: マス全体を覆う */
+      .square {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 105%;
+        height: 105%;
+        border: 5px solid #fff9f9;
+        box-sizing: border-box;
+        background: #fff9f9;
+        pointer-events: auto; /* これでクリックを受け取る */
+        cursor: pointer;
+        z-index: 3;
+      }
+
+      /* ひび割れSVG */
+      .crack {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        opacity: 0;
+        transition: opacity 0.2s ease;
+        z-index: 4;
+      }
+      .crack.show {
+        opacity: 1;
       }
 
       .circle {
         width: 56px;
         height: 56px;
-        border: 4px solid red;
         border-radius: 50%;
+        border: 4px solid red;
       }
-      .square {
-        width: 60px; /* circle と cross と同じくらいの大きさに調整 */
-        height: 60px;
-        border: 40px solid green; /* 枠線の色を指定 */
-        background-color: transparent; /* 中身は透明にするならこれ */
-        box-sizing: border-box;
-      }
-
       .cross {
         width: 56px;
         height: 56px;
@@ -118,41 +146,19 @@
         transform: translateX(-50%) rotate(-45deg);
       }
 
-      /* 勝敗表示 */
       .result-message {
-        font-size: 2em;
-        font-weight: bold;
+        font-size: 1.4em;
+        margin: 12px 0;
         color: #444;
-        margin: 120px 0 10px;
-        text-align: center;
       }
-
-      /* リトライボタン */
       .retry-btn {
-        background-color: #4caf50;
-        color: white;
+        margin-bottom: 8px;
+        padding: 8px 12px;
+        border-radius: 6px;
         border: none;
-        padding: 12px 24px;
-        font-size: 1em;
-        border-radius: 8px;
+        background: #4caf50;
+        color: white;
         cursor: pointer;
-        transition: background 0.3s, transform 0.2s;
-      }
-      .retry-btn:hover {
-        background-color: #45a049;
-        transform: scale(1.05);
-      }
-      .retry-btn:active {
-        transform: scale(0.95);
-      }
-      #canvas {
-        margin-top: 70px;
-        position: absolute;
-        top: 120px; /* grid-container の位置に合わせる */
-        left: 50%;
-        transform: translateX(-50%);
-        z-index: 10; /* 確実に前面に */
-        pointer-events: auto; /* Canvas がイベントを受け取る */
       }
     </style>
   </head>
@@ -161,211 +167,345 @@
       <div class="message">まだあなたのことは信用できません</div>
     </div>
 
-    <div class="grid-container" id="board">
+    <div id="board-wrapper">
+      <div class="grid-container" id="grid"></div>
       <div class="panel-container" id="panel"></div>
     </div>
 
-    <!-- 勝敗表示 -->
     <p class="result-message" id="result">ゲーム中...</p>
-
-    <!-- リトライボタン -->
+    <p id="x_cnt">のこり:3</p>
     <button class="retry-btn" onclick="retry()">リトライ</button>
 
     <script>
-      // 盤面の配列 (O=○, X=×, ""=空き)
+      // --- ゲームデータ（3x3 ボード。レンダリング時は 5x5 の中央に配置） ---
       let board = [
         ["", "", ""],
         ["", "X", ""],
         ["", "", ""],
       ];
 
+      // ミニマックス等（既存ロジック保持）
       let x_ = 0,
         y_ = 0,
-        m_ = 0,
-        b_ = [
-          ["", "", ""],
-          ["", "", ""],
-          ["", "", ""],
-        ];
-
+        m_ = 0;
+      let b_ = board.map((r) => [...r]);
       function AI(t) {
-        console.log(b_);
         let winner = checkWinner(b_);
-        if (winner != null) {
-          if (winner === "X") {
-            return 1;
-          } else {
-            return -1;
-          }
-        }
+        if (winner != null) return winner === "X" ? 1 : -1;
         let x_r = 0,
           y_r = 0,
           m_r = -Infinity;
-        if (t == 1) {
-          m_r = Infinity;
-        }
-        let cnt = 0;
+        if (t === 1) m_r = Infinity;
         for (let i = 0; i <= 2; i++) {
           for (let j = 0; j <= 2; j++) {
-            if (b_[i][j] != "") {
-              cnt++;
-              continue;
-            }
-            b_[i][j] = t == 0 ? "X" : "O";
-            console.log("うお", i, j);
-            console.log(b_);
+            if (b_[i][j] !== "") continue;
+            b_[i][j] = t === 0 ? "X" : "O";
             let ret = AI(1 - t);
-            if (t == 0) {
+            if (t === 0) {
               if (ret > m_r) {
-                (x_r = i), (y_r = j);
+                x_r = i;
+                y_r = j;
                 m_r = ret;
               }
             } else {
               if (ret < m_r) {
-                (x_r = i), (y_r = j);
+                x_r = i;
+                y_r = j;
                 m_r = ret;
               }
             }
             b_[i][j] = "";
           }
         }
-        (x_ = x_r), (y_ = y_r);
+        x_ = x_r;
+        y_ = y_r;
         m_ = m_r;
         return m_;
       }
-      function handleCellClick(x, y) {
-        //ここに実装
-        if (board[x][y] != "" || checkWinner(board)) {
+
+      // --- panelState（二次元配列で管理） ---
+      // values: "intact", "cracked", "removed", null (null は最初からパネル無し)
+      const panelState = [];
+      for (let r = 0; r < 5; r++) {
+        panelState[r] = [];
+        for (let c = 0; c < 5; c++) {
+          // 中央の 3x3 (rows 1..3, cols 1..3) は最初からパネル無し
+          if (r >= 1 && r <= 3 && c >= 1 && c <= 3) {
+            panelState[r][c] = null;
+          } else {
+            panelState[r][c] = "intact";
+          }
+        }
+      }
+
+      // ----- ヘルパー関数 -----
+      // 指定 panel マスが覆われているかを返す
+      function isPanelCovered(row, col) {
+        const s = panelState?.[row]?.[col];
+        return s === "intact" || s === "cracked";
+      }
+
+      // クリック時に呼ばれる関数（要件）：
+      // 「クリックされたときにそのマスが覆われているかどうかを返す」
+      function panelCellClicked(row, col) {
+        const covered = isPanelCovered(row, col);
+        console.log(`panelCellClicked(${row},${col}) => ${covered}`);
+        return covered;
+      }
+
+      // 盤面セルが有効（覆われていない）なときに呼ぶプレースホルダ
+      function onCellActivated(boardX, boardY) {
+        console.log("onCellActivated called for", boardX, boardY);
+        // あとで実装してください
+      }
+
+      let now_x_placed = 0,
+        zanki = 3;
+
+      // grid 側のクリック処理
+      function handleGridCellClick(panelRow, panelCol) {
+        // panelRow, panelCol are 0..4
+        // only respond when the cell maps to board (center 3x3)
+        if (
+          !(panelRow >= 1 && panelRow <= 3 && panelCol >= 1 && panelCol <= 3)
+        ) {
+          if (isPanelCovered(panelRow, panelCol)) {
+            return;
+          } else {
+            if (zanki === 1 && now_x_placed === 3) {
+              //改めて盤面を5×5で見て、ビンゴしてたらOK
+            } else {
+              return;
+            }
+          }
+        }
+        const boardX = panelRow - 1;
+        const boardY = panelCol - 1;
+
+        // 覆われているなら処理しない
+        if (isPanelCovered(panelRow, panelCol)) {
+          console.log("このマスはパネルで覆われています。");
           return;
         }
-        board[x][y] = "O";
-        b_ = board.map((row) => [...row]);
+
+        // ここで将来の処理を呼ぶ
+        onCellActivated(boardX, boardY);
+
+        // 既存ゲームの動作（O を置いて AI を動かす） — 必要なら残す
+        if (board[boardX][boardY] != "" || checkWinner(board)) return;
+        board[boardX][boardY] = "O";
+        b_ = board.map((r) => [...r]);
         AI(0);
         board[x_][y_] = "X";
-        renderBoard();
+        now_x_placed++;
+        zanki--;
+        document.getElementById("x_cnt").textContent = `のこり:${zanki}`;
+        renderGrid(); // グリッドだけ再描画（panel は再生成しない）
       }
-      const boardContainer = document.getElementById("board");
-      const resultEl = document.getElementById("result");
-      let panelContainer = document.getElementById("panel");
 
-      // 盤面描画関数
-      function renderBoard() {
-        boardContainer.innerHTML =
-          '<div class="panel-container" id="panel"></div>';
-        panelContainer = document.getElementById("panel");
-        for (let i = 0; i < 5; i++) {
-          const div = document.createElement("div");
-          div.classList.add("grid-cell");
-          boardContainer.appendChild(div);
-          const div_ = document.createElement("div");
-          div_.classList.add("panel-cell");
-          div_
-            .appendChild(document.createElement("div"))
-            .classList.add("square");
-          panelContainer.appendChild(div_);
+      // ひび割れ SVG を生成（panelCell に append する）
+      function createCrackSVG() {
+        const svgns = "http://www.w3.org/2000/svg";
+        const svg = document.createElementNS(svgns, "svg");
+        svg.setAttribute("viewBox", "0 0 80 80");
+        svg.classList.add("crack");
+        const paths = [
+          "M8 40 L28 28 L40 40 L52 18 L68 36",
+          "M40 8 L40 40 L44 60",
+          "M12 52 L24 42",
+          "M60 52 L48 42",
+        ];
+        for (const d of paths) {
+          const p = document.createElementNS(svgns, "path");
+          p.setAttribute("d", d);
+          p.setAttribute("stroke", "rgba(20,20,20,0.95)");
+          p.setAttribute("stroke-width", "2");
+          p.setAttribute("fill", "none");
+          svg.appendChild(p);
         }
+        return svg;
+      }
 
-        board.forEach((row, x) => {
-          const div = document.createElement("div");
-          div.classList.add("grid-cell");
-          boardContainer.appendChild(div);
-          const div_ = document.createElement("div");
-          div_.classList.add("panel-cell");
-          div_
-            .appendChild(document.createElement("div"))
-            .classList.add("square");
-          panelContainer.appendChild(div_);
+      // panel UI を初期化（一度だけ呼ぶ）
+      function initPanel() {
+        const panel = document.getElementById("panel");
+        panel.innerHTML = ""; // 初回は空なのでOK
 
-          row.forEach((cell, y) => {
-            const div = document.createElement("div");
-            div.classList.add("grid-cell");
-            const div_ = document.createElement("div");
-            div_.classList.add("panel-cell");
+        for (let r = 0; r < 5; r++) {
+          for (let c = 0; c < 5; c++) {
+            const cell = document.createElement("div");
+            cell.className = "panel-cell";
+            cell.dataset.r = r;
+            cell.dataset.c = c;
 
-            if (cell === "O") {
-              const circle = document.createElement("div");
-              circle.classList.add("circle");
-              div.appendChild(circle);
-            } else if (cell === "X") {
-              const cross = document.createElement("div");
-              cross.classList.add("cross");
-              div.appendChild(cross);
+            // ここで panelState に従い .square(cover) を作るかどうか決める
+            const s = panelState[r][c];
+            if (s === "intact" || s === "cracked") {
+              const sq = document.createElement("div");
+              sq.className = "square";
+              sq.dataset.state = s; // "intact" または "cracked"
+              // ひび要素
+              const crack = createCrackSVG();
+              if (s === "cracked") crack.classList.add("show");
+              cell.appendChild(crack);
+              cell.appendChild(sq);
+
+              // クリックハンドラを登録（state と panelState を更新）
+              sq.addEventListener("click", (e) => {
+                e.stopPropagation();
+                const row = Number(cell.dataset.r);
+                const col = Number(cell.dataset.c);
+                // 要求どおり、クリックされたときにそのマスが覆われているかを返す
+                const coveredNow = panelCellClicked(row, col);
+
+                // 状態遷移： intact -> cracked -> removed
+                const cur = panelState[row][col];
+                if (cur === "intact") {
+                  panelState[row][col] = "cracked";
+                  sq.dataset.state = "cracked";
+                  crack.classList.add("show");
+                } else if (cur === "cracked") {
+                  panelState[row][col] = "removed";
+                  // remove DOM nodes
+                  sq.remove();
+                  crack.remove();
+                }
+              });
+            }
+            // pointer-events は panel 全体では none なので個々の .square のみ受け取る
+            panel.appendChild(cell);
+          }
+        }
+      }
+
+      // panel の特定マスの UI を更新（状態の変更があるときに呼ぶ）
+      function updatePanelCellUI(row, col) {
+        const panel = document.getElementById("panel");
+        if (!panel) return;
+        const idx = row * 5 + col;
+        const cell = panel.children[idx];
+        if (!cell) return;
+        // まず既存要素をクリア（安全のため）
+        cell.innerHTML = "";
+        const s = panelState[row][col];
+        if (s === "intact" || s === "cracked") {
+          const sq = document.createElement("div");
+          sq.className = "square";
+          sq.dataset.state = s;
+          const crack = createCrackSVG();
+          if (s === "cracked") crack.classList.add("show");
+          cell.appendChild(crack);
+          cell.appendChild(sq);
+          sq.addEventListener("click", (e) => {
+            e.stopPropagation();
+            if (panelState[row][col] === "intact") {
+              panelState[row][col] = "cracked";
+              updatePanelCellUI(row, col);
+            } else if (panelState[row][col] === "cracked") {
+              panelState[row][col] = "removed";
+              updatePanelCellUI(row, col);
+            }
+          });
+        }
+        // null または removed -> 空にする（覆われていない）
+      }
+
+      // ------- grid（盤面）を描画（panel は再描画しない） -------
+      function renderGrid() {
+        const grid = document.getElementById("grid");
+        grid.innerHTML = "";
+
+        for (let r = 0; r < 5; r++) {
+          for (let c = 0; c < 5; c++) {
+            const cell = document.createElement("div");
+            cell.className = "grid-cell";
+
+            // 中央 3x3 のみ board の値を描画
+            if (r >= 1 && r <= 3 && c >= 1 && c <= 3) {
+              const br = r - 1;
+              const bc = c - 1;
+              const val = board[br][bc];
+              if (val === "O") {
+                const circle = document.createElement("div");
+                circle.className = "circle";
+                cell.appendChild(circle);
+              } else if (val === "X") {
+                const cross = document.createElement("div");
+                cross.className = "cross";
+                cell.appendChild(cross);
+              }
+              // grid 側のクリック：内部では panelState をチェック
+              cell.addEventListener("click", () => handleGridCellClick(r, c));
+            } else {
+              // パディングセル。クリックしても何もしない
+              cell.style.background = "#f7f7f7";
+              cell.style.cursor = "default";
             }
 
-            // クリックイベント登録
-            div.addEventListener("click", () => handleCellClick(x, y));
-            panelContainer.appendChild(div_);
-            boardContainer.appendChild(div);
-          });
-          const div2 = document.createElement("div");
-          div2.classList.add("grid-cell");
-          boardContainer.appendChild(div2);
-          const div2_ = document.createElement("div");
-          div2_.classList.add("panel-cell");
-          div2_.classList.add("panel-cell");
-          div2_
-            .appendChild(document.createElement("div"))
-            .classList.add("square");
-          panelContainer.appendChild(div2_);
-        });
-        for (let i = 0; i < 5; i++) {
-          const div = document.createElement("div");
-          div.classList.add("grid-cell");
-          boardContainer.appendChild(div);
-
-          const div_ = document.createElement("div");
-          div_.classList.add("panel-cell");
-          div_
-            .appendChild(document.createElement("div"))
-            .classList.add("square");
-          panelContainer.appendChild(div_);
+            grid.appendChild(cell);
+          }
         }
 
-        // 勝敗チェック
+        // 勝敗表示
         const winner = checkWinner(board);
-        if (winner) {
-          resultEl.textContent = winner + " の勝ち！";
-        } else {
-          resultEl.textContent = "ゲーム中...";
-        }
+        const resultEl = document.getElementById("result");
+        if (winner) resultEl.textContent = winner + " の勝ち！";
+        else resultEl.textContent = "ゲーム中...";
       }
 
-      // 勝敗判定
+      // 勝敗判定（既存）
       function checkWinner(board_) {
         const lines = [
-          // 横
           [board_[0][0], board_[0][1], board_[0][2]],
           [board_[1][0], board_[1][1], board_[1][2]],
           [board_[2][0], board_[2][1], board_[2][2]],
-          // 縦
           [board_[0][0], board_[1][0], board_[2][0]],
           [board_[0][1], board_[1][1], board_[2][1]],
           [board_[0][2], board_[1][2], board_[2][2]],
-          // 斜め
           [board_[0][0], board_[1][1], board_[2][2]],
           [board_[0][2], board_[1][1], board_[2][0]],
         ];
-
-        for (let line of lines) {
-          if (line[0] && line[0] === line[1] && line[0] === line[2]) {
+        for (const line of lines) {
+          if (line[0] && line[0] === line[1] && line[0] === line[2])
             return line[0];
-          }
         }
         return null;
       }
 
-      // リトライ
+      // リトライ: board と panelState を初期化して UI を再構築
+      function resetPanelStateToDefault() {
+        for (let r = 0; r < 5; r++) {
+          for (let c = 0; c < 5; c++) {
+            if (r >= 1 && r <= 3 && c >= 1 && c <= 3) panelState[r][c] = null;
+            else panelState[r][c] = "intact";
+          }
+        }
+      }
       function retry() {
+        zanki = 3;
+        document.getElementById("x_cnt").textContent = `のこり:${zanki}`;
+        now_x_placed = 0;
+
         board = [
           ["", "", ""],
           ["", "X", ""],
           ["", "", ""],
         ];
-        renderBoard();
+        resetPanelStateToDefault();
+        // panel は初期化し直す（安全のため再生成）
+        initPanel();
+        renderGrid();
       }
 
-      // 初期描画
-      renderBoard();
+      // 初期化
+      initPanel(); // panel を一度だけ作る
+      renderGrid(); // grid を描画
+
+      // （必要であれば外部から読み出せるように expose）
+      window.isPanelCovered = isPanelCovered;
+      window.panelCellClicked = panelCellClicked;
+      window.panelState = panelState;
+      window.updatePanelCellUI = updatePanelCellUI;
     </script>
   </body>
 </html>
