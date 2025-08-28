@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>マルバツ ドラッグデモ</title>
+    <style>
+      body {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin: 0;
+        font-family: sans-serif;
+        background-color: #f0f0f0;
+      }
+      canvas {
+        border: 2px solid #333;
+        margin-top: 50px;
+        touch-action: none; /* タッチスクロール抑制 */
+      }
+    </style>
+  </head>
+  <body>
+    <h2>Canvas上で駒をドラッグできます</h2>
+    <canvas id="boardCanvas" width="400" height="400"></canvas>
+
+    <script>
+      const canvas = document.getElementById("boardCanvas");
+      const ctx = canvas.getContext("2d", { willReadFrequently: true });
+
+      // Canvas背景
+      ctx.fillStyle = "black";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      // 消しゴム用
+      let isErasing = false;
+      const eraserSize = 30;
+
+      // 駒オブジェクト
+      const pieces = [
+        { type: "O", x: 50, y: 50, radius: 20, dragging: false },
+        { type: "X", x: 100, y: 50, radius: 20, dragging: false },
+      ];
+
+      // 描画関数
+      function draw() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        // 背景
+        ctx.fillStyle = "black";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        // 駒描画
+        pieces.forEach((p) => {
+          if (p.type === "O") {
+            ctx.strokeStyle = "red";
+            ctx.lineWidth = 4;
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+            ctx.stroke();
+          } else if (p.type === "X") {
+            ctx.strokeStyle = "blue";
+            ctx.lineWidth = 4;
+            ctx.beginPath();
+            ctx.moveTo(p.x - p.radius, p.y - p.radius);
+            ctx.lineTo(p.x + p.radius, p.y + p.radius);
+            ctx.moveTo(p.x + p.radius, p.y - p.radius);
+            ctx.lineTo(p.x - p.radius, p.y + p.radius);
+            ctx.stroke();
+          }
+        });
+      }
+
+      // 消しゴム関数
+      function erase(x, y) {
+        ctx.save();
+        ctx.globalCompositeOperation = "destination-out";
+        ctx.beginPath();
+        ctx.arc(x, y, eraserSize, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+      }
+
+      // マウス座標取得
+      function getMousePos(e) {
+        const rect = canvas.getBoundingClientRect();
+        return {
+          x: e.clientX - rect.left,
+          y: e.clientY - rect.top,
+        };
+      }
+
+      // ドラッグ操作
+      let draggingPiece = null;
+      canvas.addEventListener("mousedown", (e) => {
+        const pos = getMousePos(e);
+        // 駒がクリックされているか判定
+        for (let p of pieces) {
+          const dx = pos.x - p.x;
+          const dy = pos.y - p.y;
+          if (dx * dx + dy * dy <= p.radius * p.radius) {
+            draggingPiece = p;
+            p.dragging = true;
+            return;
+          }
+        }
+        // それ以外なら消しゴム
+        isErasing = true;
+        erase(pos.x, pos.y);
+      });
+
+      canvas.addEventListener("mousemove", (e) => {
+        const pos = getMousePos(e);
+        if (draggingPiece && draggingPiece.dragging) {
+          draggingPiece.x = pos.x;
+          draggingPiece.y = pos.y;
+          draw();
+        } else if (isErasing) {
+          erase(pos.x, pos.y);
+        }
+      });
+
+      canvas.addEventListener("mouseup", () => {
+        if (draggingPiece) draggingPiece.dragging = false;
+        draggingPiece = null;
+        isErasing = false;
+      });
+
+      // タッチ対応
+      canvas.addEventListener("touchstart", (e) => {
+        const touch = e.touches[0];
+        const pos = {
+          x: touch.clientX - canvas.getBoundingClientRect().left,
+          y: touch.clientY - canvas.getBoundingClientRect().top,
+        };
+        for (let p of pieces) {
+          const dx = pos.x - p.x;
+          const dy = pos.y - p.y;
+          if (dx * dx + dy * dy <= p.radius * p.radius) {
+            draggingPiece = p;
+            p.dragging = true;
+            e.preventDefault();
+            return;
+          }
+        }
+        isErasing = true;
+        erase(pos.x, pos.y);
+        e.preventDefault();
+      });
+
+      canvas.addEventListener("touchmove", (e) => {
+        const touch = e.touches[0];
+        const pos = {
+          x: touch.clientX - canvas.getBoundingClientRect().left,
+          y: touch.clientY - canvas.getBoundingClientRect().top,
+        };
+        if (draggingPiece && draggingPiece.dragging) {
+          draggingPiece.x = pos.x;
+          draggingPiece.y = pos.y;
+          draw();
+        } else if (isErasing) {
+          erase(pos.x, pos.y);
+        }
+        e.preventDefault();
+      });
+
+      canvas.addEventListener("touchend", () => {
+        if (draggingPiece) draggingPiece.dragging = false;
+        draggingPiece = null;
+        isErasing = false;
+      });
+
+      // 初期描画
+      draw();
+    </script>
+  </body>
+</html>
