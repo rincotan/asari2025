@@ -26,13 +26,14 @@ window.addEventListener("DOMContentLoaded", () => {
   const stepTitle = document.getElementById("step-title");
   if (stepTitle) stepTitle.innerText = `STEP${stepNum}`;
 
-  document.querySelectorAll('.story-box').forEach(elem => {
+  document.querySelectorAll(".story-box").forEach((elem) => {
     if (stepNum === 1) {
-      elem.innerHTML = '冊子と5枚の謎を組み合わせて<br>彼の名前を導こう';
+      elem.innerHTML = "冊子と5枚の謎を組み合わせて<br>彼の名前を導こう";
     } else if (stepNum === 2) {
-      elem.innerHTML = '宇宙船に書かれた6つの謎と冊子を使い<br>宇宙船の開け方を導け';
+      elem.innerHTML =
+        "宇宙船に書かれた6つの謎と冊子を使い<br>宇宙船の開け方を導け";
     } else if (stepNum === 3) {
-      elem.innerHTML = 'パスワードを忘れた方はこちらの謎をお解き';
+      elem.innerHTML = "パスワードを忘れた方はこちらの謎をお解き";
     }
   });
 
@@ -118,15 +119,12 @@ window.addEventListener("DOMContentLoaded", () => {
   }
 });
 
-
 // STEPページの問題ボタン生成
 function generateStepButtons(stepNum, total) {
-  console.log("出てこい１");
   const grid = document.getElementById("problem-grid");
   if (!grid) return;
   grid.innerHTML = "";
   for (let i = 1; i <= total; i++) {
-    console.log("出てこい");
     const btn = document.createElement("button");
     btn.innerText = i;
     btn.onclick = () =>
@@ -163,9 +161,17 @@ function showResultModal(isCorrect, val, correct) {
       <div style="margin-top:10px;">解説やコメントをここに入れられます</div>
     `;
     nextBtn.style.display = "";
-    nextBtn.onclick = function() {
+    nextBtn.onclick = function () {
       // 次の問題へ
-      window.location.href = `quiz.html?step=${stepNum}&quiz=${quizNum+1}`;
+      if (
+        (stepNum === 1 && quizNum === 5) ||
+        (stepNum === 2 && quizNum === 6) ||
+        (stepNum === 3 && quizNum === 6)
+      ) {
+        window.location.href = `step.html?step=${stepNum}&from=quiz`;
+      } else {
+        window.location.href = `quiz.html?step=${stepNum}&quiz=${quizNum + 1}`;
+      }
     };
   } else {
     // 不正解時
@@ -177,7 +183,7 @@ function showResultModal(isCorrect, val, correct) {
     nextBtn.style.display = "none";
   }
   modal.style.display = "flex";
-  closeBtn.onclick = function() {
+  closeBtn.onclick = function () {
     modal.style.display = "none";
   };
 }
@@ -212,32 +218,32 @@ if (!unlockedStep.includes(stepNum)) {
 
 function goToStep(step, fromQuiz) {
   if (step === 0) window.location.href = "index.html";
-  else if (fromQuiz)
-    window.location.href = `step.html?step=${step}&from=quiz`;
-  else
-    window.location.href = `step.html?step=${step}`;
+  else if (fromQuiz) window.location.href = `step.html?step=${step}&from=quiz`;
+  else window.location.href = `step.html?step=${step}`;
 }
 
-window.addEventListener("DOMContentLoaded", function() {
+window.addEventListener("DOMContentLoaded", function () {
   // STEP番号取得
   const params = new URLSearchParams(window.location.search);
   const stepNum = parseInt(params.get("step") || "1", 10);
-  const fromQuiz = params.get("from") === "quiz"; 
+  const fromQuiz = params.get("from") === "quiz";
 
   // ストーリーオーバーレイの表示関数
   function showStoryOverlay() {
     document.getElementById("story-overlay").style.display = "flex";
     // すべて非表示
-    document.querySelectorAll('.step-story-section').forEach(sec => sec.classList.remove('active'));
+    document
+      .querySelectorAll(".step-story-section")
+      .forEach((sec) => sec.classList.remove("active"));
     // 対象だけ表示
     const target = document.getElementById(`story-section-step${stepNum}`);
-    if(target) target.classList.add('active');
+    if (target) target.classList.add("active");
   }
 
   // ストーリーを振り返るボタン
-  const storyBtn = document.querySelector('.story-btn');
+  const storyBtn = document.querySelector(".story-btn");
   if (storyBtn) {
-    storyBtn.addEventListener('click', showStoryOverlay);
+    storyBtn.addEventListener("click", showStoryOverlay);
   }
 
   // ページ初回表示時のみStory自動表示（from=quizならスキップ）
@@ -248,7 +254,7 @@ window.addEventListener("DOMContentLoaded", function() {
   // 閉じるボタン
   const closeStoryBtn = document.getElementById("close-story");
   if (closeStoryBtn) {
-    closeStoryBtn.onclick = function() {
+    closeStoryBtn.onclick = function () {
       document.getElementById("story-overlay").style.display = "none";
     };
   }
@@ -256,8 +262,11 @@ window.addEventListener("DOMContentLoaded", function() {
   const hintBtn = document.getElementById("hint-btn");
   const hintArea = document.getElementById("hint-area");
   if (hintBtn && hintArea) {
-    hintBtn.addEventListener("click", function() {
-      hintArea.style.display = (hintArea.style.display === "none" || hintArea.style.display === "") ? "block" : "none";
+    hintBtn.addEventListener("click", function () {
+      hintArea.style.display =
+        hintArea.style.display === "none" || hintArea.style.display === ""
+          ? "block"
+          : "none";
     });
   }
 });

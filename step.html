@@ -1,124 +1,186 @@
 <!DOCTYPE html>
 <html lang="ja">
-<head>
-<meta charset="UTF-8">
-<title>STEPページ</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="stylesheet" href="style.css">
-</head>
-<body>
-<!-- <div id="pc-warning">※スマホ専用サイトです。スマートフォンでご利用ください。</div> -->
-<div class="page active">
-  <h2 id="step-title"></h2>
+  <head>
+    <meta charset="UTF-8" />
+    <title>STEPページ</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <!-- <div id="pc-warning">※スマホ専用サイトです。スマートフォンでご利用ください。</div> -->
+    <div class="page active">
+      <h2 id="step-title"></h2>
 
-  <div class="story-box">冊子と5枚の謎を組み合わせて<div>彼の名前を導こう</div></div>
-  <button class="story-btn">ストーリーを振り返る</button>
+      <div class="story-box">
+        冊子と5枚の謎を組み合わせて
+        <div>彼の名前を導こう</div>
+      </div>
+      <button class="story-btn">ストーリーを振り返る</button>
 
-  <!-- STEP内の小問ボタン -->
-  <div id="problem-grid"></div>
-  
-  <!-- STEP解答欄 -->
-  <div class="input-group">
-    <input type="text" id="step-input" placeholder="ひらがなと半角数字のみで入力してね">
-    <button id="step-submit">決定</button>
-  </div>
-  <button id="hint-btn">ヒント</button>
-  <!-- ヒントボタンのすぐ下に追加 -->
-  <div id="hint-area" style="display:none;">
-    <details open>
-      <summary>ヒント1</summary>
-      このSTEPのヒント1をここに書いてください。
-    </details>
-    <details>
-      <summary>ヒント2</summary>
-      このSTEPのヒント2をここに書いてください。
-    </details>
-    <details>
-      <summary>ヒント3</summary>
-      このSTEPのヒント3をここに書いてください。
-    </details>
-  </div>
-</div>
+      <!-- STEP内の小問ボタン -->
+      <div id="problem-grid"></div>
 
-<!-- Storyオーバーレイ -->
-<div id="story-overlay" style="display:none;">
-  <div class="story-bg"></div>
-  <div class="story-center">
-    <div class="intro-story">
-      <h2 class="story-title">～STORY～</h2>
-      <section id="story-section-step1" class="step-story-section">
-        <div class="story-chat">
-          <div class="chat user">記憶喪失じゃん！！！</div>
-          <div class="chat alien">だだだだだ、大丈夫！！<br>はい、これ</div>
-          <div class="chat user">なにこれ…？<br>小さい紙5枚と…文字が散りばめられた紙？</div>
-          <div class="chat alien">これは僕の名刺！宇宙旅行中に出会った生き物に渡してるんだ〜</div>
-          <div class="chat user">へ〜、もしかして謎解き？</div>
-          <div class="chat alien">そう！よくわかったね、謎解きで名前知ってもらったらずっと覚えててくれるかなと思って作ったんだ！</div>
-          <div class="chat user">いいね。私謎解き大得意だよ</div>
-          <div class="chat alien">自信作だけど、君に解けるかな…？</div>
-          <div class="chat user">ふっふっふ秒速で解いちゃうよ〜……って雑談してる場合じゃないよ！！<br>記憶喪失なんでしょ？そもそも、自信作なのにこれ見て思い出さないの？</div>
-          <div class="chat alien">全然……</div>
-          <div class="chat user">なんでよ…</div>
-          <div class="chat alien">と、とにかく解いてみてよ</div>
-        </div>
-      </section>
-      <section id="story-section-step2" class="step-story-section">
-        <div class="story-chat">
-          <div class="chat user">あなた、タイタンって言うのね！</div>
-          <div class="chat alien">そう！僕はタイタン！！ありがとう！<br>君って謎解きが本当に得意なんだね！</div>
-          <div class="chat user">えへへ…次もドンと来い！</div>
-          <div class="chat alien">本当に助かるよ、君がいればすぐ帰れちゃいそう！</div>
-          <div class="chat user">それでそれで？次何すればいい？</div>
-          <div class="chat alien">そうだった、とりあえず宇宙船を見てくれないかな</div>
-          <div class="chat user">うん！</div>
-          <div id="chat-dialog">―宇宙船の目の前―</div>
-          <div class="chat user">でっか…</div>
-          <div class="chat alien">中を見せてあげたい所なんだけど、<br>緊急時の入り方を忘れちゃって…</div>
-          <div class="chat user">そんなことある！？あ、記憶喪失か…<br>なんでこうも重要なことばっかり…</div>
-          <div class="chat alien">どうしたら開くんだっけ…<br>う〜ん……………………</div>
-          <div class="chat user">あれ、ロケットになんか書いてあるよ</div>
-          <div></div>
-          <div id="chat-dialog">「うちゅうせんのあけかた」</div>
-          <div></div>
-          <div class="chat user">タイタン不用心すぎ！？</div>
-        </div>
-      </section>
-      <section id="story-section-step3" class="step-story-section">
-        <div class="story-chat">
-          <div class="chat user">かぎ？そんな当たり前な…ねぇタイタン？</div>
-          <div class="chat alien">あっ</div>
-          <div class="chat user">えっ</div>
-          <div class="chat alien">じゃじゃーん宇宙船のかぎ〜！</div>
-          <div class="chat user">…</div>
-          <div class="chat alien">ごっごめん！非常用のドアの鍵が別にあるってこと忘れてて…</div>
-          <div class="chat user">タイタンよくこれまで無事に旅してきたね…</div>
-          <div class="chat alien">実は僕これまで通った惑星全部で墜落しちゃってて、この宇宙船もボロボロなんだ…</div>
-          <div class="chat user">無事じゃないじゃん！</div>
-          <div class="chat alien">出発したとたんに墜落したり…</div>
-          <div class="chat user">おつかれタイタン</div>
-          <div class="chat alien">ありがとう！でももう宇宙船もあいたしまた旅に出れるよ！</div>
-          <div class="chat user">パスワードを入力してって書いてあるよ？</div>
-          <div class="chat alien">あ〜〜…</div>
-          <div class="chat user">この流れは……</div>
-          <div class="chat alien">忘れちゃった！</div>
-        </div>
-      </section>
-      <button id="close-story">✕</button>
+      <!-- STEP解答欄 -->
+      <div class="input-group">
+        <input
+          type="text"
+          id="step-input"
+          placeholder="ひらがなと半角数字のみで入力してね"
+        />
+        <button id="step-submit">決定</button>
+      </div>
+      <button id="hint-btns">ヒント</button>
+      <!-- ヒントボタンのすぐ下に追加 -->
+      <div id="hint-area" style="display: none">
+        <details open>
+          <summary>ヒント1</summary>
+          このSTEPのヒント1をここに書いてください。
+        </details>
+        <details>
+          <summary>ヒント2</summary>
+          このSTEPのヒント2をここに書いてください。
+        </details>
+        <details>
+          <summary>ヒント3</summary>
+          このSTEPのヒント3をここに書いてください。
+        </details>
+      </div>
     </div>
-  </div>
-</div>
 
+    <!-- Storyオーバーレイ -->
+    <div id="story-overlay" style="display: none">
+      <div class="story-bg"></div>
+      <div class="story-center">
+        <div class="intro-story">
+          <h2 class="story-title">～STORY～</h2>
+          <section id="story-section-step1" class="step-story-section">
+            <div class="story-chat">
+              <div class="chat user">記憶喪失じゃん！！！</div>
+              <div class="chat alien">
+                だだだだだ、大丈夫！！<br />はい、これ
+              </div>
+              <div class="chat user">
+                なにこれ…？<br />小さい紙5枚と…文字が散りばめられた紙？
+              </div>
+              <div class="chat alien">
+                これは僕の名刺！宇宙旅行中に出会った生き物に渡してるんだ〜
+              </div>
+              <div class="chat user">へ〜、もしかして謎解き？</div>
+              <div class="chat alien">
+                そう！よくわかったね、謎解きで名前知ってもらったらずっと覚えててくれるかなと思って作ったんだ！
+              </div>
+              <div class="chat user">いいね。私謎解き大得意だよ</div>
+              <div class="chat alien">自信作だけど、君に解けるかな…？</div>
+              <div class="chat user">
+                ふっふっふ秒速で解いちゃうよ〜……って雑談してる場合じゃないよ！！<br />記憶喪失なんでしょ？そもそも、自信作なのにこれ見て思い出さないの？
+              </div>
+              <div class="chat alien">全然……</div>
+              <div class="chat user">なんでよ…</div>
+              <div class="chat alien">と、とにかく解いてみてよ</div>
+            </div>
+          </section>
+          <section id="story-section-step2" class="step-story-section">
+            <div class="story-chat">
+              <div class="chat user">あなた、タイタンって言うのね！</div>
+              <div class="chat alien">
+                そう！僕はタイタン！！ありがとう！<br />君って謎解きが本当に得意なんだね！
+              </div>
+              <div class="chat user">えへへ…次もドンと来い！</div>
+              <div class="chat alien">
+                本当に助かるよ、君がいればすぐ帰れちゃいそう！
+              </div>
+              <div class="chat user">それでそれで？次何すればいい？</div>
+              <div class="chat alien">
+                そうだった、とりあえず宇宙船を見てくれないかな
+              </div>
+              <div class="chat user">うん！</div>
+              <div id="chat-dialog">―宇宙船の目の前―</div>
+              <div class="chat user">でっか…</div>
+              <div class="chat alien">
+                中を見せてあげたい所なんだけど、<br />緊急時の入り方を忘れちゃって…
+              </div>
+              <div class="chat user">
+                そんなことある！？あ、記憶喪失か…<br />なんでこうも重要なことばっかり…
+              </div>
+              <div class="chat alien">
+                どうしたら開くんだっけ…<br />う〜ん……………………
+              </div>
+              <div class="chat user">あれ、ロケットになんか書いてあるよ</div>
+              <div></div>
+              <div id="chat-dialog">「うちゅうせんのあけかた」</div>
+              <div></div>
+              <div class="chat user">タイタン不用心すぎ！？</div>
+            </div>
+          </section>
+          <section id="story-section-step3" class="step-story-section">
+            <div class="story-chat">
+              <div class="chat user">かぎ？そんな当たり前な…ねぇタイタン？</div>
+              <div class="chat alien">あっ</div>
+              <div class="chat user">えっ</div>
+              <div class="chat alien">じゃじゃーん宇宙船のかぎ〜！</div>
+              <div class="chat user">…</div>
+              <div class="chat alien">
+                ごっごめん！非常用のドアの鍵が別にあるってこと忘れてて…
+              </div>
+              <div class="chat user">
+                タイタンよくこれまで無事に旅してきたね…
+              </div>
+              <div class="chat alien">
+                実は僕これまで通った惑星全部で墜落しちゃってて、この宇宙船もボロボロなんだ…
+              </div>
+              <div class="chat user">無事じゃないじゃん！</div>
+              <div class="chat alien">出発したとたんに墜落したり…</div>
+              <div class="chat user">おつかれタイタン</div>
+              <div class="chat alien">
+                ありがとう！でももう宇宙船もあいたしまた旅に出れるよ！
+              </div>
+              <div class="chat user">
+                パスワードを入力してって書いてあるよ？
+              </div>
+              <div class="chat alien">あ〜〜…</div>
+              <div class="chat user">この流れは……</div>
+              <div class="chat alien">忘れちゃった！</div>
+            </div>
+          </section>
+          <button id="close-story">✕</button>
+        </div>
+      </div>
+    </div>
 
+    <div class="hamburger" id="hamburger">
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
+    <div class="menu" id="menu">
+      <a href="#" data-step="0">タイトル</a>
+      <a href="#" data-step="1">STEP1</a>
+      <a href="#" data-step="2" class="locked">STEP2</a>
+      <a href="#" data-step="3" class="locked">STEP3</a>
+    </div>
+    <script src="main.js"></script>
+    <script>
+      const params2 = new URLSearchParams(window.location.search);
+      const step = params2.get("step");
 
-<div class="hamburger" id="hamburger">
-  <div></div><div></div><div></div>
-</div>
-<div class="menu" id="menu">
-  <a href="#" data-step="0">タイトル</a>
-  <a href="#" data-step="1">STEP1</a>
-  <a href="#" data-step="2" class="locked">STEP2</a>
-  <a href="#" data-step="3" class="locked">STEP3</a>
-</div>
-<script src="main.js"></script>
-</body>
+      // stepの値に応じてCSS変数を変更
+      if (step === "1") {
+        document.documentElement.style.setProperty(
+          "--step-submit-hover",
+          "#f7bfc7"
+        );
+      } else if (step === "2") {
+        document.documentElement.style.setProperty(
+          "--step-submit-hover",
+          "#7991ff"
+        );
+        console.log("出てこい!!!!!!!!!!!!!!");
+      } else if (step === "3") {
+        document.documentElement.style.setProperty(
+          "--step-submit-hover",
+          "#ffde59"
+        );
+      }
+    </script>
+  </body>
 </html>
