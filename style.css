@@ -29,6 +29,21 @@ html {
   display: block;
 }
 
+.first-next-btn{
+  padding: 16px 0;
+  margin: 10px 0;
+  font-size: 20px;
+  width: 90vw;
+  max-width: 400px;
+  border-radius: 12px;
+  box-sizing: border-box;
+  background: #333;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  font-family: 'しねきゃぷしょん';
+}
+
 /* 動画オーバーレイ */
 #video-overlay {
   position: fixed;
@@ -123,6 +138,7 @@ html {
   max-height: 220px;
   overflow-y: auto;
   display: none;
+  min-height: 60vh; /* 画面の縦の半分を最低高さにする */
 }
 .step-story-section.active {
   opacity: 1;
@@ -145,6 +161,15 @@ html {
   justify-content: center;
   margin: 18px auto 0 auto;
 }
+
+#chat-dialog {
+  text-align: center;
+  font-size: 1.2em;
+  margin: 12px 0;
+  font-family: 'しねきゃぷしょん';
+  color: #555;
+}
+
 
 button {
   padding: 16px 0;
@@ -756,11 +781,8 @@ input[type="text"],
 }
 
 h2.speaking-A3-R1 {
-  font-size: 2em;
-  font-family: 'しねきゃぷしょん', sans-serif;
-  color: #ffffff;
-  text-align: center;
-  vertical-align: center;
+  font-weight: bold;
+  color: #ff4b4b;
 }
 
 /* 結果モーダル */
@@ -825,4 +847,46 @@ h2.speaking-A3-R1 {
 #hint-area summary {
   cursor: pointer;
   font-weight: bold;
+}
+
+
+.speech {
+  text-align: center;
+  color: #555;
+  font-size: 16px;
+  line-height: 1.6;
+  flex: 1;
+  margin: 0 0 20px 0;
+}
+
+/* 質問 */
+.question {
+  text-align: center;
+  font-weight: bold;
+  margin: 10px 0;
+}
+
+/* ボタン */
+.btn-row {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
+.btn-yes, .btn-no {
+  border: none;
+  padding: 10px 20px;
+  border-radius: 6px;
+  color: white;
+  font-weight: bold;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.btn-yes {
+  background-color: #e74c3c; /* 赤 */
+}
+
+.btn-no {
+  background-color: #3f51b5; /* 青 */
 }
