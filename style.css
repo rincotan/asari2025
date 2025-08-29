@@ -18,11 +18,11 @@ html {
   max-width: 480px;
   margin-left: auto;
   margin-right: auto;
-  background-image: url(images/back.png);
   background-size: 100%;
   position: relative;
   min-height: 100vh;
 }
+
 
 .page {
   display: none;
@@ -33,7 +33,7 @@ html {
   display: block;
 }
 
-.first-next-btn {
+.first-next-btn,.last-close-btn {
   padding: 16px 0;
   margin: 10px 0;
   font-size: 20px;
@@ -142,7 +142,7 @@ html {
   max-height: 220px;
   overflow-y: auto;
   display: none;
-  min-height: 60vh; /* 画面の縦の半分を最低高さにする */
+  min-height: 55vh; /* 画面の縦の半分を最低高さにする */
 }
 .step-story-section.active {
   opacity: 1;
@@ -285,6 +285,10 @@ input[type="text"] {
   font-family: "しねきゃぷしょん";
 }
 
+body.first-page {
+  background-image: url(images/back.png);
+}
+
 /* STEP1用 */
 body.step1 {
   background-image: url(images/back1.png);
@@ -302,6 +306,20 @@ body.step3 {
 
 body.last {
   background-image: url(images/back_last.png);
+}
+
+body.good-last {
+  background :#644d93;
+}
+
+body.bad-last {
+  background-image: url(images/back_bad.png);
+}
+
+/* タイトル画面の背景も明示的に指定 */
+body:not(.step1):not(.step2):not(.step3):not(.last):not(.good-last):not(.bad-last) {
+  background-image: url(images/back.png);
+  background-size: 100%;
 }
 
 /* STEPタイトル */
@@ -864,13 +882,39 @@ h2.speaking-A3-R1 {
   box-shadow: 0 2px 8px #0001;
   font-family: "しねきゃぷしょん";
 }
+
 #hint-area details {
   margin-bottom: 8px;
   font-size: 1.1em;
 }
+
 #hint-area summary {
   cursor: pointer;
   font-weight: bold;
+  padding: 8px;
+  background: #fff3cd;
+  border-radius: 4px;
+  margin-bottom: 4px;
+}
+
+#hint-area details[open] summary {
+  margin-bottom: 8px;
+}
+
+/* STEPごとのヒント色分け */
+.step1-hints details summary {
+  background: #ffe6e6;
+  border-left: 4px solid #ff8787;
+}
+
+.step2-hints details summary {
+  background: #e6f0ff;
+  border-left: 4px solid #7991ff;
+}
+
+.step3-hints details summary {
+  background: #fff8e6;
+  border-left: 4px solid #ffde59;
 }
 
 .speech {
@@ -913,4 +957,46 @@ h2.speaking-A3-R1 {
 
 .btn-no {
   background-color: #3f51b5; /* 青 */
+}
+
+/* good.html用のスタイル */
+body.good-last {
+  background: #644d93;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.title {
+  text-align: center;
+  color: #fff;
+  font-size: 2em;
+  margin: 20px 0;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+}
+
+#playground {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  margin: 20px 0;
+  overflow: hidden;
+}
+
+.char {
+  position: absolute;
+  width: 150px;
+  height: 150px;
+  cursor: grab;
+  user-select: none;
+  border-radius: 8px;
+  z-index: 10;
+}
+
+.char:active {
+  cursor: grabbing;
+}
+
+.char:hover {
+  transform: scale(1.05);
 }

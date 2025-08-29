@@ -18,7 +18,7 @@ const unlockedStep = JSON.parse(localStorage.getItem("unlockedStep"));
 
 window.addEventListener("DOMContentLoaded", () => {
   const params = new URLSearchParams(window.location.search);
-  const stepNum = parseInt(params.get("step")) || 1;
+  const stepNum = parseInt(params.get("step")) || 0;
 
   // bodyにstepクラスを付与
   document.body.classList.add(`step${stepNum}`);
@@ -56,18 +56,28 @@ window.addEventListener("DOMContentLoaded", () => {
   document.querySelectorAll(".menu a").forEach((a) => {
     a.addEventListener("click", (e) => {
       e.preventDefault();
-      const targetStep = parseInt(a.dataset.step);
+      
+      // data-step属性がある場合（STEPページへのリンク）
+      if (a.dataset.step !== undefined) {
+        const targetStep = parseInt(a.dataset.step);
 
-      if (targetStep === 0) {
-        window.location.href = "index.html";
-      } else {
-        const unlocked = JSON.parse(
-          localStorage.getItem("unlockedStep") || "[1]"
-        );
-        if (unlocked.includes(targetStep)) {
-          window.location.href = `step.html?step=${targetStep}`;
+        if (targetStep === 0) {
+          window.location.href = "index.html";
         } else {
-          alert("まだこのSTEPは解放されていません！");
+          const unlocked = JSON.parse(
+            localStorage.getItem("unlockedStep") || "[1]"
+          );
+          if (unlocked.includes(targetStep)) {
+            window.location.href = `step.html?step=${targetStep}`;
+          } else {
+            alert("まだこのSTEPは解放されていません！");
+          }
+        }
+      } else {
+        // href属性がある場合（直接リンク）
+        const href = a.getAttribute("href");
+        if (href && href !== "#") {
+          window.location.href = href;
         }
       }
     });
@@ -148,18 +158,39 @@ function showResultModal(isCorrect, val, correct) {
   const content = document.getElementById("result-content");
   const closeBtn = document.getElementById("modal-close-btn");
   const nextBtn = document.getElementById("modal-next-btn");
+  
   // 問題番号取得
   const params = new URLSearchParams(window.location.search);
   const stepNum = parseInt(params.get("step")) || 1;
   const quizNum = parseInt(params.get("quiz")) || 1;
 
   if (isCorrect) {
-    // 正解時
-    content.innerHTML = `
+    // 小問題ごとの解説と解説画像を表示
+    const explanation = quizData[stepNum][quizNum].explanation;
+    const explanationImg = quizData[stepNum][quizNum].explanation_img;
+    
+    let explanationText = "";
+    if (Array.isArray(explanation)) {
+      explanationText = explanation.join("<br>");
+    } else if (explanation) {
+      explanationText = explanation;
+    } else {
+      explanationText = "解説は準備中です。";
+    }
+    
+    let contentHTML = `
       <div style="color:#f08080;font-size:2em;font-weight:bold;">正解</div>
-      <img src="images/answer${quizNum}.png" style="width:90%;max-width:220px;margin:10px auto;">
-      <div style="margin-top:10px;">解説やコメントをここに入れられます</div>
     `;
+    
+    // 解説画像がある場合は表示
+    if (explanationImg) {
+      contentHTML += `<img src="${explanationImg}" style="width:90%;max-width:300px;margin:10px auto;border:2px solid #ddd;border-radius:8px;">`;
+    }
+    
+    contentHTML += `<div style="margin-top:10px;font-size:0.9em;line-height:1.4;text-align:left;padding:10px;background:#f8f9fa;border-radius:4px;">${explanationText}</div>`;
+    
+    content.innerHTML = contentHTML;
+    
     nextBtn.style.display = "";
     nextBtn.onclick = function () {
       // 次の問題へ
@@ -173,6 +204,17 @@ function showResultModal(isCorrect, val, correct) {
         window.location.href = `quiz.html?step=${stepNum}&quiz=${quizNum + 1}`;
       }
     };
+    if (
+      (stepNum === 1 && quizNum === 5) ||
+      (stepNum === 2 && quizNum === 6) ||
+      (stepNum === 3 && quizNum === 6)
+    ) {
+      nextBtn.innerText=("トップに戻る");
+    }
+    else{
+      nextBtn.innerText=("次の問題へ→");
+    }
+    
   } else {
     // 不正解時
     content.innerHTML = `
@@ -182,6 +224,7 @@ function showResultModal(isCorrect, val, correct) {
     `;
     nextBtn.style.display = "none";
   }
+  
   modal.style.display = "flex";
   closeBtn.onclick = function () {
     modal.style.display = "none";
@@ -225,12 +268,15 @@ function goToStep(step, fromQuiz) {
 window.addEventListener("DOMContentLoaded", function () {
   // STEP番号取得
   const params = new URLSearchParams(window.location.search);
-  const stepNum = parseInt(params.get("step") || "1", 10);
+  const stepNum = parseInt(params.get("step") || "", 10);
   const fromQuiz = params.get("from") === "quiz";
+  console.log(stepData);
 
   // ストーリーオーバーレイの表示関数
   function showStoryOverlay() {
-    document.getElementById("story-overlay").style.display = "flex";
+    if(document.getElementById("story-overlay")!=null){
+      document.getElementById("story-overlay").style.display = "flex";
+    }
     // すべて非表示
     document
       .querySelectorAll(".step-story-section")
@@ -259,14 +305,38 @@ window.addEventListener("DOMContentLoaded", function () {
     };
   }
   // ヒントボタンの表示切替
-  const hintBtn = document.getElementById("hint-btn");
+  const hintBtn = document.getElementById("hint-btns");
   const hintArea = document.getElementById("hint-area");
   if (hintBtn && hintArea) {
     hintBtn.addEventListener("click", function () {
-      hintArea.style.display =
-        hintArea.style.display === "none" || hintArea.style.display === ""
-          ? "block"
-          : "none";
+      // 現在のSTEPに応じてヒントを表示
+      const step1Hints = document.querySelector('.step1-hints');
+      const step2Hints = document.querySelector('.step2-hints');
+      const step3Hints = document.querySelector('.step3-hints');
+      
+      // すべてのヒントを非表示
+      if (step1Hints) step1Hints.style.display = 'none';
+      if (step2Hints) step2Hints.style.display = 'none';
+      if (step3Hints) step3Hints.style.display = 'none';
+      
+      // 現在のSTEPのヒントを表示
+      if (stepNum === 1 && step1Hints) {
+        step1Hints.style.display = 'block';
+      } else if (stepNum === 2 && step2Hints) {
+        step2Hints.style.display = 'block';
+      } else if (stepNum === 3 && step3Hints) {
+        step3Hints.style.display = 'block';
+      }
+      
+      hintArea.style.display = (hintArea.style.display === "none" || hintArea.style.display === "") ? "block" : "none";
     });
   }
 });
+
+
+//goodとbad.htmlの戻るボタン
+if(document.getElementById('last-close-btn')!=null){
+  document.getElementById('last-close-btn').addEventListener('click', () => {
+    window.location.href = 'last.html';
+  });
+}
