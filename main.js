@@ -340,3 +340,4 @@ if(document.getElementById('last-close-btn')!=null){
     window.location.href = 'last.html';
   });
 }
+

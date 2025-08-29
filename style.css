@@ -1000,3 +1000,25 @@ body.good-last {
 .char:hover {
   transform: scale(1.05);
 }
+
+/* STORY配色（タイトル/STEP1/2/3で切替） */
+
+/* タイトル（index.html） */
+body.first-page .story-title { text-shadow: 0 2px 8px #cecece, 0 0 2px #cecece; }
+body.first-page .chat { box-shadow: 0 2px 8px #00000066; }
+body.first-page .chat.user { background:#f3f3f3; }
+
+/* STEP1 */
+body.step1 .story-title { text-shadow: 0 2px 8px 1 #f7bfc7, 0 0 2px #f7bfc7; }
+body.step1 .chat { box-shadow: 0 2px 8px #ff002666; }
+body.step1 .chat.user { background:#fff1f3; }
+
+/* STEP2 */
+body.step2 .story-title { text-shadow: 0 2px 8px #aabaff, 0 0 2px #aabaff; }
+body.step2 .chat { box-shadow: 0 2px 8px #002fff66; }
+body.step2 .chat.user { background:#eef2ff; }
+
+/* STEP3 */
+body.step3 .story-title { text-shadow: 0 2px 8px #fff5ce, 0 0 2px #fff5ce; }
+body.step3 .chat { box-shadow: 0 2px 8px #ffcc0066; }
+body.step3 .chat.user { background:#fffbea; }
