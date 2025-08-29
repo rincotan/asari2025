@@ -56,7 +56,7 @@ window.addEventListener("DOMContentLoaded", () => {
   document.querySelectorAll(".menu a").forEach((a) => {
     a.addEventListener("click", (e) => {
       e.preventDefault();
-      
+
       // data-step属性がある場合（STEPページへのリンク）
       if (a.dataset.step !== undefined) {
         const targetStep = parseInt(a.dataset.step);
@@ -133,7 +133,7 @@ function showResultModal(isCorrect, val, correct) {
   const content = document.getElementById("result-content");
   const closeBtn = document.getElementById("modal-close-btn");
   const nextBtn = document.getElementById("modal-next-btn");
-  
+
   // 問題番号取得
   const params = new URLSearchParams(window.location.search);
   const stepNum = parseInt(params.get("step")) || 1;
@@ -149,7 +149,7 @@ function showResultModal(isCorrect, val, correct) {
       solved[`s${stepNum}q${quizNum}`] = true;
       localStorage.setItem("solvedQuiz", JSON.stringify(solved));
     } catch (_) {}
-    
+
     let explanationText = "";
     if (Array.isArray(explanation)) {
       explanationText = explanation.join("<br>");
@@ -158,20 +158,20 @@ function showResultModal(isCorrect, val, correct) {
     } else {
       explanationText = "解説は準備中です。";
     }
-    
+
     let contentHTML = `
       <div style="color:#f08080;font-size:2em;font-weight:bold;">正解</div>
     `;
-    
+
     // 解説画像がある場合は表示
     if (explanationImg) {
       contentHTML += `<img src="${explanationImg}" style="width:90%;max-width:300px;margin:10px auto;border:2px solid #ddd;border-radius:8px;">`;
     }
-    
+
     contentHTML += `<div style="margin-top:10px;font-size:0.9em;line-height:1.4;text-align:left;padding:10px;background:#f8f9fa;border-radius:4px;">${explanationText}</div>`;
-    
+
     content.innerHTML = contentHTML;
-    
+
     nextBtn.style.display = "";
     nextBtn.onclick = function () {
       // 次の問題へ
@@ -190,12 +190,10 @@ function showResultModal(isCorrect, val, correct) {
       (stepNum === 2 && quizNum === 6) ||
       (stepNum === 3 && quizNum === 6)
     ) {
-      nextBtn.innerText=("トップに戻る");
+      nextBtn.innerText = "トップに戻る";
+    } else {
+      nextBtn.innerText = "次の問題へ→";
     }
-    else{
-      nextBtn.innerText=("次の問題へ→");
-    }
-    
   } else {
     // 不正解時
     content.innerHTML = `
@@ -205,7 +203,7 @@ function showResultModal(isCorrect, val, correct) {
     `;
     nextBtn.style.display = "none";
   }
-  
+
   modal.style.display = "flex";
   closeBtn.onclick = function () {
     modal.style.display = "none";
@@ -222,14 +220,15 @@ function showStepResultModal(isCorrect, stepNum) {
   const stepExplanations = {
     1: "冊子と5枚の謎を正しく組み合わせるのがポイントでした。",
     2: "宇宙船の6つの謎を冊子と照合して順に解読します。",
-    3: "これまでの情報を総合し、最終パスワードを導きます。"
+    3: "これまでの情報を総合し、最終パスワードを導きます。",
   };
 
   if (isCorrect) {
     // アンロック処理
     const unlocked = JSON.parse(localStorage.getItem("unlockedStep") || "[1]");
     if (!unlocked.includes(stepNum)) unlocked.push(stepNum);
-    if (stepNum < 3 && !unlocked.includes(stepNum + 1)) unlocked.push(stepNum + 1);
+    if (stepNum < 3 && !unlocked.includes(stepNum + 1))
+      unlocked.push(stepNum + 1);
     localStorage.setItem("unlockedStep", JSON.stringify(unlocked));
 
     const imgPath = `images/step${stepNum}-ans.png`; // あれば表示
@@ -257,7 +256,9 @@ function showStepResultModal(isCorrect, stepNum) {
   }
 
   modal.style.display = "flex";
-  closeBtn.onclick = function () { modal.style.display = "none"; };
+  closeBtn.onclick = function () {
+    modal.style.display = "none";
+  };
 }
 
 function checkStepAnswer(stepNum, correct) {
@@ -303,7 +304,7 @@ window.addEventListener("DOMContentLoaded", function () {
 
   // ストーリーオーバーレイの表示関数
   function showStoryOverlay() {
-    if(document.getElementById("story-overlay")!=null){
+    if (document.getElementById("story-overlay") != null) {
       document.getElementById("story-overlay").style.display = "flex";
     }
     // すべて非表示
@@ -334,39 +335,11 @@ window.addEventListener("DOMContentLoaded", function () {
     };
   }
   // ヒントボタンの表示切替
-  const hintBtn = document.getElementById("hint-btns");
-  const hintArea = document.getElementById("hint-area");
-  if (hintBtn && hintArea) {
-    hintBtn.addEventListener("click", function () {
-      // 現在のSTEPに応じてヒントを表示
-      const step1Hints = document.querySelector('.step1-hints');
-      const step2Hints = document.querySelector('.step2-hints');
-      const step3Hints = document.querySelector('.step3-hints');
-      
-      // すべてのヒントを非表示
-      if (step1Hints) step1Hints.style.display = 'none';
-      if (step2Hints) step2Hints.style.display = 'none';
-      if (step3Hints) step3Hints.style.display = 'none';
-      
-      // 現在のSTEPのヒントを表示
-      if (stepNum === 1 && step1Hints) {
-        step1Hints.style.display = 'block';
-      } else if (stepNum === 2 && step2Hints) {
-        step2Hints.style.display = 'block';
-      } else if (stepNum === 3 && step3Hints) {
-        step3Hints.style.display = 'block';
-      }
-      
-      hintArea.style.display = (hintArea.style.display === "none" || hintArea.style.display === "") ? "block" : "none";
-    });
-  }
 });
 
-
 //goodとbad.htmlの戻るボタン
-if(document.getElementById('last-close-btn')!=null){
-  document.getElementById('last-close-btn').addEventListener('click', () => {
-    window.location.href = 'last.html';
+if (document.getElementById("last-close-btn") != null) {
+  document.getElementById("last-close-btn").addEventListener("click", () => {
+    window.location.href = "last.html";
   });
 }
-

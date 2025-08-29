@@ -1,110 +1,160 @@
 <!DOCTYPE html>
 <html lang="ja">
-<head>
-<meta charset="UTF-8">
-<title>asari2025</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="stylesheet" href="style.css">
-</head>
-<body class="good-last">
-<h2 class="title">上から読め</h2>
+  <head>
+    <meta charset="UTF-8" />
+    <title>asari2025</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body class="good-last">
+    <h2 class="title">上から読め</h2>
 
-<div id="playground">
-  <img src="images/cha1.png" class="char" style="top:0px; left:0px; width:250px; height:250px;" alt="た">
-  <img src="images/cha2.png" class="char" style="top:50px; left:350px; width:200px; height:200px;" alt="い">
-  <img src="images/cha3.png" class="char" style="top:70px; left:220px; width:150px; height:150px;" alt="の">
-  <img src="images/cha4.png" class="char" style="top:260px; left:150px; width:200px; height:200px;" alt="お">
-  <img src="images/cha5.png" class="char" style="top:250px; left:300px; width:200px; height:200px;" alt="う">
-  <img src="images/cha6.png" class="char" style="top:500px; left:20px; width:200px; height:200px;" alt="ら">
-  <img src="images/cha7.png" class="char" style="top:280px; left:10px; width:200px; height:200px;" alt="ど">
-  <img src="images/cha8.png" class="char" style="top:450px; left:180px; width:150px; height:150px;" alt="ろ">
-  <img src="images/cha9.png" class="char" style="top:420px; left:320px; width:300px; height:300px;" alt="私">
-</div>
+    <div id="playground">
+      <img
+        src="images/cha1.png"
+        class="char"
+        style="top: 0px; left: 0px; width: 250px; height: 250px"
+        alt="た"
+      />
+      <img
+        src="images/cha2.png"
+        class="char"
+        style="top: 50px; left: 350px; width: 200px; height: 200px"
+        alt="い"
+      />
+      <img
+        src="images/cha3.png"
+        class="char"
+        style="top: 70px; left: 220px; width: 150px; height: 150px"
+        alt="の"
+      />
+      <img
+        src="images/cha4.png"
+        class="char"
+        style="top: 260px; left: 150px; width: 200px; height: 200px"
+        alt="お"
+      />
+      <img
+        src="images/cha5.png"
+        class="char"
+        style="top: 250px; left: 300px; width: 200px; height: 200px"
+        alt="う"
+      />
+      <img
+        src="images/cha6.png"
+        class="char"
+        style="top: 500px; left: 20px; width: 200px; height: 200px"
+        alt="ら"
+      />
+      <img
+        src="images/cha7.png"
+        class="char"
+        style="top: 280px; left: 10px; width: 200px; height: 200px"
+        alt="ど"
+      />
+      <img
+        src="images/cha8.png"
+        class="char"
+        style="top: 450px; left: 180px; width: 150px; height: 150px"
+        alt="ろ"
+      />
+      <img
+        src="images/cha9.png"
+        class="char"
+        style="top: 420px; left: 320px; width: 300px; height: 300px"
+        alt="私"
+      />
+    </div>
 
-<button class="last-close-btn" id="last-close-btn">✕ 閉じる</button>
+    <button class="last-close-btn" id="last-close-btn">✕ 閉じる</button>
+    <button class="reset-btn" id="reset-btn" onclick="location.reload();">
+      リセット
+    </button>
 
-<div class="hamburger" id="hamburger">
-  <div></div><div></div><div></div>
-</div>
-<div class="menu" id="menu">
-  <a href="#" data-step="0">タイトル</a>
-  <a href="#" data-step="1">STEP1</a>
-  <a href="#" data-step="2" class="locked">STEP2</a>
-  <a href="#" data-step="3" class="locked">STEP3</a>
-  <a href="last.html">Last</a>
-</div>
+    <div class="hamburger" id="hamburger">
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
+    <div class="menu" id="menu">
+      <a href="#" data-step="0">タイトル</a>
+      <a href="#" data-step="1">STEP1</a>
+      <a href="#" data-step="2" class="locked">STEP2</a>
+      <a href="#" data-step="3" class="locked">STEP3</a>
+      <a href="last.html">Last</a>
+    </div>
 
-<script src="main.js"></script>
-<script>
-document.addEventListener('DOMContentLoaded', () => {
-  const chars = document.querySelectorAll('.char');
-  
-  chars.forEach(char => {
-    let isDragging = false;
-    let currentX;
-    let currentY;
-    let initialX;
-    let initialY;
-    let xOffset = 0;
-    let yOffset = 0;
+    <script src="main.js"></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const chars = document.querySelectorAll(".char");
 
-    // タッチイベント（モバイル用）
-    char.addEventListener('touchstart', dragStart, false);
-    char.addEventListener('touchend', dragEnd, false);
-    char.addEventListener('touchmove', drag, false);
+        chars.forEach((char) => {
+          let isDragging = false;
+          let currentX;
+          let currentY;
+          let initialX;
+          let initialY;
+          let xOffset = 0;
+          let yOffset = 0;
 
-    // マウスイベント（PC用）
-    char.addEventListener('mousedown', dragStart, false);
-    char.addEventListener('mouseup', dragEnd, false);
-    char.addEventListener('mousemove', drag, false);
+          // タッチイベント（モバイル用）
+          char.addEventListener("touchstart", dragStart, false);
+          char.addEventListener("touchend", dragEnd, false);
+          char.addEventListener("touchmove", drag, false);
 
-    function dragStart(e) {
-      e.preventDefault();
-      
-      if (e.type === 'touchstart') {
-        initialX = e.touches[0].clientX - xOffset;
-        initialY = e.touches[0].clientY - yOffset;
-      } else {
-        initialX = e.clientX - xOffset;
-        initialY = e.clientY - yOffset;
-      }
+          // マウスイベント（PC用）
+          char.addEventListener("mousedown", dragStart, false);
+          char.addEventListener("mouseup", dragEnd, false);
+          char.addEventListener("mousemove", drag, false);
 
-      if (e.target === char) {
-        isDragging = true;
-      }
-    }
+          function dragStart(e) {
+            e.preventDefault();
 
-    function dragEnd(e) {
-      e.preventDefault();
-      initialX = currentX;
-      initialY = currentY;
-      isDragging = false;
-    }
+            if (e.type === "touchstart") {
+              initialX = e.touches[0].clientX - xOffset;
+              initialY = e.touches[0].clientY - yOffset;
+            } else {
+              initialX = e.clientX - xOffset;
+              initialY = e.clientY - yOffset;
+            }
 
-    function drag(e) {
-      e.preventDefault();
-      
-      if (isDragging) {
-        if (e.type === 'touchmove') {
-          currentX = e.touches[0].clientX - initialX;
-          currentY = e.touches[0].clientY - initialY;
-        } else {
-          currentX = e.clientX - initialX;
-          currentY = e.clientY - initialY;
-        }
+            if (e.target === char) {
+              isDragging = true;
+            }
+          }
 
-        xOffset = currentX;
-        yOffset = currentY;
+          function dragEnd(e) {
+            e.preventDefault();
+            initialX = currentX;
+            initialY = currentY;
+            isDragging = false;
+          }
 
-        setTranslate(currentX, currentY, char);
-      }
-    }
+          function drag(e) {
+            e.preventDefault();
 
-    function setTranslate(xPos, yPos, el) {
-      el.style.transform = `translate3d(${xPos}px, ${yPos}px, 0)`;
-    }
-  });
-});
-</script>
-</body>
+            if (isDragging) {
+              if (e.type === "touchmove") {
+                currentX = e.touches[0].clientX - initialX;
+                currentY = e.touches[0].clientY - initialY;
+              } else {
+                currentX = e.clientX - initialX;
+                currentY = e.clientY - initialY;
+              }
+
+              xOffset = currentX;
+              yOffset = currentY;
+
+              setTranslate(currentX, currentY, char);
+            }
+          }
+
+          function setTranslate(xPos, yPos, el) {
+            el.style.transform = `translate3d(${xPos}px, ${yPos}px, 0)`;
+          }
+        });
+      });
+    </script>
+  </body>
 </html>

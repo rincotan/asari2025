@@ -33,7 +33,7 @@
       <!-- ヒントボタンのすぐ下に追加 -->
       <div id="hint-area" style="display: none">
         <!-- STEP1のヒント -->
-        <div class="step1-hints" style="display: none;">
+        <div class="step1-hints" style="display: none">
           <details open>
             <summary>ヒント1</summary>
             冊子の内容をよく読んでみましょう。
@@ -47,9 +47,9 @@
             文字を組み合わせる順番を考えてみてください。
           </details>
         </div>
-        
+
         <!-- STEP2のヒント -->
-        <div class="step2-hints" style="display: none;">
+        <div class="step2-hints" style="display: none">
           <details open>
             <summary>ヒント1</summary>
             宇宙船の表面に書かれた謎を解読しましょう。
@@ -63,9 +63,9 @@
             6つの謎は順番に解く必要があります。
           </details>
         </div>
-        
+
         <!-- STEP3のヒント -->
-        <div class="step3-hints" style="display: none;">
+        <div class="step3-hints" style="display: none">
           <details open>
             <summary>ヒント1</summary>
             パスワードは宇宙船の内部に関連しているかもしれません。
@@ -196,12 +196,12 @@
     </div>
 
     <!-- STEP用モーダル（quizと共通の構造） -->
-    <div id="result-modal" style="display:none;">
+    <div id="result-modal" style="display: none">
       <div class="modal-bg"></div>
       <div class="modal-center">
         <div id="result-content"></div>
         <button id="modal-close-btn">✕ 閉じる</button>
-        <button id="modal-next-btn" style="display:none;">次へ→</button>
+        <button id="modal-next-btn" style="display: none">次へ→</button>
       </div>
     </div>
     <script src="main.js"></script>
@@ -231,28 +231,35 @@
       // ヒントボタンの表示切替
       const hintBtn = document.getElementById("hint-btns");
       const hintArea = document.getElementById("hint-area");
+
       if (hintBtn && hintArea) {
         hintBtn.addEventListener("click", function () {
           // 現在のSTEPに応じてヒントを表示
-          const step1Hints = document.querySelector('.step1-hints');
-          const step2Hints = document.querySelector('.step2-hints');
-          const step3Hints = document.querySelector('.step3-hints');
-          
+          const step1Hints = document.querySelector(".step1-hints");
+          const step2Hints = document.querySelector(".step2-hints");
+          const step3Hints = document.querySelector(".step3-hints");
+
           // すべてのヒントを非表示
-          if (step1Hints) step1Hints.style.display = 'none';
-          if (step2Hints) step2Hints.style.display = 'none';
-          if (step3Hints) step3Hints.style.display = 'none';
-          
+          if (step1Hints) step1Hints.style.display = "none";
+          if (step2Hints) step2Hints.style.display = "none";
+          if (step3Hints) step3Hints.style.display = "none";
+
           // 現在のSTEPのヒントを表示
           if (step === "1" && step1Hints) {
-            step1Hints.style.display = 'block';
+            step1Hints.style.display = "block";
           } else if (step === "2" && step2Hints) {
-            step2Hints.style.display = 'block';
+            step2Hints.style.display = "block";
           } else if (step === "3" && step3Hints) {
-            step3Hints.style.display = 'block';
+            step3Hints.style.display = "block";
           }
-          
-          hintArea.style.display = (hintArea.style.display === "none" || hintArea.style.display === "") ? "block" : "none";
+          if (
+            hintArea.style.display === "none" ||
+            hintArea.style.display === ""
+          ) {
+            hintArea.style.display = "block";
+          } else {
+            hintArea.style.display = "none";
+          }
         });
       }
     </script>

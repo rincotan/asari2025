@@ -29,7 +29,6 @@ html {
   min-height: 100vh;
 }
 
-
 .page {
   display: none;
   padding: 10px 4vw;
@@ -39,7 +38,9 @@ html {
   display: block;
 }
 
-.first-next-btn,.last-close-btn {
+.first-next-btn,
+.last-close-btn,
+.reset-btn {
   padding: 16px 0;
   margin: 10px 0;
   font-size: 20px;
@@ -52,6 +53,22 @@ html {
   border: none;
   cursor: pointer;
   font-family: "しねきゃぷしょん";
+  text-align: center;
+}
+
+.last-close-btn {
+  position: fixed;
+  left: 50%;
+  bottom: 60px;
+  transform: translateX(-50%);
+  z-index: 1000;
+}
+.reset-btn {
+  position: fixed;
+  left: 50%;
+  bottom: 120px;
+  transform: translateX(-50%);
+  z-index: 1000;
 }
 
 /* 動画オーバーレイ */
@@ -316,7 +333,7 @@ body.last {
 }
 
 body.good-last {
-  background :#644d93;
+  background: #644d93;
   font-family: JKゴシック;
 }
 
@@ -326,7 +343,9 @@ body.bad-last {
 }
 
 /* タイトル画面の背景も明示的に指定 */
-body:not(.step1):not(.step2):not(.step3):not(.last):not(.good-last):not(.bad-last) {
+body:not(.step1):not(.step2):not(.step3):not(.last):not(.good-last):not(
+    .bad-last
+  ) {
   background-image: url(images/back.png);
   background-size: 100%;
 }
@@ -868,7 +887,7 @@ h2.speaking-A3-R1 {
 }
 #modal-close-btn,
 #modal-next-btn {
-  margin: 8px 0 0 0;
+  margin: 8px auto 0 auto;
   padding: 10px 0;
   font-size: 1.1em;
   border-radius: 6px;
@@ -876,6 +895,8 @@ h2.speaking-A3-R1 {
   background: #333;
   color: #fff;
   cursor: pointer;
+  display: block;
+  text-align: center;
 }
 #modal-next-btn {
   background: #f08080;
@@ -963,9 +984,15 @@ h2.speaking-A3-R1 {
 .btn-yes {
   background-color: #e74c3c; /* 赤 */
 }
+.btn-yes:hover {
+  background-color: #ff8787; /* 赤のホバー色 */
+}
 
 .btn-no {
   background-color: #3f51b5; /* 青 */
+}
+.btn-no:hover {
+  background-color: #7986cb; /* 青のホバー色 */
 }
 
 /* good.html用のスタイル */
@@ -981,7 +1008,7 @@ body.good-last {
   color: #fff;
   font-size: 2em;
   margin: 20px 0;
-  text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
 }
 
 #playground {
@@ -1013,24 +1040,48 @@ body.good-last {
 /* STORY配色（タイトル/STEP1/2/3で切替） */
 
 /* タイトル（index.html） */
-body.first-page .story-title { text-shadow: 0 2px 8px #cecece, 0 0 2px #cecece; }
-body.first-page .chat { box-shadow: 0 2px 8px #00000066; }
-body.first-page .chat.user { background:#f3f3f3; }
+body.first-page .story-title {
+  text-shadow: 0 2px 8px #cecece, 0 0 2px #cecece;
+}
+body.first-page .chat {
+  box-shadow: 0 2px 8px #00000066;
+}
+body.first-page .chat.user {
+  background: #f3f3f3;
+}
 
 /* STEP1 */
-body.step1 .story-title { text-shadow: 0 2px 8px 1 #f7bfc7, 0 0 2px #f7bfc7; }
-body.step1 .chat { box-shadow: 0 2px 8px #ff002666; }
-body.step1 .chat.user { background:#fff1f3; }
+body.step1 .story-title {
+  text-shadow: 0 2px 8px 1 #f7bfc7, 0 0 2px #f7bfc7;
+}
+body.step1 .chat {
+  box-shadow: 0 2px 8px #ff002666;
+}
+body.step1 .chat.user {
+  background: #fff1f3;
+}
 
 /* STEP2 */
-body.step2 .story-title { text-shadow: 0 2px 8px #aabaff, 0 0 2px #aabaff; }
-body.step2 .chat { box-shadow: 0 2px 8px #002fff66; }
-body.step2 .chat.user { background:#eef2ff; }
+body.step2 .story-title {
+  text-shadow: 0 2px 8px #aabaff, 0 0 2px #aabaff;
+}
+body.step2 .chat {
+  box-shadow: 0 2px 8px #002fff66;
+}
+body.step2 .chat.user {
+  background: #eef2ff;
+}
 
 /* STEP3 */
-body.step3 .story-title { text-shadow: 0 2px 8px #fff5ce, 0 0 2px #fff5ce; }
-body.step3 .chat { box-shadow: 0 2px 8px #ffcc0066; }
-body.step3 .chat.user { background:#fffbea; }
+body.step3 .story-title {
+  text-shadow: 0 2px 8px #fff5ce, 0 0 2px #fff5ce;
+}
+body.step3 .chat {
+  box-shadow: 0 2px 8px #ffcc0066;
+}
+body.step3 .chat.user {
+  background: #fffbea;
+}
 
 /* last.html（パネル無し・中央寄せ） */
 body.last {
@@ -1073,6 +1124,6 @@ body.last .btn-no {
   width: 96px;
   height: 38px;
   border-radius: 6px;
-  box-shadow: 0 3px 0 rgba(0,0,0,0.25);
-  border: 2px solid rgba(255,255,255,0.35);
+  box-shadow: 0 3px 0 rgba(0, 0, 0, 0.25);
+  border: 2px solid rgba(255, 255, 255, 0.35);
 }
