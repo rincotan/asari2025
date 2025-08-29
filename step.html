@@ -194,6 +194,16 @@
       <a href="#" data-step="3" class="locked">STEP3</a>
       <a href="last.html">Last</a>
     </div>
+
+    <!-- STEP用モーダル（quizと共通の構造） -->
+    <div id="result-modal" style="display:none;">
+      <div class="modal-bg"></div>
+      <div class="modal-center">
+        <div id="result-content"></div>
+        <button id="modal-close-btn">✕ 閉じる</button>
+        <button id="modal-next-btn" style="display:none;">次へ→</button>
+      </div>
+    </div>
     <script src="main.js"></script>
     <script>
       const params2 = new URLSearchParams(window.location.search);

@@ -91,34 +91,9 @@ window.addEventListener("DOMContentLoaded", () => {
   if (submitBtn) {
     submitBtn.addEventListener("click", () => {
       const val = document.getElementById("step-input").value.trim();
-      if (val === stepAnswers[stepNum]) {
-        alert("正解！次のSTEPが解放されました。");
-
-        // アンロック処理
-        const unlocked = JSON.parse(
-          localStorage.getItem("unlockedStep") || "[1]"
-        );
-
-        // 現在のSTEPを記録
-        if (!unlocked.includes(stepNum)) unlocked.push(stepNum);
-
-        // 次のSTEPも解放
-        if (stepNum < 3 && !unlocked.includes(stepNum + 1)) {
-          unlocked.push(stepNum + 1);
-        }
-
-        localStorage.setItem("unlockedStep", JSON.stringify(unlocked));
-
-        // 次のSTEPへ
-        if (stepNum < 3) {
-          window.location.href = `step.html?step=${stepNum + 1}`;
-        } else {
-          // STEP3クリア時はlast.htmlへ
-          window.location.href = "last.html";
-        }
-      } else {
-        alert("違います！");
-      }
+      const isCorrect = val === stepAnswers[stepNum];
+      // モーダルで結果表示（正解も不正解も）
+      showStepResultModal(isCorrect, stepNum);
     });
   }
 
@@ -165,9 +140,15 @@ function showResultModal(isCorrect, val, correct) {
   const quizNum = parseInt(params.get("quiz")) || 1;
 
   if (isCorrect) {
-    // 小問題ごとの解説と解説画像を表示
     const explanation = quizData[stepNum][quizNum].explanation;
     const explanationImg = quizData[stepNum][quizNum].explanation_img;
+
+    // 正解を保存（STEPページの小問題ボタン色付け用）
+    try {
+      const solved = JSON.parse(localStorage.getItem("solvedQuiz") || "{}");
+      solved[`s${stepNum}q${quizNum}`] = true;
+      localStorage.setItem("solvedQuiz", JSON.stringify(solved));
+    } catch (_) {}
     
     let explanationText = "";
     if (Array.isArray(explanation)) {
@@ -229,6 +210,54 @@ function showResultModal(isCorrect, val, correct) {
   closeBtn.onclick = function () {
     modal.style.display = "none";
   };
+}
+
+function showStepResultModal(isCorrect, stepNum) {
+  const modal = document.getElementById("result-modal");
+  const content = document.getElementById("result-content");
+  const closeBtn = document.getElementById("modal-close-btn");
+  const nextBtn = document.getElementById("modal-next-btn");
+
+  // 任意のSTEP解説（必要に応じて編集）
+  const stepExplanations = {
+    1: "冊子と5枚の謎を正しく組み合わせるのがポイントでした。",
+    2: "宇宙船の6つの謎を冊子と照合して順に解読します。",
+    3: "これまでの情報を総合し、最終パスワードを導きます。"
+  };
+
+  if (isCorrect) {
+    // アンロック処理
+    const unlocked = JSON.parse(localStorage.getItem("unlockedStep") || "[1]");
+    if (!unlocked.includes(stepNum)) unlocked.push(stepNum);
+    if (stepNum < 3 && !unlocked.includes(stepNum + 1)) unlocked.push(stepNum + 1);
+    localStorage.setItem("unlockedStep", JSON.stringify(unlocked));
+
+    const imgPath = `images/step${stepNum}-ans.png`; // あれば表示
+    content.innerHTML = `
+      <div style="color:#f08080;font-size:2em;font-weight:bold;">正解</div>
+      <img src="${imgPath}" onerror="this.style.display='none'" style="width:90%;max-width:300px;margin:10px auto;border:2px solid #ddd;border-radius:8px;">
+      <div style="margin-top:10px;font-size:0.9em;line-height:1.4;text-align:left;padding:10px;background:#f8f9fa;border-radius:4px;">
+        ${stepExplanations[stepNum] || "クリア！次へ進もう。"}
+      </div>
+    `;
+    nextBtn.style.display = "";
+    nextBtn.innerText = stepNum < 3 ? "次のSTEPへ→" : "Lastへ→";
+    nextBtn.onclick = function () {
+      if (stepNum < 3) window.location.href = `step.html?step=${stepNum + 1}`;
+      else window.location.href = "last.html";
+    };
+  } else {
+    content.innerHTML = `
+      <div style="color:#7991ff;font-size:2em;font-weight:bold;">不正解</div>
+      <div style="font-size:5em;color:#7991ff;">&#10006;</div>
+      <div style="margin-top:10px;font-weight:bold;">ヒントを見てみよう</div>
+    `;
+    nextBtn.style.display = "none";
+    nextBtn.onclick = null;
+  }
+
+  modal.style.display = "flex";
+  closeBtn.onclick = function () { modal.style.display = "none"; };
 }
 
 function checkStepAnswer(stepNum, correct) {
