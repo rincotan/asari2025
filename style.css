@@ -4,6 +4,12 @@
   font-weight: normal;
   font-style: normal;
 }
+@font-face {
+  font-family: "JKゴシック";
+  src: url("fonts/JKG-L_3.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
 
 :root {
   --step-submit-hover: red; /* デフォルト色 */
@@ -306,14 +312,17 @@ body.step3 {
 
 body.last {
   background-image: url(images/back_last.png);
+  font-family: JKゴシック;
 }
 
 body.good-last {
   background :#644d93;
+  font-family: JKゴシック;
 }
 
 body.bad-last {
   background-image: url(images/back_bad.png);
+  font-family: JKゴシック;
 }
 
 /* タイトル画面の背景も明示的に指定 */
@@ -1022,3 +1031,48 @@ body.step2 .chat.user { background:#eef2ff; }
 body.step3 .story-title { text-shadow: 0 2px 8px #fff5ce, 0 0 2px #fff5ce; }
 body.step3 .chat { box-shadow: 0 2px 8px #ffcc0066; }
 body.step3 .chat.user { background:#fffbea; }
+
+/* last.html（パネル無し・中央寄せ） */
+body.last {
+  font-family: JKゴシック;
+}
+
+.last-content {
+  min-height: calc(65vh - 40px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end; /* 下寄せ */
+  text-align: center;
+  padding: 0 18px 24px;
+  padding-top: 28vh;
+}
+
+body.last .speech {
+  color: #fff;
+  font-size: 30px;
+  line-height: 1.9;
+  margin: 0 0 18px 0;
+}
+
+body.last .question {
+  color: #fff;
+  font-weight: 800;
+  font-size: 30px;
+  margin: 6px 0 12px;
+}
+
+body.last .btn-row {
+  display: flex;
+  justify-content: center;
+  gap: 50px;
+}
+
+body.last .btn-yes,
+body.last .btn-no {
+  width: 96px;
+  height: 38px;
+  border-radius: 6px;
+  box-shadow: 0 3px 0 rgba(0,0,0,0.25);
+  border: 2px solid rgba(255,255,255,0.35);
+}
