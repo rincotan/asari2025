@@ -31,7 +31,7 @@ window.addEventListener("DOMContentLoaded", () => {
       elem.innerHTML = "冊子と5枚の謎を組み合わせて<br>彼の名前を導こう";
     } else if (stepNum === 2) {
       elem.innerHTML =
-        "宇宙船に書かれた6つの謎と冊子を使い<br>宇宙船の開け方を導け";
+        "宇宙船に書かれた7つの謎を使い<br>宇宙船の開け方を導け";
     } else if (stepNum === 3) {
       elem.innerHTML = "パスワードを忘れた方はこちらの謎をお解き";
     }
