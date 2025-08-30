@@ -264,6 +264,7 @@
 
       // grid 側のクリック処理
       function handleGridCellClick(panelRow, panelCol) {
+        if (zanki === 0) return;
         // panelRow, panelCol are 0..4
         // only respond when the cell maps to board (center 3x3)
         if (
