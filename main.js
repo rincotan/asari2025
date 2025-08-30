@@ -62,6 +62,19 @@ window.addEventListener("DOMContentLoaded", () => {
     } else {
       a.classList.remove("locked");
     }
+    
+    // Lastリンクの状態確認（Step3クリア済みかチェック）
+    if (a.href && a.href.includes('last.html')) {
+      if (unlockedStep.includes(3)) {
+        a.classList.remove("locked");
+        a.style.color = '#333';
+        a.style.pointerEvents = 'auto';
+      } else {
+        a.classList.add("locked");
+        a.style.color = '#aaa';
+        a.style.pointerEvents = 'none';
+      }
+    }
   });
 
   // 戻る・進むメニュー
@@ -249,6 +262,16 @@ function showStepResultModal(isCorrect, stepNum) {
     if (stepNum < 3 && !unlocked.includes(stepNum + 1))
       unlocked.push(stepNum + 1);
     localStorage.setItem("unlockedStep", JSON.stringify(unlocked));
+    
+    // Step3クリア後にLastリンクのlocked状態を解除
+    if (stepNum === 3) {
+      const lastLink = document.querySelector('.menu a[href="last.html"]');
+      if (lastLink) {
+        lastLink.classList.remove('locked');
+        lastLink.style.color = '#333';
+        lastLink.style.pointerEvents = 'auto';
+      }
+    }
 
     const imgPath = `images/step${stepNum}-ans.png`; // あれば表示
     content.innerHTML = `
@@ -302,7 +325,7 @@ if (stepTitleElem) stepTitleElem.innerText = `STEP${stepNum}`;
 
 generateStepButtons(stepNum, stepData[stepNum]);
 
-// アンロック済みSTEP更新
+//アンロック済みSTEP更新
 if (!unlockedStep.includes(stepNum)) {
   unlockedStep.push(stepNum);
   localStorage.setItem("unlockedStep", JSON.stringify(unlockedStep));
