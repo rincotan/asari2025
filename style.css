@@ -362,16 +362,32 @@ body:not(.step1):not(.step2):not(.step3):not(.last):not(.good-last):not(
   color: #fff;
   letter-spacing: 0.1em;
   font-family: "しねきゃぷしょん";
+  font-weight: bold;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+  background: rgba(255, 255, 255, 0.2);
+  padding: 10px 20px;
+  border-radius: 8px;
+  display: inline-block;
+  margin-left: 50%;
+  transform: translateX(-50%);
+  backdrop-filter: blur(5px);
+  border: 2px solid rgba(255, 255, 255, 0.3);
 }
 
 body.step1 #step-title {
   text-shadow: 0 2px 8px #e6bfc7, 0 0 2px #e6bfc7;
+  background: rgba(255, 135, 135, 0.2);
+  border-color: rgba(255, 135, 135, 0.4);
 }
 body.step2 #step-title {
   text-shadow: 0 2px 8px #aabaff, 0 0 2px #aabaff;
+  background: rgba(121, 145, 255, 0.2);
+  border-color: rgba(121, 145, 255, 0.4);
 }
 body.step3 #step-title {
   text-shadow: 0 2px 8px #fff5ce, 0 0 2px #fff5ce;
+  background: rgba(255, 222, 89, 0.2);
+  border-color: rgba(255, 222, 89, 0.4);
 }
 
 /* 問題文・ストーリー */
@@ -543,12 +559,15 @@ body.step3 #problem-grid button {
 /* 上の番号 */
 #quiz-title {
   border: 2px solid var(--main-color);
-  padding: 10px 20px;
-  border-radius: 6px;
+  padding: 10px 12px;
   font-size: 24px;
   font-weight: bold;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
   font-family: "しねきゃぷしょん";
+  background-color: #fff;
+  color: #000;
+  padding-left: 1em;
+  padding-right: 1em;
 }
 
 #quiz-img {
