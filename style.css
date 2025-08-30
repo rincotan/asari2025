@@ -1127,3 +1127,14 @@ body.last .btn-no {
   box-shadow: 0 3px 0 rgba(0, 0, 0, 0.25);
   border: 2px solid rgba(255, 255, 255, 0.35);
 }
+
+.reload-btn {
+  background: #fff;
+  color: #000;
+  border: none;
+  border-radius: 8px;
+  font-size: 1.2em;
+  padding: 6px 18px;
+  font-weight: bold;
+  font-family: "しねきゃぷしょん";
+}
