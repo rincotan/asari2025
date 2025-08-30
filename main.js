@@ -41,6 +41,19 @@ window.addEventListener("DOMContentLoaded", () => {
     document.getElementById("menu").classList.toggle("open");
   });
 
+  // メニュー以外の場所をクリックしたときにメニューを閉じる
+  document.addEventListener("click", (e) => {
+    const menu = document.getElementById("menu");
+    const hamburger = document.getElementById("hamburger");
+    
+    // メニューが開いている状態で、メニューとハンバーガー以外の場所をクリックした場合
+    if (menu.classList.contains("open") && 
+        !menu.contains(e.target) && 
+        !hamburger.contains(e.target)) {
+      menu.classList.remove("open");
+    }
+  });
+
   // メニューのロック状態反映
   document.querySelectorAll(".menu a").forEach((a) => {
     const targetStep = parseInt(a.dataset.step);
@@ -115,8 +128,8 @@ function generateStepButtons(stepNum, total) {
       btn.onclick = () =>
         (window.location.href = `quiz.html?step=${stepNum}&quiz=${i}&title=たむかむごごたて`);
     } else {
-      btn.onclick = () =>
-        (window.location.href = `quiz.html?step=${stepNum}&quiz=${i}`);
+    btn.onclick = () =>
+      (window.location.href = `quiz.html?step=${stepNum}&quiz=${i}`);
     }
     if (solvedQuiz[`s${stepNum}q${i}`]) btn.style.background = "lightgreen";
     grid.appendChild(btn);
