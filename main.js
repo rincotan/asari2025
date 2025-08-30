@@ -131,7 +131,9 @@ function generateStepButtons(stepNum, total) {
     btn.onclick = () =>
       (window.location.href = `quiz.html?step=${stepNum}&quiz=${i}`);
     }
-    if (solvedQuiz[`s${stepNum}q${i}`]) btn.style.background = "lightgreen";
+    if (stepNum === 1 && solvedQuiz[`s${1}q${i}`]) btn.style.background = "#f7bfc7";
+    if (stepNum === 2 && solvedQuiz[`s${2}q${i}`]) btn.style.background = "#abbaff";
+    if (stepNum === 3 && solvedQuiz[`s${3}q${i}`]) btn.style.background = "#fff5ce";   
     grid.appendChild(btn);
   }
 }

@@ -56,6 +56,10 @@ html {
   text-align: center;
 }
 
+.first-next-btn {
+  background: #f08080;
+}
+
 .last-close-btn {
   position: fixed;
   left: 50%;
@@ -1140,8 +1144,11 @@ body.last .btn-no {
   color: #000;
   border: none;
   border-radius: 8px;
-  font-size: 1.2em;
+  font-size: 1.1em;
   padding: 6px 18px;
   font-weight: bold;
   font-family: "しねきゃぷしょん";
+  width: 30vw;
+  max-width: 400px;
+  height: 35px;
 }
