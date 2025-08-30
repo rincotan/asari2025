@@ -1010,6 +1010,13 @@ body.good-last {
   margin: 20px 0;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
 }
+.title_black {
+  text-align: center;
+  color: #fff;
+  font-size: 2em;
+  margin: 20px 0;
+  text-shadow: 0 0 0 #000, 4px 4px 16px rgba(0, 0, 0, 1), 2px 2px 8px #000;
+}
 
 #playground {
   position: relative;

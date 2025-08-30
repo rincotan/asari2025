@@ -30,8 +30,7 @@ window.addEventListener("DOMContentLoaded", () => {
     if (stepNum === 1) {
       elem.innerHTML = "冊子と5枚の謎を組み合わせて<br>彼の名前を導こう";
     } else if (stepNum === 2) {
-      elem.innerHTML =
-        "宇宙船に書かれた7つの謎を使い<br>宇宙船の開け方を導け";
+      elem.innerHTML = "宇宙船に書かれた7つの謎を使い<br>宇宙船の開け方を導け";
     } else if (stepNum === 3) {
       elem.innerHTML = "パスワードを忘れた方はこちらの謎をお解き";
     }
@@ -112,8 +111,13 @@ function generateStepButtons(stepNum, total) {
   for (let i = 1; i <= total; i++) {
     const btn = document.createElement("button");
     btn.innerText = i;
-    btn.onclick = () =>
-      (window.location.href = `quiz.html?step=${stepNum}&quiz=${i}`);
+    if (stepNum === 2 && i === 3) {
+      btn.onclick = () =>
+        (window.location.href = `quiz.html?step=${stepNum}&quiz=${i}&title=たむかむごごたて`);
+    } else {
+      btn.onclick = () =>
+        (window.location.href = `quiz.html?step=${stepNum}&quiz=${i}`);
+    }
     if (solvedQuiz[`s${stepNum}q${i}`]) btn.style.background = "lightgreen";
     grid.appendChild(btn);
   }
