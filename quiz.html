@@ -20,6 +20,8 @@
       <div class="bottom-buttons">
         <button id="close-btn" onclick="goToStep(stepNum, true)">閉じる</button>
         <button id="hint-btn">ヒント</button>
+        <button id="rev-btn" style="display: none;">うらがえす</button>
+
         </div>
         <div id="hint-area" style="display:none;"></div>        
       </div>
@@ -344,6 +346,46 @@
             quizImg.style.cursor = "zoom-in";
           }
         };
+      }
+      let now_omote_ura = 0;
+      document.getElementById("rev-btn").onclick = function() {
+        if(!solvedQuiz[`s${3}q${quizNum}`]){
+          const modal = document.getElementById("result-modal");
+          const content = document.getElementById("result-content");
+          const closeBtn = document.getElementById("modal-close-btn");
+          const nextBtn = document.getElementById("modal-next-btn");
+
+          // 問題番号取得
+          const params = new URLSearchParams(window.location.search);
+          const stepNum = parseInt(params.get("step")) || 1;
+          const quizNum = parseInt(params.get("quiz")) || 1;
+
+            // 不正解時
+          content.innerHTML = `
+            <div style="color:#7991ff;font-size:2em;font-weight:bold;">未開放</div>
+            <div style="font-size:5em;color:#7991ff;">&#10006;</div>
+            <div style="margin-top:10px;font-weight:bold;">この操作はまだ解放されていません</div>
+          `;
+            nextBtn.style.display = "none";
+          
+
+          modal.style.display = "flex";
+          closeBtn.onclick = function () {
+            modal.style.display = "none";
+          };
+          return;
+        }
+        console.log("うらがえす");
+        if (now_omote_ura===1) {
+          document.getElementById("quiz-img").src = quizData[stepNum][quizNum].img;
+        }
+        else{
+          document.getElementById("quiz-img").src = `images/3-${quizNum}-2.png`;
+        }
+        now_omote_ura ^=1;
+      };
+      if(stepNum===3){
+        document.getElementById("rev-btn").style.display = "block";
       }
 
       document.getElementById("hint-btn").onclick = function() {

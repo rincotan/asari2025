@@ -594,6 +594,8 @@ body.step3 #problem-grid button {
 
 /* ヒントボタン */
 .hint-btn,
+.rev-btn,
+#rev-btn,
 #hint-btn {
   display: block;
   margin: 18px auto 0 auto;
@@ -609,6 +611,7 @@ body.step3 #problem-grid button {
   font-family: "しねきゃぷしょん";
 }
 .hint-btn:hover,
+#rev-btn:hover,
 #hint-btn:hover {
   background: var(--hover-color);
   color: #fff;

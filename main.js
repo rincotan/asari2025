@@ -45,11 +45,13 @@ window.addEventListener("DOMContentLoaded", () => {
   document.addEventListener("click", (e) => {
     const menu = document.getElementById("menu");
     const hamburger = document.getElementById("hamburger");
-    
+
     // メニューが開いている状態で、メニューとハンバーガー以外の場所をクリックした場合
-    if (menu.classList.contains("open") && 
-        !menu.contains(e.target) && 
-        !hamburger.contains(e.target)) {
+    if (
+      menu.classList.contains("open") &&
+      !menu.contains(e.target) &&
+      !hamburger.contains(e.target)
+    ) {
       menu.classList.remove("open");
     }
   });
@@ -62,17 +64,17 @@ window.addEventListener("DOMContentLoaded", () => {
     } else {
       a.classList.remove("locked");
     }
-    
+
     // Lastリンクの状態確認（Step3クリア済みかチェック）
-    if (a.href && a.href.includes('last.html')) {
+    if (a.href && a.href.includes("last.html")) {
       if (unlockedStep.includes(3)) {
         a.classList.remove("locked");
-        a.style.color = '#333';
-        a.style.pointerEvents = 'auto';
+        a.style.color = "#333";
+        a.style.pointerEvents = "auto";
       } else {
         a.classList.add("locked");
-        a.style.color = '#aaa';
-        a.style.pointerEvents = 'none';
+        a.style.color = "#aaa";
+        a.style.pointerEvents = "none";
       }
     }
   });
@@ -141,12 +143,15 @@ function generateStepButtons(stepNum, total) {
       btn.onclick = () =>
         (window.location.href = `quiz.html?step=${stepNum}&quiz=${i}&title=たむかむごごたて`);
     } else {
-    btn.onclick = () =>
-      (window.location.href = `quiz.html?step=${stepNum}&quiz=${i}`);
+      btn.onclick = () =>
+        (window.location.href = `quiz.html?step=${stepNum}&quiz=${i}`);
     }
-    if (stepNum === 1 && solvedQuiz[`s${1}q${i}`]) btn.style.background = "#f7bfc7";
-    if (stepNum === 2 && solvedQuiz[`s${2}q${i}`]) btn.style.background = "#abbaff";
-    if (stepNum === 3 && solvedQuiz[`s${3}q${i}`]) btn.style.background = "#fff5ce";   
+    if (stepNum === 1 && solvedQuiz[`s${1}q${i}`])
+      btn.style.background = "#f7bfc7";
+    if (stepNum === 2 && solvedQuiz[`s${2}q${i}`])
+      btn.style.background = "#abbaff";
+    if (stepNum === 3 && solvedQuiz[`s${3}q${i}`])
+      btn.style.background = "#fff5ce";
     grid.appendChild(btn);
   }
 }
@@ -189,6 +194,10 @@ function showResultModal(isCorrect, val, correct) {
       explanationText = explanation;
     } else {
       explanationText = "解説は準備中です。";
+    }
+
+    if (stepNum === 3) {
+      explanationText += "どこかのロックが解除されました";
     }
 
     let contentHTML = `
@@ -262,14 +271,14 @@ function showStepResultModal(isCorrect, stepNum) {
     if (stepNum < 3 && !unlocked.includes(stepNum + 1))
       unlocked.push(stepNum + 1);
     localStorage.setItem("unlockedStep", JSON.stringify(unlocked));
-    
+
     // Step3クリア後にLastリンクのlocked状態を解除
     if (stepNum === 3) {
       const lastLink = document.querySelector('.menu a[href="last.html"]');
       if (lastLink) {
-        lastLink.classList.remove('locked');
-        lastLink.style.color = '#333';
-        lastLink.style.pointerEvents = 'auto';
+        lastLink.classList.remove("locked");
+        lastLink.style.color = "#333";
+        lastLink.style.pointerEvents = "auto";
       }
     }
 
