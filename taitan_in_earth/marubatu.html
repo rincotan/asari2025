@@ -4,29 +4,58 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <title>マルバツゲーム - panelState 管理版</title>
+
     <style>
       body {
         display: flex;
         flex-direction: column;
         justify-content: center;
         align-items: center;
-        min-height: 100vh;
         margin: 0;
         background-color: #f8f8f8;
         font-family: sans-serif;
+
+        padding: 0;
+        font-family: "しねきゃぷしょん";
+        max-width: 480px;
+        margin-left: auto;
+        margin-right: auto;
+        background-size: 100%;
+        position: relative;
+        min-height: 100vh;
       }
 
       .header-container {
         position: absolute;
         top: 0;
         width: 100%;
-        padding: 10px 20px;
+        padding: 0px, 0px;
         box-sizing: border-box;
+        display: flex; /* 横並びにする */
+        align-items: center; /* 縦方向を中央に揃える */
+        justify-content: flex-start; /* 左寄せのままにする */
+        border-bottom: 3px solid #000; /* 下線を追加 */
       }
       .message {
+        display: flex;
+        font-family: "しねきゃぷしょん";
+
+        align-items: center;
+        justify-content: flex-start;
+        width: 220px;
+        height: 80px;
         margin-left: auto;
+        margin-right: 0;
         font-size: 1.1em;
         color: #333;
+        background: #f0f0f0;
+        border-radius: 12px;
+        box-sizing: border-box;
+        text-align: left;
+        word-break: break-all;
+        white-space: pre-line;
+        padding-left: 18px;
+        padding-right: 8px;
       }
 
       /* ラッパー（grid と panel を重ねる） */
@@ -160,11 +189,21 @@
         color: white;
         cursor: pointer;
       }
+      #marubatu_image {
+        height: 140px;
+        vertical-align: middle;
+        margin-top: -60px;
+      }
     </style>
   </head>
   <body>
     <div class="header-container">
-      <div class="message">まだあなたのことは信用できません</div>
+      <img
+        src="../images/marubatu_are.png"
+        alt="マルバツ画像"
+        id="marubatu_image"
+      />
+      <div class="message">まだあなたのことは<br />信用できません</div>
     </div>
 
     <div id="board-wrapper">
