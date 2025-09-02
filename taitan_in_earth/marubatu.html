@@ -207,6 +207,46 @@
         background: rgba(255, 0, 0, 0); /* デバッグ用(透明可) */
         cursor: pointer;
       }
+      .success-overlay {
+        position: fixed;
+        inset: 0;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        z-index: 10000;
+        background: rgba(0, 0, 0, 0.55);
+        pointer-events: none;
+      }
+      .success-overlay.show {
+        display: flex;
+      }
+      .success-text {
+        color: #ffffff;
+        font-weight: 900;
+        font-size: clamp(26px, 6vw, 56px);
+        letter-spacing: 0.06em;
+        text-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
+        opacity: 0;
+      }
+      .success-overlay.show .success-text {
+        animation: successFade 2800ms ease forwards;
+      }
+      @keyframes successFade {
+        0% {
+          opacity: 0;
+          transform: scale(0.98);
+        }
+        20% {
+          opacity: 1;
+          transform: scale(1);
+        }
+        80% {
+          opacity: 1;
+        }
+        100% {
+          opacity: 0;
+        }
+      }
     </style>
   </head>
   <body>
@@ -230,14 +270,21 @@
     <p class="result-message" id="result">ゲーム中...</p>
     <p id="x_cnt">のこり:3</p>
     <button class="retry-btn" onclick="retry()">リトライ</button>
+    <div id="successOverlay" class="success-overlay" aria-hidden="true">
+      <div class="success-text">認証しました</div>
+    </div>
 
     <script>
       // --- ゲームデータ（3x3 ボード。レンダリング時は 5x5 の中央に配置） ---
       let board = [
-        ["", "", ""],
-        ["", "X", ""],
-        ["", "", ""],
+        ["", "", "", "", ""],
+        ["", "", "", "", ""],
+        ["", "", "X", "", ""],
+        ["", "", "", "", ""],
+        ["", "", "", "", ""],
       ];
+      const successOverlay = document.getElementById("successOverlay");
+      const successText = successOverlay.querySelector(".success-text");
 
       // ミニマックス等（既存ロジック保持）
       let x_ = 0,
@@ -251,8 +298,8 @@
           y_r = 0,
           m_r = -Infinity;
         if (t === 1) m_r = Infinity;
-        for (let i = 0; i <= 2; i++) {
-          for (let j = 0; j <= 2; j++) {
+        for (let i = 1; i <= 3; i++) {
+          for (let j = 1; j <= 3; j++) {
             if (b_[i][j] !== "") continue;
             b_[i][j] = t === 0 ? "X" : "O";
             let ret = AI(1 - t);
@@ -275,6 +322,9 @@
         x_ = x_r;
         y_ = y_r;
         m_ = m_r;
+        if (m_r === -Infinity || m_r === Infinity) {
+          m_ = 0;
+        }
         return m_;
       }
 
@@ -315,10 +365,12 @@
       }
 
       let now_x_placed = 0,
-        zanki = 3;
+        zanki = 3,
+        additional_zanki = 1;
 
       // grid 側のクリック処理
       function handleGridCellClick(panelRow, panelCol) {
+        console.log(`Grid cell clicked: (${panelRow}, ${panelCol})`);
         if (zanki === 0) return;
         // panelRow, panelCol are 0..4
         // only respond when the cell maps to board (center 3x3)
@@ -328,15 +380,16 @@
           if (isPanelCovered(panelRow, panelCol)) {
             return;
           } else {
-            if (zanki === 1 && now_x_placed === 3) {
+            console.log("隠されたマスをくりっく！");
+            if (additional_zanki === 0) {
               //改めて盤面を5×5で見て、ビンゴしてたらOK
             } else {
               return;
             }
           }
         }
-        const boardX = panelRow - 1;
-        const boardY = panelCol - 1;
+        const boardX = panelRow;
+        const boardY = panelCol;
 
         // 覆われているなら処理しない
         if (isPanelCovered(panelRow, panelCol)) {
@@ -477,26 +530,20 @@
             cell.className = "grid-cell";
 
             // 中央 3x3 のみ board の値を描画
-            if (r >= 1 && r <= 3 && c >= 1 && c <= 3) {
-              const br = r - 1;
-              const bc = c - 1;
-              const val = board[br][bc];
-              if (val === "O") {
-                const circle = document.createElement("div");
-                circle.className = "circle";
-                cell.appendChild(circle);
-              } else if (val === "X") {
-                const cross = document.createElement("div");
-                cross.className = "cross";
-                cell.appendChild(cross);
-              }
-              // grid 側のクリック：内部では panelState をチェック
-              cell.addEventListener("click", () => handleGridCellClick(r, c));
-            } else {
-              // パディングセル。クリックしても何もしない
-              cell.style.background = "#f7f7f7";
-              cell.style.cursor = "default";
+            const br = r;
+            const bc = c;
+            const val = board[br][bc];
+            if (val === "O") {
+              const circle = document.createElement("div");
+              circle.className = "circle";
+              cell.appendChild(circle);
+            } else if (val === "X") {
+              const cross = document.createElement("div");
+              cross.className = "cross";
+              cell.appendChild(cross);
             }
+            // grid 側のクリック：内部では panelState をチェック
+            cell.addEventListener("click", () => handleGridCellClick(r, c));
 
             grid.appendChild(cell);
           }
@@ -507,24 +554,54 @@
         const resultEl = document.getElementById("result");
         if (winner) resultEl.textContent = winner + " の勝ち！";
         else resultEl.textContent = "ゲーム中...";
+        if (winner === "O") {
+          successOverlay.classList.add("show");
+          // 押下回数はリセット（演出中に次の入力が入らないように）
+          const handleEnd = () => {
+            successText.removeEventListener("animationend", handleEnd);
+            successOverlay.classList.remove("show");
+            window.location.href = "dummy.html";
+          };
+          successText.addEventListener("animationend", handleEnd);
+        }
       }
 
       // 勝敗判定（既存）
       function checkWinner(board_) {
-        const lines = [
-          [board_[0][0], board_[0][1], board_[0][2]],
-          [board_[1][0], board_[1][1], board_[1][2]],
-          [board_[2][0], board_[2][1], board_[2][2]],
-          [board_[0][0], board_[1][0], board_[2][0]],
-          [board_[0][1], board_[1][1], board_[2][1]],
-          [board_[0][2], board_[1][2], board_[2][2]],
-          [board_[0][0], board_[1][1], board_[2][2]],
-          [board_[0][2], board_[1][1], board_[2][0]],
-        ];
-        for (const line of lines) {
-          if (line[0] && line[0] === line[1] && line[0] === line[2])
-            return line[0];
+        for (let i = 0; i < 5; i++) {
+          for (let j = 0; j < 5; j++) {
+            if (i + 2 < 5) {
+              const line = [board_[i][j], board_[i + 1][j], board_[i + 2][j]];
+              if (line[0] && line[0] === line[1] && line[0] === line[2])
+                return line[0];
+            }
+            if (j + 2 < 5) {
+              const line = [board_[i][j], board_[i][j + 1], board_[i][j + 2]];
+              if (line[0] && line[0] === line[1] && line[0] === line[2])
+                return line[0];
+            }
+
+            if (i + 2 < 5 && j + 2 < 5) {
+              const line = [
+                board_[i][j],
+                board_[i + 1][j + 1],
+                board_[i + 2][j + 2],
+              ];
+              if (line[0] && line[0] === line[1] && line[0] === line[2])
+                return line[0];
+            }
+            if (i - 2 >= 0 && j + 2 < 5) {
+              const line = [
+                board_[i][j],
+                board_[i - 1][j + 1],
+                board_[i - 2][j + 2],
+              ];
+              if (line[0] && line[0] === line[1] && line[0] === line[2])
+                return line[0];
+            }
+          }
         }
+
         return null;
       }
 
@@ -539,13 +616,18 @@
       }
       function retry() {
         zanki = 3;
+        additional_zanki = 1;
+        document.getElementsByClassName("hitbox")[0].style.background =
+          "rgba(255,0,0,0)";
         document.getElementById("x_cnt").textContent = `のこり:${zanki}`;
         now_x_placed = 0;
 
         board = [
-          ["", "", ""],
-          ["", "X", ""],
-          ["", "", ""],
+          ["", "", "", "", ""],
+          ["", "", "", "", ""],
+          ["", "", "X", "", ""],
+          ["", "", "", "", ""],
+          ["", "", "", "", ""],
         ];
         resetPanelStateToDefault();
         // panel は初期化し直す（安全のため再生成）
@@ -566,8 +648,16 @@
       function mouth_click() {
         // クリック時の処理をここに追加
         console.log("口がクリックされました");
+        if (additional_zanki === 1) {
+          zanki++;
+          additional_zanki = 0;
+        }
         document.getElementsByClassName("hitbox")[0].style.background =
           "#d5bfc1";
+        showmessage("口をとらないよ<br>うにお願いします");
+      }
+      function showmessage(t) {
+        document.getElementsByClassName("message")[0].innerHTML = t;
       }
     </script>
   </body>
