@@ -312,16 +312,6 @@ function showStepResultModal(isCorrect, stepNum) {
   };
 }
 
-function checkStepAnswer(stepNum, correct) {
-  const val = document.getElementById(`step${stepNum}-answer`).value.trim();
-  if (val === correct) {
-    alert("正解！次のSTEPが解放されました");
-    unlockStep(stepNum + 1);
-  } else {
-    alert("不正解…");
-  }
-}
-
 //これ何
 const params = new URLSearchParams(window.location.search);
 const stepNum = parseInt(params.get("step")) || 1;
@@ -365,6 +355,10 @@ window.addEventListener("DOMContentLoaded", function () {
     // 対象だけ表示
     const target = document.getElementById(`story-section-step${stepNum}`);
     if (target) target.classList.add("active");
+    document.querySelectorAll("#title-call").forEach((elem) => {
+      console.log("粛清!");
+      elem.classList.remove("show");
+    });
   }
 
   // ストーリーを振り返るボタン

@@ -10,7 +10,6 @@
     <!-- <div id="pc-warning">※スマホ専用サイトです。スマートフォンでご利用ください。</div> -->
     <h2>ASARI2025</h2>
 
-    
     <div class="page active"></div>
 
     <!-- 動画オーバーレイ -->
@@ -27,8 +26,6 @@
         <button id="close-video">✕</button>
       </div>
     </div>
-    
-
 
     <!-- STORYセクション -->
     <section id="story-section">
@@ -40,7 +37,7 @@
         </div>
         <div class="chat user">しゃべった…<br />助けてってどうしたの？</div>
         <div class="chat alien">
-          宇宙一周しようと思って土星から来たんだけど<br/>どうやら墜落しちゃったみたいで…
+          宇宙一周しようと思って土星から来たんだけど<br />どうやら墜落しちゃったみたいで…
         </div>
         <div class="chat ailien">
           「にんげん」がいるってことは<br />ここは地球かな…
@@ -68,7 +65,6 @@
       </div>
     </section>
 
- 
     <div style="text-align: center">
       <button
         class="first-next-btn"
@@ -77,13 +73,13 @@
         STEP1へ進む
       </button>
     </div>
-   
-    <div style="text-align: center;">
+
+    <div style="text-align: center">
       <button class="reload-btn" onclick="location.reload();">
         動画を見返す
       </button>
     </div>
-   
+
     <div class="hamburger" id="hamburger">
       <div></div>
       <div></div>
@@ -105,6 +101,13 @@
         const trigger = 20;
         if (window.scrollY > trigger) {
           story.classList.add("visible");
+          document.querySelectorAll(".title-call").forEach((elem) => {
+            console.log("粛清!");
+            elem.classList.remove("show");
+            setTimeout(() => {
+              elem.remove();
+            }, 300);
+          });
         } else {
           story.classList.remove("visible");
         }
@@ -118,7 +121,7 @@
         document.getElementById("video-overlay").style.display = "none";
         // タイトルコール演出
         const titleCall = document.createElement("div");
-        titleCall.id = "title-call";
+        titleCall.classList.add("title-call");
         titleCall.textContent = "宇宙への帰還";
         document.body.appendChild(titleCall);
         setTimeout(() => {
@@ -129,7 +132,7 @@
           setTimeout(() => {
             titleCall.remove();
           }, 1000);
-        }, 2000);
+        }, 1500);
       }
       function onScrollTop() {
         // 一番上までスクロールされた時の処理

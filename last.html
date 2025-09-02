@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<title>lastページ</title>
+<title>Last</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="stylesheet" href="style.css">
 </head>
@@ -46,7 +46,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // 「はい」→ 認証（例としてマルバツゲーム）へ
   if (yes) yes.addEventListener('click', () => {
-    window.location.href = 'taitan_in_earth/index.html';
+    window.open('taitan_in_earth/index.html', '_blank');
   });
 
   if (no) no.addEventListener('click', () => {

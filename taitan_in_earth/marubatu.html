@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>マルバツゲーム - panelState 管理版</title>
+    <title>マルバツゲーム</title>
 
     <style>
       body {
@@ -194,15 +194,31 @@
         vertical-align: middle;
         margin-top: -60px;
       }
+      .image-wrapper {
+        position: relative;
+        display: inline-block;
+      }
+      .hitbox {
+        position: absolute;
+        top: 28px; /* 顔の位置 */
+        left: 58px;
+        width: 17px;
+        height: 17px;
+        background: rgba(255, 0, 0, 0); /* デバッグ用(透明可) */
+        cursor: pointer;
+      }
     </style>
   </head>
   <body>
     <div class="header-container">
-      <img
-        src="../images/marubatu_are.png"
-        alt="マルバツ画像"
-        id="marubatu_image"
-      />
+      <div class="image-wrapper">
+        <img
+          src="../images/marubatu_are.png"
+          alt="マルバツ画像"
+          id="marubatu_image"
+        />
+        <div class="hitbox" onclick="mouth_click()"></div>
+      </div>
       <div class="message">まだあなたのことは<br />信用できません</div>
     </div>
 
@@ -546,6 +562,13 @@
       window.panelCellClicked = panelCellClicked;
       window.panelState = panelState;
       window.updatePanelCellUI = updatePanelCellUI;
+
+      function mouth_click() {
+        // クリック時の処理をここに追加
+        console.log("口がクリックされました");
+        document.getElementsByClassName("hitbox")[0].style.background =
+          "#d5bfc1";
+      }
     </script>
   </body>
 </html>
