@@ -14,7 +14,7 @@ if (!localStorage.getItem("unlockedStep"))
   localStorage.setItem("unlockedStep", JSON.stringify([1]));
 
 const solvedQuiz = JSON.parse(localStorage.getItem("solvedQuiz"));
-const unlockedStep = JSON.parse(localStorage.getItem("unlockedStep"));
+unlockedStep = JSON.parse(localStorage.getItem("unlockedStep"));
 
 window.addEventListener("DOMContentLoaded", () => {
   const params = new URLSearchParams(window.location.search);
@@ -57,6 +57,7 @@ window.addEventListener("DOMContentLoaded", () => {
   });
 
   // メニューのロック状態反映
+  unlockedStep = JSON.parse(localStorage.getItem("unlockedStep") || "[1]");
   document.querySelectorAll(".menu a").forEach((a) => {
     const targetStep = parseInt(a.dataset.step);
     if (targetStep > 0 && !unlockedStep.includes(targetStep)) {
@@ -67,7 +68,8 @@ window.addEventListener("DOMContentLoaded", () => {
 
     // Lastリンクの状態確認（Step3クリア済みかチェック）
     if (a.href && a.href.includes("last.html")) {
-      if (unlockedStep.includes(3)) {
+      if (unlockedStep.includes(4)) {
+        console.log("Lastリンクのロック解除");
         a.classList.remove("locked");
         a.style.color = "#333";
         a.style.pointerEvents = "auto";
@@ -117,6 +119,7 @@ window.addEventListener("DOMContentLoaded", () => {
   const submitBtn = document.getElementById("step-submit");
   if (submitBtn) {
     submitBtn.addEventListener("click", () => {
+      console.log("STEP答え判定");
       const val = document.getElementById("step-input").value.trim();
       const isCorrect = val === stepAnswers[stepNum];
       // モーダルで結果表示（正解も不正解も）
@@ -292,6 +295,7 @@ function showStepResultModal(isCorrect, stepNum) {
     `;
     nextBtn.style.display = "";
     nextBtn.innerText = stepNum < 3 ? "次のSTEPへ→" : "Lastへ→";
+
     nextBtn.onclick = function () {
       if (stepNum < 3) window.location.href = `step.html?step=${stepNum + 1}`;
       else window.location.href = "last.html";
