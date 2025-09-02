@@ -847,6 +847,34 @@ input[type="text"],
   background: #fff;
   color: #333;
 }
+
+.message {
+  display: flex;
+  align-items: flex-end; /* アイコンと吹き出しの下を揃える */
+  margin: 8px 0;
+}
+
+.message.alien {
+  justify-content: flex-start; /* 左寄せ */
+}
+
+.message.user {
+  justify-content: flex-end; /* 右寄せ */
+}
+.icon {
+  width: 40px; /* アイコンの大きさ */
+  height: 40px;
+  border-radius: 50%; /* 丸くする */
+  object-fit: cover; /* はみ出した部分をトリミング */
+  margin-right: 8px; /* テキストとの余白 */
+  vertical-align: middle;
+}
+.message.alien .icon {
+  margin-right: 8px;
+}
+.message.user .icon {
+  margin-left: 8px;
+}
 .chat.highlight {
   border: 2px solid #ff8787;
   background: #fff9f9;
