@@ -124,6 +124,27 @@
         pointer-events: none;
       }
 
+      /* タップ回数バッジ */
+      .tile .counter {
+        position: absolute;
+        top: 6px;
+        right: 6px;
+        background: rgba(0, 0, 0, 0.7);
+        color: #fff;
+        border-radius: 999px;
+        min-width: 22px;
+        height: 22px;
+        padding: 0 6px;
+        display: none; /* 0 回のときは非表示 */
+        align-items: center;
+        justify-content: center;
+        font-size: 14px;
+        font-weight: 800;
+        line-height: 1;
+        z-index: 2;
+        pointer-events: none;
+      }
+
       /* 選択中の見た目 */
       .tile.selected {
         box-shadow: 0 0 0 4px rgba(34, 119, 238, 0.18) inset;
@@ -149,6 +170,86 @@
       }
       .confirm-btn:active {
         transform: translateY(1px);
+      }
+      /* 不正解モーダル */
+      .modal-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.6);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        z-index: 9999;
+      }
+      .modal-overlay.show {
+        display: flex;
+      }
+      .modal {
+        background: #ffffff;
+        width: min(88vw, 400px);
+        border-radius: 10px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+        padding: 20px 18px;
+        text-align: center;
+      }
+      .modal h2 {
+        margin: 0 0 10px 0;
+        font-size: 20px;
+      }
+      .modal p {
+        margin: 0 0 16px 0;
+        font-size: 16px;
+      }
+      .modal .close-btn {
+        background: var(--blue);
+        color: #fff;
+        padding: 10px 18px;
+        border-radius: 6px;
+        border: none;
+        cursor: pointer;
+        font-weight: 900;
+        font-size: 16px;
+      }
+      /* 正解時のフェードイン/アウトメッセージ */
+      .success-overlay {
+        position: fixed;
+        inset: 0;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        z-index: 10000;
+        background: rgba(0, 0, 0, 0.55);
+        pointer-events: none;
+      }
+      .success-overlay.show {
+        display: flex;
+      }
+      .success-text {
+        color: #ffffff;
+        font-weight: 900;
+        font-size: clamp(26px, 6vw, 56px);
+        letter-spacing: 0.06em;
+        text-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
+        opacity: 0;
+      }
+      .success-overlay.show .success-text {
+        animation: successFade 2800ms ease forwards;
+      }
+      @keyframes successFade {
+        0% {
+          opacity: 0;
+          transform: scale(0.98);
+        }
+        20% {
+          opacity: 1;
+          transform: scale(1);
+        }
+        80% {
+          opacity: 1;
+        }
+        100% {
+          opacity: 0;
+        }
       }
       @media (max-width: 500px) {
         .header h1 {
@@ -178,10 +279,23 @@
       <div class="controls">
         <button id="confirm" class="confirm-btn">決定</button>
       </div>
+      <!-- 不正解モーダル -->
+      <div id="incorrectModal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="incorrectTitle">
+        <div class="modal">
+          <h2 id="incorrectTitle">不正解</h2>
+          <p>もう一度お試しください。</p>
+          <button id="closeIncorrect" class="close-btn">OK</button>
+        </div>
+      </div>
+      <!-- 正解メッセージ -->
+      <div id="successOverlay" class="success-overlay" aria-hidden="true">
+        <div class="success-text">認証しました</div>
+      </div>
     </div>
 
     <script>
-      /*
+
+/*
   使い方:
    - IMAGE_SRC を実画像に変えてください
    - onTileClick(row, col, index, buttonElem) を自分の判定用に改造してください
@@ -195,6 +309,10 @@
 
       const gridElem = document.getElementById("grid");
       const tiles = []; // ボタン要素配列
+      const incorrectModal = document.getElementById("incorrectModal");
+      const closeIncorrectBtn = document.getElementById("closeIncorrect");
+      const successOverlay = document.getElementById("successOverlay");
+      const successText = successOverlay.querySelector('.success-text');
 
       // 3x3 のタイルを作る
       let index = 0;
@@ -220,11 +338,24 @@
 
           btn.appendChild(img);
 
+          // カウント表示用バッジ
+          const counter = document.createElement("span");
+          counter.className = "counter";
+          counter.textContent = "0";
+          btn.appendChild(counter);
+          btn.dataset.count = "0";
+
           // クリックハンドラ
           btn.addEventListener("click", () => {
             // toggle 選択表示（必要な場合はここを変更）
             btn.classList.toggle("selected");
             onTileClick(r, c, index, btn);
+
+            // 押下回数の更新と表示
+            const next = Number(btn.dataset.count || "0") + 1;
+            btn.dataset.count = String(next);
+            counter.textContent = String(next);
+            counter.style.display = "inline-flex";
           });
 
           gridElem.appendChild(btn);
@@ -243,16 +374,42 @@
         return { correct_cnt };
       }
 
+      function resetTileCounts() {
+        tiles.forEach((btn) => {
+          btn.dataset.count = "0";
+          const badge = btn.querySelector('.counter');
+          if (badge) {
+            badge.textContent = "0";
+            badge.style.display = "none";
+          }
+          btn.classList.remove('selected');
+        });
+        correct_cnt = 0;
+      }
+
       // 決定ボタン（例）
       document.getElementById("confirm").addEventListener("click", () => {
-        if (correct_cnt != 4) {
-          alert("不正解");
-          correct_cnt = 0;
-        } else {
-          alert("正解");
-          //別のページへ遷移
-          window.location.href = "marubatu.html";
+        const isCorrect = correct_cnt === 4;
+        if (!isCorrect) {
+          incorrectModal.classList.add('show');
+          resetTileCounts();
+          return;
         }
+
+        // 正解: フェードイン→フェードアウト後に遷移
+        successOverlay.classList.add('show');
+        // 押下回数はリセット（演出中に次の入力が入らないように）
+        resetTileCounts();
+        const handleEnd = () => {
+          successText.removeEventListener('animationend', handleEnd);
+          successOverlay.classList.remove('show');
+          window.location.href = "marubatu.html";
+        };
+        successText.addEventListener('animationend', handleEnd);
+      });
+
+      closeIncorrectBtn.addEventListener('click', () => {
+        incorrectModal.classList.remove('show');
       });
 
       // (任意) 画像が読み込めないときの表示改善
