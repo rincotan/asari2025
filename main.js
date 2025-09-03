@@ -58,25 +58,40 @@ window.addEventListener("DOMContentLoaded", () => {
 
   // メニューのロック状態反映
   unlockedStep = JSON.parse(localStorage.getItem("unlockedStep") || "[1]");
+  
+  // Lastページの場合は全てのステップを解放
+  const isLastPage = document.body.classList.contains('last') || 
+                     document.body.classList.contains('good-last') || 
+                     document.body.classList.contains('bad-last');
+  
   document.querySelectorAll(".menu a").forEach((a) => {
     const targetStep = parseInt(a.dataset.step);
-    if (targetStep > 0 && !unlockedStep.includes(targetStep)) {
-      a.classList.add("locked"); // CSSで灰色などに
-    } else {
+    
+    if (isLastPage) {
+      // Lastページでは全てのステップを解放
       a.classList.remove("locked");
-    }
-
-    // Lastリンクの状態確認（Step3クリア済みかチェック）
-    if (a.href && a.href.includes("last.html")) {
-      if (unlockedStep.includes(4)) {
-        console.log("Lastリンクのロック解除");
-        a.classList.remove("locked");
-        a.style.color = "#333";
-        a.style.pointerEvents = "auto";
+      a.style.color = "#333";
+      a.style.pointerEvents = "auto";
+    } else {
+      // 通常のページでは通常のロック判定
+      if (targetStep > 0 && !unlockedStep.includes(targetStep)) {
+        a.classList.add("locked"); // CSSで灰色などに
       } else {
-        a.classList.add("locked");
-        a.style.color = "#aaa";
-        a.style.pointerEvents = "none";
+        a.classList.remove("locked");
+      }
+
+      // Lastリンクの状態確認（Step3クリア済みかチェック）
+      if (a.href && a.href.includes("last.html")) {
+        if (unlockedStep.includes(4)) {
+          console.log("Lastリンクのロック解除");
+          a.classList.remove("locked");
+          a.style.color = "#333";
+          a.style.pointerEvents = "auto";
+        } else {
+          a.classList.add("locked");
+          a.style.color = "#aaa";
+          a.style.pointerEvents = "none";
+        }
       }
     }
   });
@@ -163,7 +178,15 @@ function generateStepButtons(stepNum, total) {
 function checkQuizAnswer(inputId, correct) {
   const val = document.getElementById(inputId).value.trim();
   const result = document.getElementById(inputId + "-result");
-  let isCorrect = val === correct;
+  
+  // 答えが配列の場合は、その中のどれかと一致すれば正解
+  let isCorrect;
+  if (Array.isArray(correct)) {
+    isCorrect = correct.some(ans => val === ans);
+  } else {
+    isCorrect = val === correct;
+  }
+  
   // モーダル表示
   showResultModal(isCorrect, val, correct);
 }
@@ -188,6 +211,19 @@ function showResultModal(isCorrect, val, correct) {
       const solved = JSON.parse(localStorage.getItem("solvedQuiz") || "{}");
       solved[`s${stepNum}q${quizNum}`] = true;
       localStorage.setItem("solvedQuiz", JSON.stringify(solved));
+      
+      // 正解時に「うらがえす」ボタンを即座に有効化
+      if (stepNum === 3) {
+        const revBtn = document.getElementById("rev-btn");
+        if (revBtn) {
+          // ボタンの見た目を有効化状態に変更
+          revBtn.style.opacity = "1";
+          revBtn.style.cursor = "pointer";
+          revBtn.disabled = false;
+          
+          // ボタンの状態を有効化（クリックイベントはquiz.htmlで管理）
+        }
+      }
     } catch (_) {}
 
     let explanationText = "";
@@ -200,7 +236,7 @@ function showResultModal(isCorrect, val, correct) {
     }
 
     if (stepNum === 3) {
-      explanationText += "どこかのロックが解除されました";
+      explanationText += "<br/>どこかのロックが解除されました";
     }
 
     let contentHTML = `

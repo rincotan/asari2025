@@ -175,19 +175,86 @@
         transform: translateX(-50%) rotate(-45deg);
       }
 
-      .result-message {
-        font-size: 1.4em;
-        margin: 12px 0;
-        color: #444;
+      .game-status-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+        margin-top: 20px;
+        padding: 20px;
+        max-width: 300px;
+        margin-left: auto;
+        margin-right: auto;
       }
+      
+      .game-status {
+        font-size: 1.2em;
+        color: #333;
+        font-weight: bold;
+        text-align: center;
+      }
+      
+      .turn-indicator {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+      }
+      
+      .player-symbol {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        border: 4px solid #ff4444;
+        background: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5em;
+        font-weight: bold;
+        color: #ff4444;
+      }
+      
+      .colon {
+        font-size: 2em;
+        font-weight: bold;
+        color: #333;
+      }
+      
+      .turn-count {
+        font-size: 2em;
+        font-weight: bold;
+        color: #333;
+      }
+      
+      .caution {
+        text-align: center;
+        font-size: 1.2em;
+        color: #333;
+        font-weight: bold;
+        margin: 120px 0px -90px 0px;
+      }
+      
       .retry-btn {
-        margin-bottom: 8px;
-        padding: 8px 12px;
-        border-radius: 6px;
+        padding: 12px 24px;
+        border-radius: 8px;
         border: none;
         background: #4caf50;
         color: white;
         cursor: pointer;
+        font-size: 1em;
+        font-weight: bold;
+        transition: background-color 0.3s ease;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+      }
+      
+      .retry-btn:hover {
+        background: #45a049;
+      }
+      
+      .retry-btn:active {
+        transform: translateY(1px);
+        box-shadow: 0 1px 2px rgba(0,0,0,0.2);
       }
       #marubatu_image {
         height: 140px;
@@ -262,17 +329,22 @@
       <div class="message">まだあなたのことは<br />信用できません</div>
     </div>
     <div class="caution">3つ並べたら勝ち</div>
-
     <div id="board-wrapper">
       <div class="grid-container" id="grid"></div>
       <div class="panel-container" id="panel"></div>
     </div>
 
-    <p class="result-message" id="result">ゲーム中...</p>
-    <p id="x_cnt">のこり:3</p>
-    <button class="retry-btn" onclick="retry()">リトライ</button>
+    <div class="game-status-container">
+      <div class="game-status" id="result">ゲーム中...</div>
+      <div class="turn-indicator">
+        <div class="player-symbol">　</div>
+        <span class="colon">:</span>
+        <span class="turn-count" id="x_cnt">3</span>
+      </div>
+      <button class="retry-btn" onclick="retry()">リトライ</button>
+    </div>
     <div id="successOverlay" class="success-overlay" aria-hidden="true">
-      <div class="success-text">認証しました</div>
+      <div class="success-text">勝ち</div>
     </div>
 
     <script>
@@ -369,6 +441,18 @@
         zanki = 3,
         additional_zanki = 1;
 
+      // 「勝ち」と同じオーバーレイで任意のテキストを表示する
+      function showOverlayMessage(text) {
+        successText.textContent = text;
+        successOverlay.classList.add("show");
+        const handleEnd = () => {
+          successText.removeEventListener("animationend", handleEnd);
+          successOverlay.classList.remove("show");
+        };
+        successText.addEventListener("animationend", handleEnd);
+      }
+
+
       // grid 側のクリック処理
       function handleGridCellClick(panelRow, panelCol) {
         console.log(`Grid cell clicked: (${panelRow}, ${panelCol})`);
@@ -387,6 +471,7 @@
               showmessage("！！");
             } else {
               showmessage("そこには置かないでください。");
+              showOverlayMessage("だめです");
               return;
             }
           }
@@ -411,7 +496,7 @@
         board[x_][y_] = "X";
         now_x_placed++;
         zanki--;
-        document.getElementById("x_cnt").textContent = `のこり:${zanki}`;
+        document.getElementById("x_cnt").textContent = `${zanki}`;
         renderGrid(); // グリッドだけ再描画（panel は再生成しない）
       }
 
@@ -561,6 +646,7 @@
         else resultEl.textContent = "ゲーム中...";
         if (winner === "O") {
           showmessage("お見事");
+          showOverlayMessage("勝ち");
           successOverlay.classList.add("show");
           // 押下回数はリセット（演出中に次の入力が入らないように）
           const handleEnd = () => {
@@ -569,6 +655,7 @@
             window.location.href = "step.html";
           };
           successText.addEventListener("animationend", handleEnd);
+
         } else if (winner === "X") {
           showmessage("私の勝ちです。");
         }
@@ -628,7 +715,7 @@
         additional_zanki = 1;
         document.getElementsByClassName("hitbox")[0].style.background =
           "rgba(255,0,0,0)";
-        document.getElementById("x_cnt").textContent = `のこり:${zanki}`;
+        document.getElementById("x_cnt").textContent = `${zanki}`;
         now_x_placed = 0;
 
         board = [
@@ -660,7 +747,7 @@
         if (additional_zanki === 1) {
           zanki++;
           additional_zanki = 0;
-          document.getElementById("x_cnt").textContent = `のこり:${zanki}`;
+          document.getElementById("x_cnt").textContent = `${zanki}`;
         }
         document.getElementsByClassName("hitbox")[0].style.background =
           "#ffedd1";
