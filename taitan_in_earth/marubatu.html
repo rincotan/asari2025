@@ -660,6 +660,7 @@
         if (additional_zanki === 1) {
           zanki++;
           additional_zanki = 0;
+          document.getElementById("x_cnt").textContent = `のこり:${zanki}`;
         }
         document.getElementsByClassName("hitbox")[0].style.background =
           "#d5bfc1";
