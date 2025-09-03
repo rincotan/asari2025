@@ -566,11 +566,10 @@
           const handleEnd = () => {
             successText.removeEventListener("animationend", handleEnd);
             successOverlay.classList.remove("show");
-            window.location.href = "dummy.html";
+            window.location.href = "step.html";
           };
           successText.addEventListener("animationend", handleEnd);
-        }
-        else if(winner==="X"){
+        } else if (winner === "X") {
           showmessage("私の勝ちです。");
         }
       }
@@ -664,7 +663,7 @@
           document.getElementById("x_cnt").textContent = `のこり:${zanki}`;
         }
         document.getElementsByClassName("hitbox")[0].style.background =
-          "#d5bfc1";
+          "#ffedd1";
         showmessage("！？(喋れない...！)");
       }
       function showmessage(t) {
