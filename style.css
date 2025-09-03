@@ -866,8 +866,11 @@ input[type="text"],
   height: 40px;
   border-radius: 50%; /* 丸くする */
   object-fit: cover; /* はみ出した部分をトリミング */
+  object-position: center;
   margin-right: 8px; /* テキストとの余白 */
   vertical-align: middle;
+  overflow: hidden;
+  flex-shrink: 0; /* ←これを追加！ */
 }
 .message.alien .icon {
   margin-right: 8px;
@@ -1200,4 +1203,9 @@ body.last .btn-no {
   font-family: "しねきゃぷしょん";
   max-width: 400px;
   height: 35px;
+}
+#final-problem {
+  text-align: center;
+  color: #fff;
+  font-size: 2em;
 }
