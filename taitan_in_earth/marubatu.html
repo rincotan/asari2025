@@ -384,7 +384,9 @@
             console.log("隠されたマスをくりっく！");
             if (additional_zanki === 0) {
               //改めて盤面を5×5で見て、ビンゴしてたらOK
+              showmessage("！！");
             } else {
+              showmessage("そこには置かないでください。");
               return;
             }
           }
@@ -474,11 +476,13 @@
                   panelState[row][col] = "cracked";
                   sq.dataset.state = "cracked";
                   crack.classList.add("show");
+                  showmessage("あ...");
                 } else if (cur === "cracked") {
                   panelState[row][col] = "removed";
                   // remove DOM nodes
                   sq.remove();
                   crack.remove();
+                  showmessage("まずい...");
                 }
               });
             }
@@ -556,6 +560,7 @@
         if (winner) resultEl.textContent = winner + " の勝ち！";
         else resultEl.textContent = "ゲーム中...";
         if (winner === "O") {
+          showmessage("お見事");
           successOverlay.classList.add("show");
           // 押下回数はリセット（演出中に次の入力が入らないように）
           const handleEnd = () => {
@@ -564,6 +569,9 @@
             window.location.href = "dummy.html";
           };
           successText.addEventListener("animationend", handleEnd);
+        }
+        else if(winner==="X"){
+          showmessage("私の勝ちです。");
         }
       }
 
@@ -616,6 +624,7 @@
         }
       }
       function retry() {
+        showmessage("まだあなたのことは<br>信用できません");
         zanki = 3;
         additional_zanki = 1;
         document.getElementsByClassName("hitbox")[0].style.background =
@@ -652,10 +661,11 @@
         if (additional_zanki === 1) {
           zanki++;
           additional_zanki = 0;
+          document.getElementById("x_cnt").textContent = `のこり:${zanki}`;
         }
         document.getElementsByClassName("hitbox")[0].style.background =
           "#d5bfc1";
-        showmessage("口をとらないよ<br>うにお願いします");
+        showmessage("！？(喋れない...！)");
       }
       function showmessage(t) {
         document.getElementsByClassName("message")[0].innerHTML = t;
