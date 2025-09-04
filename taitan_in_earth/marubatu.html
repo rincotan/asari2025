@@ -186,21 +186,21 @@
         margin-left: auto;
         margin-right: auto;
       }
-      
+
       .game-status {
         font-size: 1.2em;
         color: #333;
         font-weight: bold;
         text-align: center;
       }
-      
+
       .turn-indicator {
         display: flex;
         align-items: center;
         justify-content: center;
         gap: 8px;
       }
-      
+
       .player-symbol {
         width: 40px;
         height: 40px;
@@ -214,19 +214,19 @@
         font-weight: bold;
         color: #ff4444;
       }
-      
+
       .colon {
         font-size: 2em;
         font-weight: bold;
         color: #333;
       }
-      
+
       .turn-count {
         font-size: 2em;
         font-weight: bold;
         color: #333;
       }
-      
+
       .caution {
         text-align: center;
         font-size: 1.2em;
@@ -234,7 +234,7 @@
         font-weight: bold;
         margin: 120px 0px -90px 0px;
       }
-      
+
       .retry-btn {
         padding: 12px 24px;
         border-radius: 8px;
@@ -245,16 +245,16 @@
         font-size: 1em;
         font-weight: bold;
         transition: background-color 0.3s ease;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
       }
-      
+
       .retry-btn:hover {
         background: #45a049;
       }
-      
+
       .retry-btn:active {
         transform: translateY(1px);
-        box-shadow: 0 1px 2px rgba(0,0,0,0.2);
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
       }
       #marubatu_image {
         height: 140px;
@@ -451,7 +451,6 @@
         };
         successText.addEventListener("animationend", handleEnd);
       }
-
 
       // grid 側のクリック処理
       function handleGridCellClick(panelRow, panelCol) {
@@ -652,10 +651,9 @@
           const handleEnd = () => {
             successText.removeEventListener("animationend", handleEnd);
             successOverlay.classList.remove("show");
-            window.location.href = "step.html";
+            window.location.href = "index.html";
           };
           successText.addEventListener("animationend", handleEnd);
-
         } else if (winner === "X") {
           showmessage("私の勝ちです。");
         }

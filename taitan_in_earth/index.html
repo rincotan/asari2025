@@ -1,432 +1,65 @@
 <!DOCTYPE html>
 <html lang="ja">
   <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>地球のトレンド</title>
-    <style>
-      :root {
-        --card-w: 720px;
-        --gutter: 20px;
-        --blue: #2277ee;
-        --white: #ffffff;
-        --black: #0b0b0b;
-      }
-      body {
-        margin: 0;
-        min-height: 100vh;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        background: #000; /* 背景は黒 */
-        font-family: "Hiragino Kaku Gothic ProN", "メイリオ", sans-serif;
-      }
-
-      /* カード */
-      .card {
-        width: min(92vw, var(--card-w));
-        background: var(--white);
-        padding: 26px;
-        box-sizing: border-box;
-        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
-        position: relative;
-      }
-
-      /* ヘッダー（青） */
-      .header {
-        background: var(--blue);
-        color: #fff;
-        padding: 28px 18px 44px 18px; /* 下に余白を多く */
-        text-align: center;
-        position: relative;
-        border-radius: 6px;
-        overflow: visible;
-      }
-      .header h1 {
-        margin: 0;
-        font-size: 20px;
-        line-height: 1.2;
-        font-weight: 800;
-        letter-spacing: 0.03em;
-      }
-      .header .small {
-        font-size: 18px;
-        margin-top: 10px;
-        font-weight: 800;
-      }
-      .header .big {
-        font-size: 26px;
-        margin-top: 8px;
-        font-weight: 900;
-      }
-
-      /* 上の黒い丸角バー */
-      .black-bar {
-        position: absolute;
-        left: 50%;
-        transform: translateX(-50%);
-        top: 14px; /* ヘッダー内の上寄せ位置 */
-        height: 16px;
-        width: 72%;
-        background: var(--black);
-        border-radius: 12px;
-        box-shadow: 0 2px 0 rgba(0, 0, 0, 0.4);
-        z-index: 5;
-      }
-
-      /* グリッド領域 */
-      .grid-wrap {
-        margin-top: 18px;
-        background: #fff;
-        padding: 18px;
-      }
-
-      .grid {
-        width: 100%;
-        max-width: 640px;
-        aspect-ratio: 1 / 1; /* 正方形領域 */
-        margin: 0 auto;
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        grid-template-rows: repeat(3, 1fr);
-        gap: 10px; /* 白い格子線（間隔） */
-        box-sizing: border-box;
-        background: #e9e9e9; /* グリッド外枠の薄い色 */
-        padding: 10px;
-      }
-
-      /* タイルはボタン（クリック可能） */
-      .tile {
-        border: none;
-        padding: 0;
-        margin: 0;
-        display: block;
-        background: transparent;
-        cursor: pointer;
-        position: relative;
-        overflow: hidden;
-        border-radius: 4px;
-        box-shadow: 0 1px 0 rgba(0, 0, 0, 0.06) inset;
-      }
-      .tile:focus {
-        outline: 3px solid rgba(34, 119, 238, 0.35);
-        outline-offset: -3px;
-      }
-
-      .tile img {
-        width: 100%;
-        height: 100%;
-        display: block;
-        object-fit: cover; /* 元画像を拡大縮小してタイルを満たす */
-        /* object-position は JS で各タイルに設定します */
-        user-select: none;
-        -webkit-user-drag: none;
-        pointer-events: none;
-      }
-
-      /* タップ回数バッジ */
-      .tile .counter {
-        position: absolute;
-        top: 6px;
-        right: 6px;
-        background: rgba(0, 0, 0, 0.7);
-        color: #fff;
-        border-radius: 999px;
-        min-width: 22px;
-        height: 22px;
-        padding: 0 6px;
-        display: none; /* 0 回のときは非表示 */
-        align-items: center;
-        justify-content: center;
-        font-size: 14px;
-        font-weight: 800;
-        line-height: 1;
-        z-index: 2;
-        pointer-events: none;
-      }
-
-      /* 選択中の見た目 */
-      .tile.selected {
-        box-shadow: 0 0 0 4px rgba(34, 119, 238, 0.18) inset;
-      }
-
-      /* 決定ボタン */
-      .controls {
-        margin-top: 18px;
-        display: flex;
-        justify-content: flex-end;
-        align-items: center;
-        gap: 12px;
-      }
-      .confirm-btn {
-        background: var(--blue);
-        color: #fff;
-        padding: 12px 22px;
-        border-radius: 6px;
-        font-weight: 900;
-        border: none;
-        cursor: pointer;
-        font-size: 18px;
-      }
-      .confirm-btn:active {
-        transform: translateY(1px);
-      }
-      /* 不正解モーダル */
-      .modal-overlay {
-        position: fixed;
-        inset: 0;
-        background: rgba(0, 0, 0, 0.6);
-        display: none;
-        align-items: center;
-        justify-content: center;
-        z-index: 9999;
-      }
-      .modal-overlay.show {
-        display: flex;
-      }
-      .modal {
-        background: #ffffff;
-        width: min(88vw, 400px);
-        border-radius: 10px;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
-        padding: 20px 18px;
-        text-align: center;
-      }
-      .modal h2 {
-        margin: 0 0 10px 0;
-        font-size: 20px;
-      }
-      .modal p {
-        margin: 0 0 16px 0;
-        font-size: 16px;
-      }
-      .modal .close-btn {
-        background: var(--blue);
-        color: #fff;
-        padding: 10px 18px;
-        border-radius: 6px;
-        border: none;
-        cursor: pointer;
-        font-weight: 900;
-        font-size: 16px;
-      }
-      /* 正解時のフェードイン/アウトメッセージ */
-      .success-overlay {
-        position: fixed;
-        inset: 0;
-        display: none;
-        align-items: center;
-        justify-content: center;
-        z-index: 10000;
-        background: rgba(0, 0, 0, 0.55);
-        pointer-events: none;
-      }
-      .success-overlay.show {
-        display: flex;
-      }
-      .success-text {
-        color: #ffffff;
-        font-weight: 900;
-        font-size: clamp(26px, 6vw, 56px);
-        letter-spacing: 0.06em;
-        text-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
-        opacity: 0;
-      }
-      .success-overlay.show .success-text {
-        animation: successFade 2800ms ease forwards;
-      }
-      @keyframes successFade {
-        0% {
-          opacity: 0;
-          transform: scale(0.98);
-        }
-        20% {
-          opacity: 1;
-          transform: scale(1);
-        }
-        80% {
-          opacity: 1;
-        }
-        100% {
-          opacity: 0;
-        }
-      }
-      @media (max-width: 500px) {
-        .header h1 {
-          font-size: 16px;
-        }
-        .header .big {
-          font-size: 20px;
-        }
-      }
-    </style>
+    <meta charset="UTF-8" />
+    <title>STEPページ</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="../style.css" />
   </head>
   <body>
-    <div class="card" role="application">
-      <div class="header" aria-hidden="false">
-        <div class="black-bar" aria-hidden="true"></div>
-        <h1>「砂時計の真ん中に重なる2文字」</h1>
-        <div class="small">を</div>
-        <div class="big">「タイタンの墜落回数」押せ</div>
-      </div>
+    <!-- <div id="pc-warning">※スマホ専用サイトです。スマートフォンでご利用ください。</div> -->
+    <h2 class="story-title">～STORY～</h2>
+    <section id="story-section-step4" class="step-story-section active">
+      <div class="story-chat">
+        <div class="message alien">
+          <img src="../images/marubatu_are.png" alt="alien icon" class="icon" />
+          <div class="chat alien">
+            マスを壊して盤面を広げ、さらに私の口を封じて制止を振り切るとは…見事です。
+          </div>
+        </div>
+        <div class="message user">
+          <div class="chat user">やった〜！これで宇宙船を動かせるね！</div>
+          <img src="../images/user_icon.png" alt="user icon" class="icon" />
+        </div>
 
-      <div class="grid-wrap">
-        <div id="grid" class="grid" aria-label="画像タイル 3x3">
-          <!-- JS で 9 個のタイルを生成 -->
+        <div class="message alien">
+          <img src="../images/alien_icon2.png" alt="alien icon" class="icon" />
+          <div class="chat alien">
+            君のおかげで宇宙の旅に戻れる！<br/>本当にありがとう！
+          </div>
+        </div>
+        <div class="message user">
+          <div class="chat user">楽しかったよ！</div>
+          <img src="../images/user_icon.png" alt="user icon" class="icon" />
+        </div>
+
+        <div class="message alien">
+          <img src="../images/alien_icon2.png" alt="alien icon" class="icon" />
+          <div class="chat alien">また会おうね！</div>
+        </div>
+        <div class="message user">
+          <div class="chat user">
+            また宇宙船が墜落しないように気をつけてね！
+          </div>
+          <img src="../images/user_icon.png" alt="user icon" class="icon" />
+        </div>
+
+        <div class="message alien">
+          <img src="../images/alien_icon2.png" alt="alien icon" class="icon" />
+          <div class="chat alien">き、気をつけるよ…</div>
         </div>
       </div>
+    </section>
+    
+    <h1 id="final-problem">最終問題</h1>
+    <h1 id="final-problem" style="color: #130202;">タイタンを地球から<br />宇宙へ帰還させよう</h1>
 
-      <div class="controls">
-        <button id="confirm" class="confirm-btn">決定</button>
-      </div>
-      <!-- 不正解モーダル -->
-      <div
-        id="incorrectModal"
-        class="modal-overlay"
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby="incorrectTitle"
-      >
-        <div class="modal">
-          <h2 id="incorrectTitle">不正解</h2>
-          <p>もう一度お試しください。</p>
-          <button id="closeIncorrect" class="close-btn">OK</button>
-        </div>
-      </div>
-      <!-- 正解メッセージ -->
-      <div id="successOverlay" class="success-overlay" aria-hidden="true">
-        <div class="success-text">認証しました</div>
-      </div>
-    </div>
-
+    <!-- <script src="../main.js"></script> -->
     <script>
-      /*
-  使い方:
-   - IMAGE_SRC を実画像に変えてください
-   - onTileClick(row, col, index, buttonElem) を自分の判定用に改造してください
-*/
-
-      const IMAGE_SRC = [
-        ["images/a1.png", "images/a4.png", "images/a5.png"],
-        ["images/a2.png", "images/a6.png", "images/a7.png"],
-        ["images/a3.png", "images/a8.png", "images/a9.png"],
-      ];
-
-      const gridElem = document.getElementById("grid");
-      const tiles = []; // ボタン要素配列
-      const incorrectModal = document.getElementById("incorrectModal");
-      const closeIncorrectBtn = document.getElementById("closeIncorrect");
-      const successOverlay = document.getElementById("successOverlay");
-      const successText = successOverlay.querySelector(".success-text");
-
-      // 3x3 のタイルを作る
-      let index = 0;
-      for (let r = 0; r < 3; r++) {
-        for (let c = 0; c < 3; c++) {
-          const btn = document.createElement("button");
-          btn.className = "tile";
-          btn.setAttribute("aria-label", `タイル r${r + 1} c${c + 1}`);
-          btn.dataset.row = r;
-          btn.dataset.col = c;
-          btn.dataset.index = index;
-
-          const img = document.createElement("img");
-          img.src = "../" + IMAGE_SRC[r][c];
-          // object-position を使って画像のクロップ位置を調整
-          // col: 0 -> 0% , 1 -> 50% , 2 -> 100%
-          // row: 0 -> 0% , 1 -> 50% , 2 -> 100%
-          const posX = c * 50; // 0,50,100
-          const posY = r * 50;
-          img.style.objectPosition = `${posX}% ${posY}%`;
-          // 画像がクリックイベントを妨げないように
-          img.draggable = false;
-
-          btn.appendChild(img);
-
-          // カウント表示用バッジ
-          const counter = document.createElement("span");
-          counter.className = "counter";
-          counter.textContent = "0";
-          btn.appendChild(counter);
-          btn.dataset.count = "0";
-
-          // クリックハンドラ
-          btn.addEventListener("click", () => {
-            // toggle 選択表示（必要な場合はここを変更）
-            btn.classList.toggle("selected");
-            onTileClick(r, c, index, btn);
-
-            // 押下回数の更新と表示
-            const next = Number(btn.dataset.count || "0") + 1;
-            btn.dataset.count = String(next);
-            counter.textContent = String(next);
-            counter.style.display = "inline-flex";
-          });
-
-          gridElem.appendChild(btn);
-          tiles.push(btn);
-          index++;
-        }
-      }
-      let correct_cnt = 0;
-      function onTileClick(row, col, index, buttonElem) {
-        if (row === 0 && col === 1) {
-          correct_cnt++;
-        } else {
-          correct_cnt = 0;
-        }
-        console.log("correct count:", correct_cnt);
-        return { correct_cnt };
-      }
-
-      function resetTileCounts() {
-        tiles.forEach((btn) => {
-          btn.dataset.count = "0";
-          const badge = btn.querySelector(".counter");
-          if (badge) {
-            badge.textContent = "0";
-            badge.style.display = "none";
-          }
-          btn.classList.remove("selected");
-        });
-        correct_cnt = 0;
-      }
-
-      // 決定ボタン（例）
-      document.getElementById("confirm").addEventListener("click", () => {
-        const isCorrect = correct_cnt === 4;
-        if (!isCorrect) {
-          incorrectModal.classList.add("show");
-          resetTileCounts();
-          return;
-        }
-
-        // 正解: フェードイン→フェードアウト後に遷移
-        successOverlay.classList.add("show");
-        // 押下回数はリセット（演出中に次の入力が入らないように）
-        resetTileCounts();
-        const handleEnd = () => {
-          successText.removeEventListener("animationend", handleEnd);
-          successOverlay.classList.remove("show");
-          window.location.href = "marubatu.html";
-        };
-        successText.addEventListener("animationend", handleEnd);
-      });
-
-      closeIncorrectBtn.addEventListener("click", () => {
-        incorrectModal.classList.remove("show");
-      });
-
-      // (任意) 画像が読み込めないときの表示改善
-      document.querySelectorAll(".tile img").forEach((img) => {
-        img.addEventListener("error", () => {
-          img.style.background = "#ccc";
-          img.alt = "画像が読み込めません";
-        });
-      });
-
-
-
+      document.documentElement.style.setProperty(
+        "--step-submit-hover",
+        "#5ce1e6"
+      );
     </script>
   </body>
 </html>
