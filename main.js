@@ -32,7 +32,7 @@ window.addEventListener("DOMContentLoaded", () => {
     } else if (stepNum === 2) {
       elem.innerHTML = "宇宙船に書かれた7つの謎を使い<br>宇宙船の開け方を導け";
     } else if (stepNum === 3) {
-      elem.innerHTML = "パスワードを忘れた方はこちらの謎をお解き";
+      elem.innerHTML = "パスワードを忘れた方はこちら";
     }
   });
 
@@ -236,7 +236,7 @@ function showResultModal(isCorrect, val, correct) {
     }
 
     if (stepNum === 3) {
-      explanationText += "<br/>どこかのロックが解除されました";
+      explanationText += `<div style="color:#f08080;">どこかのロックが解除されました</div>`
     }
 
     let contentHTML = `
@@ -298,7 +298,7 @@ function showStepResultModal(isCorrect, stepNum) {
 
   // 任意のSTEP解説（必要に応じて編集）
   const stepExplanations = {
-    1: "冊子と5枚の謎を正しく組み合わせるのがポイントでした。",
+    1: "問題3から、2重の四角があるので英語で答えを埋めればいいとわかります。問題1～5の答えを英語で埋めて、しりとりとなるように線でつなげると「たいたん」が現れます。",
     2: "宇宙船の6つの謎を冊子と照合して順に解読します。",
     3: "これまでの情報を総合し、最終パスワードを導きます。",
   };
