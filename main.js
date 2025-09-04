@@ -58,15 +58,28 @@ window.addEventListener("DOMContentLoaded", () => {
 
   // メニューのロック状態反映
   unlockedStep = JSON.parse(localStorage.getItem("unlockedStep") || "[1]");
-  
+
   // Lastページの場合は全てのステップを解放
-  const isLastPage = document.body.classList.contains('last') || 
-                     document.body.classList.contains('good-last') || 
-                     document.body.classList.contains('bad-last');
-  
+  const isLastPage =
+    document.body.classList.contains("last") ||
+    document.body.classList.contains("good-last") ||
+    document.body.classList.contains("bad-last");
+
+  const last_lock = localStorage.getItem("last_lock") || "locked";
+  console.log("Lastリンクの状態1iiiiiii:", last_lock);
+  // Step3クリア後にLastリンクのlocked状態を解除
+  if (last_lock != "locked") {
+    const lastLink = document.querySelector('.menu a[href="last.html"]');
+    if (lastLink) {
+      lastLink.classList.remove("locked");
+      lastLink.style.color = "#333";
+      lastLink.style.pointerEvents = "auto";
+    }
+  }
+
   document.querySelectorAll(".menu a").forEach((a) => {
     const targetStep = parseInt(a.dataset.step);
-    
+
     if (isLastPage) {
       // Lastページでは全てのステップを解放
       a.classList.remove("locked");
@@ -91,6 +104,17 @@ window.addEventListener("DOMContentLoaded", () => {
           a.classList.add("locked");
           a.style.color = "#aaa";
           a.style.pointerEvents = "none";
+        }
+      }
+      const last_lock = localStorage.getItem("last_lock") || "locked";
+      console.log("Lastリンクの状態1iiiiiii:", last_lock);
+      // Step3クリア後にLastリンクのlocked状態を解除
+      if (last_lock != "locked") {
+        const lastLink = document.querySelector('.menu a[href="last.html"]');
+        if (lastLink) {
+          lastLink.classList.remove("locked");
+          lastLink.style.color = "#333";
+          lastLink.style.pointerEvents = "auto";
         }
       }
     }
@@ -178,15 +202,15 @@ function generateStepButtons(stepNum, total) {
 function checkQuizAnswer(inputId, correct) {
   const val = document.getElementById(inputId).value.trim();
   const result = document.getElementById(inputId + "-result");
-  
+
   // 答えが配列の場合は、その中のどれかと一致すれば正解
   let isCorrect;
   if (Array.isArray(correct)) {
-    isCorrect = correct.some(ans => val === ans);
+    isCorrect = correct.some((ans) => val === ans);
   } else {
     isCorrect = val === correct;
   }
-  
+
   // モーダル表示
   showResultModal(isCorrect, val, correct);
 }
@@ -211,7 +235,7 @@ function showResultModal(isCorrect, val, correct) {
       const solved = JSON.parse(localStorage.getItem("solvedQuiz") || "{}");
       solved[`s${stepNum}q${quizNum}`] = true;
       localStorage.setItem("solvedQuiz", JSON.stringify(solved));
-      
+
       // 正解時に「うらがえす」ボタンを即座に有効化
       if (stepNum === 3) {
         const revBtn = document.getElementById("rev-btn");
@@ -220,7 +244,7 @@ function showResultModal(isCorrect, val, correct) {
           revBtn.style.opacity = "1";
           revBtn.style.cursor = "pointer";
           revBtn.disabled = false;
-          
+
           // ボタンの状態を有効化（クリックイベントはquiz.htmlで管理）
         }
       }
@@ -236,7 +260,7 @@ function showResultModal(isCorrect, val, correct) {
     }
 
     if (stepNum === 3) {
-      explanationText += `<div style="color:#f08080;">どこかのロックが解除されました</div>`
+      explanationText += `<div style="color:#f08080;">どこかのロックが解除されました</div>`;
     }
 
     let contentHTML = `
@@ -311,8 +335,10 @@ function showStepResultModal(isCorrect, stepNum) {
       unlocked.push(stepNum + 1);
     localStorage.setItem("unlockedStep", JSON.stringify(unlocked));
 
+    const last_lock = localStorage.getItem("last_lock") || "locked";
+    console.log("Lastリンクの状態:", last_lock);
     // Step3クリア後にLastリンクのlocked状態を解除
-    if (stepNum === 3) {
+    if (last_lock != "locked") {
       const lastLink = document.querySelector('.menu a[href="last.html"]');
       if (lastLink) {
         lastLink.classList.remove("locked");
@@ -334,7 +360,10 @@ function showStepResultModal(isCorrect, stepNum) {
 
     nextBtn.onclick = function () {
       if (stepNum < 3) window.location.href = `step.html?step=${stepNum + 1}`;
-      else window.location.href = "last.html";
+      else {
+        window.location.href = "last.html";
+        localStorage.setItem("last_lock", "unlocked");
+      }
     };
   } else {
     content.innerHTML = `
