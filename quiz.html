@@ -56,6 +56,10 @@
       //const params = new URLSearchParams(window.location.search);
       //const stepNum = parseInt(params.get("step")) || 1;
       const quizNum = parseInt(params.get("quiz")) || 1;
+      if (stepNum === 2 && quizNum === 3 && !params.get("title")) {
+  params.set("title", "たむかむごごたて");
+  window.location.search = params.toString();
+}
       console.log(stepNum, quizNum);
 
       const quizData = {
@@ -323,6 +327,11 @@
            },
         },
       };
+      const solvedQuizanswer = localStorage.getItem(`s${stepNum}q${quizNum}`) || "";
+      const inputElem = document.getElementById("quiz-answer");
+      if (solvedQuizanswer) {
+        inputElem.value = solvedQuizanswer;
+      }
 
 
 
@@ -340,6 +349,8 @@
         .classList.add(`quiz${stepNum}`);
 
       document.getElementById("submit-btn").onclick = () => {
+        const answer = inputElem.value.trim();
+        localStorage.setItem(`s${stepNum}q${quizNum}`, answer);
         checkQuizAnswer("quiz-answer", quizData[stepNum][quizNum].ans);
       };
       console.log(document.getElementById("submit-btn").onclick);
