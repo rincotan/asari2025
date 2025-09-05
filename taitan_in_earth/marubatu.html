@@ -4,6 +4,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <title>マルバツゲーム</title>
+    <link rel="stylesheet" href="../style.css" />
 
     <style>
       body {
@@ -12,7 +13,7 @@
         justify-content: center;
         align-items: center;
         margin: 0;
-        background-color: #f8f8f8;
+        background-color: #ffffff!important;
         font-family: sans-serif;
 
         padding: 0;
@@ -24,6 +25,12 @@
         position: relative;
         min-height: 100vh;
       }
+      
+      body.marubatu-page {
+        background-image: none!important;
+        background-color: #ffffff!important;
+      }
+      
 
       .header-container {
         position: absolute;
@@ -314,9 +321,13 @@
           opacity: 0;
         }
       }
+
     </style>
   </head>
-  <body>
+  <body class="marubatu-page">
+
+
+
     <div class="header-container">
       <div class="image-wrapper">
         <img
@@ -326,7 +337,7 @@
         />
         <div class="hitbox" onclick="mouth_click()"></div>
       </div>
-      <div class="message">まだあなたのことは<br />信用できません</div>
+      <div class="message">まだあなたのことは<br />信用できません<br/>試させて頂きます<br/>勝負してください</div>
     </div>
     <div class="caution">3つ並べたら勝ち</div>
     <div id="board-wrapper">
@@ -337,7 +348,7 @@
     <div class="game-status-container">
       <div class="game-status" id="result">ゲーム中...</div>
       <div class="turn-indicator">
-        <div class="player-symbol">　</div>
+        <span class="colon">持ち数</span>
         <span class="colon">:</span>
         <span class="turn-count" id="x_cnt">3</span>
       </div>
@@ -754,6 +765,7 @@
       function showmessage(t) {
         document.getElementsByClassName("message")[0].innerHTML = t;
       }
+
     </script>
   </body>
 </html>

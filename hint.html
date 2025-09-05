@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Last以降のヒント</title>
+<style>
+  :root{
+    --bg:#f8f6f0;
+    --card:#fff;
+    --line:#e6dcc6;
+    --accent:#f0c23a;
+    --accent-deep:#d2a108;
+    --text:#333;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--text);
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Hiragino Kaku Gothic ProN", "Noto Sans JP", "Yu Gothic", "Meiryo", sans-serif;
+    line-height:1.7;
+  }
+
+  .wrap{
+    max-width: 720px;
+    margin: 24px auto 80px;
+    padding: 0 16px;
+  }
+
+  /* セクション見出し */
+  .section{
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    box-shadow: 0 2px 6px rgba(0,0,0,.04);
+    overflow: hidden;
+    margin-bottom: 28px;
+  }
+  .section-header{
+    display:flex;
+    align-items:center;
+    gap:.6rem;
+    padding:14px 16px;
+    background: linear-gradient(#f9d86b, var(--accent));
+    border-bottom:1px solid var(--accent-deep);
+    font-weight:700;
+    letter-spacing:.02em;
+  }
+  .section-header .title-small{
+    font-size:.9rem;
+    color:#7a5a00;
+    margin-left:auto;
+    opacity:.9;
+  }
+
+  /* 上の黄色帯(質問行) */
+  .question{
+    display:flex;
+    align-items:center;
+    gap:.6rem;
+    background: var(--accent);
+    color:#222;
+    padding: 12px 14px;
+    border-bottom:1px solid var(--accent-deep);
+    font-weight:700;
+  }
+  .pencil{
+    width:18px;height:18px;flex:0 0 18px;
+    background:
+      linear-gradient(45deg,#333 49%,transparent 50%) left/8px 8px no-repeat,
+      linear-gradient(45deg,#b66 49%,#eaa 51%) center/8px 8px no-repeat,
+      linear-gradient(#222,#222) right/50% 4px no-repeat;
+    border-radius:2px;
+    transform: rotate(-20deg);
+  }
+
+  /* アコーディオン */
+  .list{ margin:0; padding:0; list-style:none; }
+  details.hint{
+    border-bottom:1px solid var(--line);
+    background:#fffaf0;
+  }
+  details.hint:nth-child(even){ background:#fff; }
+
+  details.hint > summary{
+    cursor:pointer;
+    padding: 12px 14px 12px 40px;
+    position:relative;
+    user-select:none;
+    outline:none;
+  }
+  /* ▼アイコン */
+  details.hint > summary::before{
+    content:"▶";
+    position:absolute;
+    left:14px; top:12px;
+    transition: transform .2s ease;
+    font-size:.95rem;
+    opacity:.85;
+  }
+  details[open].hint > summary::before{ transform: rotate(90deg); }
+
+  .hint-body{
+    padding: 12px 16px 18px 40px;
+    color:#444;
+  }
+
+  /* 小さめ注釈テキスト風 */
+  .note{
+    font-size:.92rem;
+    color:#666;
+  }
+
+  /* フッタ */
+  .footer{
+    text-align:center; color:#777; font-size:.9rem; margin-top:20px;
+  }
+
+  /* スマホ寄りの見栄え微調整 */
+  @media (max-width:420px){
+    .section-header{ font-size:1rem; }
+    .question{ font-size:.98rem; }
+  }
+</style>
+</head>
+<body>
+  <div class="wrap">
+
+    <!-- セクション１ -->
+    <section class="section" aria-label="第5巻 最終問題 ヒント">
+      <div class="section-header">
+        <div style="font-size:1.25rem;">Last</div>
+        <div style="font-weight:800;">ヒント</div>
+        <div class="title-small">Hint List</div>
+      </div>
+
+      <div class="question">
+        <span class="pencil" aria-hidden="true"></span>
+        自分をカタカナ2文字で表すなら？
+      </div>
+
+      <ul class="list" data-accordion="single">
+        <li>
+          <details class="hint">
+            <summary>ヒント1</summary>
+            <div class="hint-body note">
+              問題文に出てくる「卒業」は昔の問題のどこかにあります。探してみましょう。
+            </div>
+          </details>
+        </li>
+        <li>
+          <details class="hint">
+            <summary>ヒント2</summary>
+            <div class="hint-body">ここにヒントの文章を入れてください。</div>
+          </details>
+        </li>
+        <li>
+          <details class="hint">
+            <summary>ヒント3</summary>
+            <div class="hint-body">ここにヒントの文章を入れてください。</div>
+          </details>
+        </li>
+        <li>
+          <details class="hint">
+            <summary>ヒント4</summary>
+            <div class="hint-body">ここにヒントの文章を入れてください。</div>
+          </details>
+        </li>
+        <li>
+          <details class="hint">
+            <summary>ヒント5</summary>
+            <div class="hint-body">ここにヒントの文章を入れてください。</div>
+          </details>
+        </li>
+        <li>
+          <details class="hint">
+            <summary>ヒント6</summary>
+            <div class="hint-body">ここにヒントの文章を入れてください。</div>
+          </details>
+        </li>
+        <li>
+          <details class="hint">
+            <summary>ヒント7</summary>
+            <div class="hint-body">ここにヒントの文章を入れてください。</div>
+          </details>
+        </li>
+        <li>
+          <details class="hint">
+            <summary>ヒント8</summary>
+            <div class="hint-body">ここにヒントの文章を入れてください。</div>
+          </details>
+        </li>
+      </ul>
+    </section>
+
+    <!-- セクション２ -->
+    <section class="section" aria-label="ナゾトレ制作秘話">
+      <div class="section-header">
+        <div class="pencil" aria-hidden="true"></div>
+        <div style="font-weight:800;">ナゾトレ制作秘話</div>
+      </div>
+
+      <ul class="list">
+        <li>
+          <details class="hint">
+            <summary>ヒント1</summary>
+            <div class="hint-body">制作の裏側その1。ここにテキスト。</div>
+          </details>
+        </li>
+        <li>
+          <details class="hint">
+            <summary>ヒント2</summary>
+            <div class="hint-body">制作の裏側その2。ここにテキスト。</div>
+          </details>
+        </li>
+        <li>
+          <details class="hint">
+            <summary>ヒント3</summary>
+            <div class="hint-body">制作の裏側その3。ここにテキスト。</div>
+          </details>
+        </li>
+      </ul>
+    </section>
+
+    <div class="footer">© Puzzle Site</div>
+  </div>
+
+<script>
+/* 同一リスト内を「一度に1つだけ開く」にしたい場合 */
+document.querySelectorAll('[data-accordion="single"]').forEach(list=>{
+  list.addEventListener('toggle', e=>{
+    if(!(e.target instanceof HTMLDetailsElement)) return;
+    if(!e.target.open) return;
+    list.querySelectorAll('details.hint[open]').forEach(d=>{
+      if(d!==e.target) d.removeAttribute('open');
+    });
+  }, true);
+});
+</script>
+</body>
+</html>
