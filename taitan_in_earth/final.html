@@ -14,20 +14,6 @@
     
     <div class="page active"></div>
 
-    <!-- 動画オーバーレイ -->
-    <div id="video-overlay">
-      <div class="video-bg"></div>
-      <div class="video-center">
-        <video
-          id="intro-video"
-          src="videos/intro.mp4"
-          autoplay
-          playsinline
-          controls
-        ></video>
-        <button id="close-video">✕</button>
-      </div>
-    </div>
     
 
 
@@ -79,11 +65,6 @@
       </button>
     </div>
    
-    <div style="text-align: center;">
-      <button class="reload-btn" onclick="location.reload();">
-        動画を見返す
-      </button>
-    </div>
    
     <div class="hamburger" id="hamburger">
       <div></div>
@@ -111,37 +92,6 @@
         }
       });
 
-      document.getElementById("close-video").onclick = function () {
-        showTitle();
-      };
-
-      function showTitle() {
-        document.getElementById("video-overlay").style.display = "none";
-        // タイトルコール演出
-        const titleCall = document.createElement("div");
-        titleCall.id = "title-call";
-        titleCall.textContent = "宇宙への帰還";
-        document.body.appendChild(titleCall);
-        setTimeout(() => {
-          titleCall.classList.add("show");
-        }, 50);
-        setTimeout(() => {
-          titleCall.classList.remove("show");
-          setTimeout(() => {
-            titleCall.remove();
-          }, 1000);
-        }, 2000);
-      }
-      function onScrollTop() {
-        // 一番上までスクロールされた時の処理
-        showTitle();
-      }
-
-      window.addEventListener("scroll", () => {
-        if (window.scrollY === 0) {
-          onScrollTop();
-        }
-      });
     </script>
   </body>
 </html>

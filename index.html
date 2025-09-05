@@ -12,25 +12,15 @@
 
     <div class="page active"></div>
 
-    <!-- 動画オーバーレイ -->
-    <div id="video-overlay">
-      <div class="video-bg"></div>
-      <div class="video-center">
-        <video
-          id="intro-video"
-          src="videos/intro.mp4"
-          autoplay
-          playsinline
-          controls
-        ></video>
-        <button id="close-video">✕</button>
-      </div>
-    </div>
+
 
     <!-- STORYセクション -->
     <section id="story-section">
       <h2 class="story-title">～STORY～</h2>
       <div class="story-chat">
+        
+        <div id="chat-dialog">ある日、あなたはなにやら大きな物音がした方へ向かった…</div>
+
         <div class="chat user">う、宇宙人！？</div>
         <div class="chat alien">
           あ！「にんげん」だ！！<br />お願い、僕を助けて！
@@ -74,11 +64,7 @@
       </button>
     </div>
 
-    <div style="text-align: center">
-      <button class="reload-btn" onclick="location.reload();">
-        動画を見返す
-      </button>
-    </div>
+
 
     <div class="hamburger" id="hamburger">
       <div></div>
@@ -95,30 +81,7 @@
 
     <script src="main.js"></script>
     <script>
-      window.addEventListener("scroll", () => {
-        const story = document.getElementById("story-section");
-        if (!story) return;
-        const trigger = 20;
-        if (window.scrollY > trigger) {
-          story.classList.add("visible");
-          document.querySelectorAll(".title-call").forEach((elem) => {
-            console.log("粛清!");
-            elem.classList.remove("show");
-            setTimeout(() => {
-              elem.remove();
-            }, 300);
-          });
-        } else {
-          story.classList.remove("visible");
-        }
-      });
-
-      document.getElementById("close-video").onclick = function () {
-        showTitle();
-      };
-
       function showTitle() {
-        document.getElementById("video-overlay").style.display = "none";
         // タイトルコール演出
         const titleCall = document.createElement("div");
         titleCall.classList.add("title-call");
@@ -134,16 +97,34 @@
           }, 1000);
         }, 1500);
       }
+
       function onScrollTop() {
         // 一番上までスクロールされた時の処理
         showTitle();
       }
 
       window.addEventListener("scroll", () => {
-        if (window.scrollY === 0) {
-          onScrollTop();
+        const story = document.getElementById("story-section");
+        if (!story) return;
+        const trigger = 20;
+        if (window.scrollY > trigger) {
+          story.classList.add("visible");
+          document.querySelectorAll(".title-call").forEach((elem) => {
+            console.log("粛清!");
+            elem.classList.remove("show");
+            setTimeout(() => {
+              elem.remove();
+            }, 300);
+          });
+        } else {
+          story.classList.remove("visible");
+          // 一番上に来た時にタイトルコールを表示
+          if (window.scrollY === 0) {
+            onScrollTop();
+          }
         }
       });
+
     </script>
   </body>
 </html>
