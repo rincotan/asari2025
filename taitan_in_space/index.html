@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>完全クリア — TITAN RETURNS</title>
+    <style>
+      :root {
+        --bg: #070707;
+        --panel: #0f0f0f;
+        --accent: #ffd400;
+        --muted: #bfbfbf;
+        --glass: rgba(255, 255, 255, 0.03);
+        --maxw: 900px;
+      }
+      html,
+      body {
+        height: 100%;
+        margin: 0;
+        background: var(--bg);
+        font-family: Inter, "Hiragino Kaku Gothic ProN", "メイリオ", meiryo,
+          sans-serif;
+        color: #fff;
+      }
+      /* starfield */
+      .sky {
+        position: fixed;
+        inset: 0;
+        overflow: hidden;
+        z-index: 0;
+      }
+      .star {
+        position: absolute;
+        background: linear-gradient(#fff, #fff);
+        border-radius: 50%;
+        opacity: 0.85;
+        filter: blur(0.5px);
+      }
+      header {
+        position: relative;
+        z-index: 2;
+        padding: 48px 20px 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .container {
+        max-width: var(--maxw);
+        margin: 0 auto;
+        padding: 20px;
+        position: relative;
+        z-index: 2;
+      }
+      .card {
+        background: linear-gradient(
+          180deg,
+          rgba(255, 255, 255, 0.02),
+          rgba(255, 255, 255, 0.01)
+        );
+        border-radius: 18px;
+        border: 2px solid rgba(255, 212, 0, 0.08);
+        padding: 28px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+        display: grid;
+        grid-template-columns: 1fr 360px;
+        gap: 24px;
+        align-items: start;
+      }
+      h1 {
+        margin: 0 0 6px;
+        font-size: 28px;
+        letter-spacing: 0.02em;
+      }
+      .sub {
+        color: var(--muted);
+        font-size: 13px;
+        margin-bottom: 12px;
+      }
+      .story {
+        font-size: 15px;
+        line-height: 1.7;
+        color: #e9e9e9;
+        padding-right: 6px;
+      }
+      .badge {
+        display: inline-block;
+        background: var(--accent);
+        color: #000;
+        padding: 6px 10px;
+        border-radius: 999px;
+        font-weight: 700;
+        margin-bottom: 10px;
+      }
+      /* rocket visual */
+      .visual {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 14px;
+        padding: 18px;
+        border-radius: 12px;
+        background: linear-gradient(
+          180deg,
+          rgba(255, 212, 0, 0.06),
+          rgba(255, 212, 0, 0.02)
+        );
+        border: 1px solid rgba(255, 212, 0, 0.06);
+      }
+      .rocket {
+        width: 140px;
+        height: 140px;
+        position: relative;
+        background: conic-gradient(from 200deg, #fff0 0deg, #0000 360deg);
+        border-radius: 14px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      /* simple rocket with CSS */
+      .rocket-body {
+        width: 46px;
+        height: 86px;
+        background: linear-gradient(#111, #333);
+        border-radius: 22px;
+        position: relative;
+        box-shadow: 0 6px 24px rgba(0, 0, 0, 0.6);
+      }
+      .nose {
+        position: absolute;
+        top: -18px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 28px;
+        height: 28px;
+        background: var(--accent);
+        border-radius: 50% 50% 6px 6px;
+      }
+      .fin {
+        position: absolute;
+        bottom: 6px;
+        width: 18px;
+        height: 26px;
+        background: #222;
+        border-radius: 6px;
+        transform: skewX(12deg);
+      }
+      .fin.left {
+        left: -12px;
+      }
+      .fin.right {
+        right: -12px;
+        transform: skewX(-12deg);
+      }
+      .rocket-fire {
+        position: absolute;
+        bottom: -18px;
+        width: 14px;
+        height: 36px;
+        background: linear-gradient(180deg, var(--accent), #ff8a00);
+        filter: blur(1px);
+        opacity: 0;
+        transform-origin: center;
+        animation: fire 1s linear infinite;
+      }
+      @keyframes fire {
+        0% {
+          opacity: 1;
+          transform: scaleY(1);
+        }
+        50% {
+          opacity: 0.7;
+          transform: scaleY(0.9);
+        }
+        100% {
+          opacity: 1;
+          transform: scaleY(1);
+        }
+      }
+      .fly-away {
+        animation: launch 3s ease-in forwards;
+        transform-origin: center;
+      }
+      @keyframes launch {
+        0% {
+          transform: translateY(0) scale(1);
+        }
+        40% {
+          transform: translateY(-60px) scale(1.02);
+        }
+        100% {
+          transform: translateY(-520px) scale(0.6);
+          opacity: 0;
+        }
+      }
+
+      /* form */
+      form {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+      label {
+        font-size: 13px;
+        color: var(--muted);
+      }
+      input[type="text"],
+      textarea {
+        width: 100%;
+        padding: 10px;
+        border-radius: 10px;
+        border: 1px solid rgba(255, 255, 255, 0.06);
+        background: var(--panel);
+        color: #fff;
+        font-size: 14px;
+        outline: none;
+        resize: vertical;
+      }
+      textarea {
+        min-height: 120px;
+        max-height: 260px;
+      }
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px 14px;
+        border-radius: 10px;
+        border: none;
+        font-weight: 700;
+        cursor: pointer;
+        background: linear-gradient(90deg, var(--accent), #ffb000);
+        color: #000;
+        box-shadow: 0 6px 18px rgba(255, 212, 0, 0.08);
+      }
+      .btn.secondary {
+        background: transparent;
+        border: 1px solid rgba(255, 255, 255, 0.06);
+        color: var(--muted);
+      }
+      .meta {
+        font-size: 12px;
+        color: var(--muted);
+        margin-top: 6px;
+      }
+      .hint {
+        font-size: 13px;
+        color: #ffd;
+        display: block;
+        margin-top: 8px;
+        background: rgba(0, 0, 0, 0.2);
+        padding: 8px;
+        border-radius: 8px;
+      }
+
+      /* mobile */
+      @media (max-width: 880px) {
+        .card {
+          grid-template-columns: 1fr;
+          padding: 20px;
+        }
+        .visual {
+          order: -1;
+        }
+      }
+      /* small footer */
+      footer {
+        margin-top: 18px;
+        color: var(--muted);
+        font-size: 13px;
+        text-align: center;
+      }
+      /* success message */
+      .success {
+        background: linear-gradient(
+          90deg,
+          rgba(255, 212, 0, 0.09),
+          rgba(255, 212, 0, 0.02)
+        );
+        padding: 12px;
+        border-radius: 10px;
+        border: 1px solid rgba(255, 212, 0, 0.06);
+        color: #111;
+      }
+      pre.payload {
+        white-space: pre-wrap;
+        background: #0b0b0b;
+        padding: 10px;
+        border-radius: 8px;
+        border: 1px dashed rgba(255, 255, 255, 0.04);
+        font-size: 13px;
+        color: var(--muted);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="sky" aria-hidden="true"></div>
+
+    <header>
+      <div class="container">
+        <div style="display: flex; align-items: center; gap: 14px">
+          <div class="badge">完全クリア</div>
+          <div>
+            <h1>TITAN — 宇宙へ</h1>
+            <div class="sub">
+              やったね。ここまで来たあなたは謎解き完全クリアです。タイタンは無事、宇宙に帰還しました。
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main class="container" role="main">
+      <section class="card" aria-labelledby="endingTitle">
+        <div>
+          <div class="story" id="endingTitle">
+            <p>
+              旅の終わり――タイタンは仲間たちとともに最後の仕掛けを解き、光の航路を辿って静かに上昇した。星々の間を渡る小さな船は、やがて夜空の一部となり、残された者たちの胸に暖かな余韻を残した。
+            </p>
+            <p>
+              この場面にたどり着いたあなたへ。感想や一言をぜひ送ってください。作り手にも、タイタンにも、届きます。
+            </p>
+          </div>
+
+          <div style="margin-top: 18px">
+            <form id="feedbackForm" autocomplete="off">
+              <label for="name">お名前（任意）</label>
+              <input
+                id="name"
+                type="text"
+                placeholder="例：旅人A / 匿名"
+                maxlength="64"
+              />
+
+              <label for="message">感想・メッセージ</label>
+              <textarea
+                id="message"
+                placeholder="ここに感想を書いてください（必須）"
+                maxlength="1000"
+                required
+              ></textarea>
+
+              <div
+                style="
+                  display: flex;
+                  gap: 8px;
+                  align-items: center;
+                  margin-top: 6px;
+                "
+              >
+                <button type="submit" id="sendBtn" class="btn">送信する</button>
+                <button type="button" id="clearBtn" class="btn secondary">
+                  内容をクリア
+                </button>
+              </div>
+
+              <div class="meta" id="metaNote">
+                ※ 連投防止のため、一度送信すると
+                <strong id="cooldownLabel"></strong>
+                の間は再送できません。サーバー側の保護も併せて推奨します。
+              </div>
+              <div class="hint" id="hintArea">
+                送信はDiscord webhookを使用して行われます。ページ内のWebhook
+                URLを差し替えてご利用ください。
+              </div>
+            </form>
+
+            <div id="resultArea" style="margin-top: 12px"></div>
+          </div>
+        </div>
+
+        <aside class="visual" aria-hidden="false">
+          <div class="rocket" id="rocketWrap" title="Titan">
+            <div class="rocket-body" id="rocketBody">
+              <div class="nose"></div>
+              <div class="fin left"></div>
+              <div class="fin right"></div>
+            </div>
+            <div class="rocket-fire" id="rocketFire"></div>
+          </div>
+
+          <div style="text-align: center">
+            <div
+              style="
+                font-weight: 700;
+                color: #000;
+                background: var(--accent);
+                padding: 8px;
+                border-radius: 10px;
+              "
+            >
+              TITAN: RETURNED
+            </div>
+            <div style="font-size: 13px; color: var(--muted); margin-top: 6px">
+              記念に感想を一言どうぞ
+            </div>
+            <div style="margin-top: 12px">
+              <button id="celebrateBtn" class="btn secondary">
+                お祝いを見せる
+              </button>
+            </div>
+          </div>
+        </aside>
+      </section>
+
+      <footer>
+        <div>
+          ※
+          このページはクライアントサイド完結型の簡易実装です。Webhookは公開しないでください。CORSやDiscord側の仕様によりブラウザ送信が失敗する場合があります。
+        </div>
+      </footer>
+    </main>
+
+    <script>
+      /* -------------------------
+  設定部分（ここだけ編集してください）
+   - 必ず YOUR_DISCORD_WEBHOOK_URL_HERE を自身のWebhookに置き換える
+------------------------- */
+      const DISCORD_WEBHOOK_URL = "YOUR_DISCORD_WEBHOOK_URL_HERE"; // <<--- ここを書き換える
+      const COOLDOWN_HOURS = 24; // 連投防止：ローカルでのクールダウン（時間単位）
+      /* ------------------------- */
+
+      const stars = document.querySelector(".sky");
+      function makeStars(n = 120) {
+        const w = Math.max(innerWidth, 800);
+        const h = Math.max(innerHeight, 600);
+        for (let i = 0; i < n; i++) {
+          const s = document.createElement("div");
+          s.className = "star";
+          const size = Math.random() * 2.5 + 0.3;
+          s.style.width = size + "px";
+          s.style.height = size + "px";
+          s.style.left = Math.random() * 100 + "%";
+          s.style.top = Math.random() * 100 + "%";
+          s.style.opacity = Math.random() * 0.9;
+          s.style.transform = `scale(${Math.random() * 1.2})`;
+          stars.appendChild(s);
+        }
+      }
+      makeStars(110);
+
+      /* UI elements */
+      const form = document.getElementById("feedbackForm");
+      const sendBtn = document.getElementById("sendBtn");
+      const clearBtn = document.getElementById("clearBtn");
+      const nameInput = document.getElementById("name");
+      const messageInput = document.getElementById("message");
+      const resultArea = document.getElementById("resultArea");
+      const cooldownLabel = document.getElementById("cooldownLabel");
+      const rocketWrap = document.getElementById("rocketWrap");
+      const rocketFire = document.getElementById("rocketFire");
+      const celebrateBtn = document.getElementById("celebrateBtn");
+
+      const STORAGE_KEY = "titan_feedback_sent_at_v1";
+      const cooldownMs = COOLDOWN_HOURS * 60 * 60 * 1000;
+
+      function getSentAt() {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (!raw) return null;
+        const t = Number(raw);
+        if (Number.isNaN(t)) return null;
+        return t;
+      }
+      function setSentAt(ts = Date.now()) {
+        localStorage.setItem(STORAGE_KEY, String(ts));
+      }
+
+      function getRemaining() {
+        const sent = getSentAt();
+        if (!sent) return 0;
+        const rem = sent + cooldownMs - Date.now();
+        return rem > 0 ? rem : 0;
+      }
+      function formatRemaining(ms) {
+        if (ms <= 0) return "0分";
+        const s = Math.floor(ms / 1000);
+        const h = Math.floor(s / 3600);
+        const m = Math.floor((s % 3600) / 60);
+        if (h > 0) return `${h}時間${m}分`;
+        return `${m}分`;
+      }
+      function updateCooldownLabel() {
+        const rem = getRemaining();
+        cooldownLabel.textContent =
+          rem > 0 ? formatRemaining(rem) : `${COOLDOWN_HOURS}時間`;
+        const metaNote = document.getElementById("metaNote");
+        if (rem > 0) {
+          metaNote.style.opacity = "0.9";
+        } else {
+          metaNote.style.opacity = "0.8";
+        }
+      }
+      updateCooldownLabel();
+      setInterval(updateCooldownLabel, 1000 * 15);
+
+      /* celebration */
+      function burstConfetti() {
+        for (let i = 0; i < 30; i++) {
+          const el = document.createElement("div");
+          el.style.position = "fixed";
+          el.style.left = 50 + (Math.random() - 0.5) * 30 + "%";
+          el.style.top = 50 + (Math.random() - 0.5) * 20 + "%";
+          el.style.width = 6 + Math.random() * 10 + "px";
+          el.style.height = el.style.width;
+          el.style.background = "#ffd400";
+          el.style.zIndex = 9999;
+          el.style.borderRadius = "2px";
+          el.style.opacity = 0.95;
+          el.style.transform = `translateY(0) rotate(${
+            Math.random() * 360
+          }deg)`;
+          el.style.transition =
+            "transform 1200ms cubic-bezier(.2,.8,.2,1), opacity 1200ms";
+          document.body.appendChild(el);
+          setTimeout(() => {
+            el.style.transform = `translateY(${
+              150 + Math.random() * 240
+            }px) translateX(${(Math.random() - 0.5) * 200}px) rotate(${
+              Math.random() * 720
+            }deg) scale(0.9)`;
+            el.style.opacity = 0;
+          }, 20 + i * 10);
+          setTimeout(() => el.remove(), 1700 + i * 10);
+        }
+      }
+
+      /* send logic */
+      async function sendToDiscord(payload) {
+        // Attempt POST. Note: CORS may block this from browser.
+        try {
+          const res = await fetch(DISCORD_WEBHOOK_URL, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload),
+          });
+          // Discord returns 204 No Content on success for webhook
+          if (res.ok || res.status === 204) {
+            return { ok: true };
+          } else {
+            const text = await res.text().catch(() => null);
+            return { ok: false, status: res.status, text };
+          }
+        } catch (err) {
+          return { ok: false, error: err.message || String(err) };
+        }
+      }
+
+      function buildPayload(name, message) {
+        const username = name ? `${name} (旅人)` : "匿名の旅人";
+        const content = `${message}`;
+        // we will use an embed for nicer formatting
+        return {
+          username: "TITAN-Feedback",
+          content: `**新しい感想が届きました**\n${username}`,
+          embeds: [
+            {
+              title: "感想",
+              description: message,
+              color: 16766720, // yellow-ish
+              footer: { text: "TITAN — 到達/完全クリア" },
+            },
+          ],
+        };
+      }
+
+      /* fallback: show payload and allow copy */
+      function showFallback(payload) {
+        resultArea.innerHTML = `
+    <div class="success">
+      ブラウザ経由での送信に失敗しました。<br>
+      DiscordのCORS制約やネットワークのため直接送信できない可能性があります。以下のペイロードをコピーして、サーバーサイド（またはPostman等）からWebhookへ送信してください。
+      <div style="margin-top:8px"><pre class="payload" id="payloadPre"></pre></div>
+      <div style="display:flex;gap:8px;margin-top:8px">
+        <button id="copyPayload" class="btn">ペイロードをコピー</button>
+        <button id="openWebhook" class="btn secondary">Webhook を別タブで開く</button>
+      </div>
+    </div>
+  `;
+        const payloadPre = document.getElementById("payloadPre");
+        payloadPre.textContent = JSON.stringify(payload, null, 2);
+        document
+          .getElementById("copyPayload")
+          .addEventListener("click", async () => {
+            try {
+              await navigator.clipboard.writeText(
+                JSON.stringify(payload, null, 2)
+              );
+              alert(
+                "ペイロードをコピーしました。サーバー経由でWebhookへ送信してください。"
+              );
+            } catch (e) {
+              alert("クリップボードにアクセスできませんでした: " + e);
+            }
+          });
+        document.getElementById("openWebhook").addEventListener("click", () => {
+          if (
+            DISCORD_WEBHOOK_URL &&
+            DISCORD_WEBHOOK_URL !== "YOUR_DISCORD_WEBHOOK_URL_HERE"
+          ) {
+            window.open(DISCORD_WEBHOOK_URL, "_blank");
+          } else {
+            alert("Webhook URL を先にコード内で設定してください。");
+          }
+        });
+      }
+
+      /* UI helpers */
+      function setSending(isSending) {
+        sendBtn.disabled = isSending;
+        sendBtn.textContent = isSending ? "送信中…" : "送信する";
+      }
+
+      form.addEventListener("submit", async (ev) => {
+        ev.preventDefault();
+        resultArea.innerHTML = "";
+        const name = nameInput.value.trim();
+        const msg = messageInput.value.trim();
+        if (!msg) {
+          alert("感想を入力してください。");
+          return;
+        }
+        const rem = getRemaining();
+        if (rem > 0) {
+          alert(
+            `連投防止のため、あと ${formatRemaining(rem)} 後に再送できます。`
+          );
+          return;
+        }
+        if (
+          DISCORD_WEBHOOK_URL === "YOUR_DISCORD_WEBHOOK_URL_HERE" ||
+          !DISCORD_WEBHOOK_URL
+        ) {
+          alert(
+            "Webhook URL が未設定です。コード内の DISCORD_WEBHOOK_URL を置き換えてください。"
+          );
+          return;
+        }
+
+        // build payload
+        const payload = buildPayload(name, msg);
+
+        // UI
+        setSending(true);
+
+        // visual: rocket launch animation
+        rocketFire.style.opacity = "1";
+        rocketWrap.classList.add("fly-away");
+        setTimeout(() => (rocketFire.style.opacity = "0"), 2000);
+
+        const res = await sendToDiscord(payload);
+        setSending(false);
+
+        if (res.ok) {
+          // success
+          setSentAt(Date.now());
+          updateCooldownLabel();
+          resultArea.innerHTML = `<div class="success">感想を受け取りました！ありがとうございました。タイタンは無事帰還しました ✨</div>`;
+          // celebration
+          burstConfetti();
+          // disable form inputs
+          nameInput.disabled = true;
+          messageInput.disabled = true;
+          sendBtn.disabled = true;
+        } else {
+          // failure: show detailed fallback
+          const eText = res.error
+            ? `エラー: ${res.error}`
+            : res.text
+            ? `レスポンス ${res.status}: ${res.text}`
+            : `レスポンス ${res.status}`;
+          resultArea.innerHTML = `<div style="color:#ffd;margin-bottom:8px">送信中に問題が発生しました。${eText}</div>`;
+          showFallback(payload);
+        }
+      });
+
+      clearBtn.addEventListener("click", () => {
+        if (!confirm("内容を消しますか？")) return;
+        nameInput.value = "";
+        messageInput.value = "";
+      });
+
+      /* celebrate button */
+      celebrateBtn.addEventListener("click", () => {
+        burstConfetti();
+        // quick rocket flicker
+        rocketWrap.classList.remove("fly-away");
+        rocketFire.style.opacity = "1";
+        setTimeout(() => (rocketFire.style.opacity = "0"), 900);
+      });
+
+      /* show initial cooldown */
+      (function init() {
+        const rem = getRemaining();
+        if (rem > 0) {
+          // block inputs visually but allow user to read
+          // do not permanently disable — allow copy/clear etc.
+        }
+      })();
+    </script>
+  </body>
+</html>
