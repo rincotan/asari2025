@@ -1150,20 +1150,24 @@ body.step3 .chat.user {
 /* last.html（パネル無し・中央寄せ） */
 body.last {
   font-family: JKゴシック;
+  background-repeat: no-repeat;
+  background-color: #aca3be;
 }
 
 .last-content {
   min-height: calc(65vh - 40px);
+  height: 8vh;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: flex-end; /* 下寄せ */
   text-align: center;
   padding: 0 18px 24px;
-  padding-top: 28vh;
+  padding-top: 30vh;
 }
 
 body.last .speech {
+  height: 20vh;
   color: #fff;
   font-size: 30px;
   line-height: 1.9;
