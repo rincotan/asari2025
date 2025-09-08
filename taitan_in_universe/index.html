@@ -314,55 +314,15 @@
         <div>
           <div class="story" id="endingTitle">
             <p>
-              旅の終わり――タイタンは仲間たちとともに最後の仕掛けを解き、光の航路を辿って静かに上昇した。星々の間を渡る小さな船は、やがて夜空の一部となり、残された者たちの胸に暖かな余韻を残した。
+             おめでとう！全ての謎を解き明かした！タイタンは無事に宇宙へ帰還しました
             </p>
-            <p>
-              この場面にたどり着いたあなたへ。感想や一言をぜひ送ってください。作り手にも、タイタンにも、届きます。
-            </p>
+            
           </div>
 
           <div style="margin-top: 18px">
             <form id="feedbackForm" autocomplete="off">
-              <label for="name">お名前（任意）</label>
-              <input
-                id="name"
-                type="text"
-                placeholder="例：旅人A / 匿名"
-                maxlength="64"
-              />
+              
 
-              <label for="message">感想・メッセージ</label>
-              <textarea
-                id="message"
-                placeholder="ここに感想を書いてください（必須）"
-                maxlength="1000"
-                required
-              ></textarea>
-
-              <div
-                style="
-                  display: flex;
-                  gap: 8px;
-                  align-items: center;
-                  margin-top: 6px;
-                "
-              >
-                <button type="submit" id="sendBtn" class="btn">送信する</button>
-                <button type="button" id="clearBtn" class="btn secondary">
-                  内容をクリア
-                </button>
-              </div>
-
-              <div class="meta" id="metaNote">
-                ※ 連投防止のため、一度送信すると
-                <strong id="cooldownLabel"></strong>
-                の間は再送できません。サーバー側の保護も併せて推奨します。
-              </div>
-              <div class="hint" id="hintArea">
-                送信はDiscord webhookを使用して行われます。ページ内のWebhook
-                URLを差し替えてご利用ください。
-              </div>
-            </form>
 
             <div id="resultArea" style="margin-top: 12px"></div>
           </div>
@@ -378,36 +338,7 @@
             <div class="rocket-fire" id="rocketFire"></div>
           </div>
 
-          <div style="text-align: center">
-            <div
-              style="
-                font-weight: 700;
-                color: #000;
-                background: var(--accent);
-                padding: 8px;
-                border-radius: 10px;
-              "
-            >
-              TITAN: RETURNED
-            </div>
-            <div style="font-size: 13px; color: var(--muted); margin-top: 6px">
-              記念に感想を一言どうぞ
-            </div>
-            <div style="margin-top: 12px">
-              <button id="celebrateBtn" class="btn secondary">
-                お祝いを見せる
-              </button>
-            </div>
-          </div>
-        </aside>
-      </section>
 
-      <footer>
-        <div>
-          ※
-          このページはクライアントサイド完結型の簡易実装です。Webhookは公開しないでください。CORSやDiscord側の仕様によりブラウザ送信が失敗する場合があります。
-        </div>
-      </footer>
     </main>
 
     <script>
