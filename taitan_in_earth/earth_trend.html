@@ -15,14 +15,27 @@
         --white: #ffffff;
         --black: #0b0b0b;
       }
+      
+      * {
+        box-sizing: border-box;
+      }
+      
+      html {
+        margin: 0;
+        padding: 0;
+        width: 100%;
+      }
       body {
         margin: 0;
+        padding: 0;
         min-height: 100vh;
         display: flex;
         align-items: center;
         justify-content: center;
         background: #000; /* 背景は黒 */
         font-family: "Hiragino Kaku Gothic ProN", "メイリオ", sans-serif;
+        width: 100%;
+        box-sizing: border-box;
       }
 
       /* カード */
@@ -446,5 +459,6 @@
         });
       });
     </script>
+    <div class="footer-text">in earth</div>
   </body>
 </html>

@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="../style.css" />
   </head>
-  <body>
+  <body class="no-scroll">
     <div style="background: #fff; padding: 20px; border-radius: 8px">
       <h1>お知らせ</h1>
       最終問題に不具合が発生しており、現在調整中です。
@@ -14,7 +14,9 @@
       <a href="https://x.com/bluebery1001"
         >このアカウントで告知します(https://x.com/bluebery1001)</a
       >
+    <!--</br>不具合調整が完了しました。小問1つに変更点があります。</br>ご確認ください。-->
     </div>
+   
     <!-- <div id="pc-warning">※スマホ専用サイトです。スマートフォンでご利用ください。</div> -->
     <h2 class="story-title">～STORY～</h2>
     <section id="story-section-step4" class="step-story-section active">
@@ -60,23 +62,41 @@
     </section>
 
     <h1 id="final-problem" style="color: rgb(83, 83, 83)">最終問題</h1>
-    <h1
-      id="final-problem"
-      style="
-        color: #130202;
-        background-image: url('../images/flame.png');
-        font-size: 25px;
-        background-size: cover;
-        position: center;
-        background-position: center;
-        background-repeat: no-repeat;
-        padding: 30px;
-        width: 30%;
-        height: 30%;
-      "
-    >
-      タイタンを地球から<br />宇宙へ帰還させよう
-    </h1>
+    <div class="final-title-container">
+      <div class="final-title-frame">
+        <div class="final-title-text">
+          タイタンを地球から<br />宇宙に帰還させよう
+        </div>
+      </div>
+    </div>
+
+    <section id="final-section">
+      <div class="final-panel">
+        <details class="method-details">
+          <summary class="final-subtitle">帰還のヒント</summary>
+          <div class="method-area">
+            <div class="method-row">
+              <span class="badge">①</span>
+              <span class="method-text">の</span>
+              <span class="badge">②</span>
+              <span class="method-text">を</span>
+            </div>
+            <div class="method-row">
+              <span class="badge">③</span>
+              <span class="method-text">に</span>
+              <span class="badge">④</span>
+            </div>
+          </div>
+
+          <div class="words-title">①〜④に入る言葉</div>
+          <div class="words-box">
+            <div class="words-grid" id="words-grid">
+              <!-- Words will be populated and shuffled by JavaScript -->
+            </div>
+          </div>
+        </details>
+      </div>
+    </section>
 
     <!-- <script src="../main.js"></script> -->
     <script>
@@ -84,6 +104,44 @@
         "--step-submit-hover",
         "#5ce1e6"
       );
+
+      // Words list with additional related words
+      const words = [
+        "URL", "タイタン", "QRコード", "自分", "問題", "冊子", "タイトル", "セキュリティ",
+        "サイト", "画面", "数字", "２", "７", "５", "文字", "earth", "universe", "watch",
+        "rainbow", "star", "○×ゲーム", "地球のトレンド", "ストーリー", "変える", "動かす",
+        "交換する", "取る", "足す", "やり直す", "直す", "飛ぶ", "燃やす", "勝つ", "負ける",
+        // Additional related words
+        "宇宙船", "ロケット", "燃料", "エンジン", "発射", "軌道", "惑星", "衛星", 
+        // 20 more words
+        "太陽", "月", "星", "銀河", "彗星", "小惑星", "大気", "酸素", "水", "氷",
+        "温度", "圧力", "速度", "時間", "距離", "方向", "角度", "位置", "座標", "データ",
+        "asari","2025","in","on","dog","cat","planet","moon","sun","galaxy","comet","asteroid","water","time","angle",
+        "97","62","41"
+      ];
+
+      // Shuffle function
+      function shuffleArray(array) {
+        const shuffled = [...array];
+        for (let i = shuffled.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+        }
+        return shuffled;
+      }
+
+      // Populate and shuffle words
+      document.addEventListener('DOMContentLoaded', function() {
+        const wordsGrid = document.getElementById('words-grid');
+        const shuffledWords = shuffleArray(words);
+        
+        shuffledWords.forEach(word => {
+          const span = document.createElement('span');
+          span.textContent = word;
+          wordsGrid.appendChild(span);
+        });
+      });
     </script>
+    <div class="footer-text">in earth</div>
   </body>
 </html>

@@ -128,6 +128,14 @@ html {
   display: none;
   min-height: 55vh; /* 画面の縦の半分を最低高さにする */
 }
+
+/* Specific pages - show all story content without scrolling */
+body.first-page .step-story-section,
+body.no-scroll .step-story-section {
+  max-height: none;
+  overflow-y: visible;
+  min-height: auto;
+}
 .step-story-section.active {
   opacity: 1;
   transform: translateY(0);
@@ -1171,6 +1179,128 @@ body.last .btn-no {
   font-size: 2em;
 }
 
+/* 最終問題タイトルフレーム */
+.final-title-container {
+  display: flex;
+  justify-content: center;
+  margin: 20px auto;
+  max-width: 420px;
+}
+
+.final-title-frame {
+  background-image: url('../images/flame.png');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  padding: 40px 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 300px;
+  min-height: 120px;
+}
+
+.final-title-text {
+  color: #fff;
+  font-size: 24px;
+  font-weight: bold;
+  text-align: center;
+  line-height: 1.4;
+  font-family: "しねきゃぷしょん";
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
+}
+
+/* 最終問題レイアウト */
+#final-section {
+  max-width: 420px;
+  margin: 12px auto 40px auto;
+}
+.final-panel {
+  background: #0f0f12;
+  color: #fff;
+  border: 2px solid #6b6b6b;
+  padding: 14px 12px 18px 12px;
+  border-radius: 6px;
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.25);
+}
+.method-details {
+  margin-bottom: 12px;
+}
+.method-details summary {
+  cursor: pointer;
+  list-style: none;
+  text-align: center;
+  margin: 8px 0 10px 0;
+  font-size: 18px;
+  font-weight: bold;
+}
+.method-details summary::-webkit-details-marker {
+  display: none;
+}
+.method-details summary::before {
+  content: "▼ ";
+  font-size: 14px;
+  margin-right: 4px;
+}
+.method-details[open] summary::before {
+  content: "▲ ";
+}
+.method-area {
+  background: #1a1a21;
+  border: 2px solid #6b6b6b;
+  border-radius: 6px;
+  padding: 10px 8px;
+  margin: 0 8px 12px 8px;
+}
+.method-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin: 6px 0;
+}
+.badge {
+  display: inline-block;
+  width: 36px;
+  height: 36px;
+  line-height: 36px;
+  text-align: center;
+  background: #224d7a;
+  border: 2px solid #9bb6d7;
+  border-radius: 6px;
+  color: #bfe1ff;
+  font-weight: bold;
+}
+.method-text {
+  color: #ddd;
+}
+.words-title {
+  background: #000;
+  display: inline-block;
+  padding: 6px 10px;
+  margin: 10px 0 8px 0;
+  border-radius: 18px;
+  font-weight: bold;
+}
+.words-box {
+  background: #113a6b;
+  border: 2px solid #6b6b6b;
+  border-radius: 6px;
+  padding: 10px 8px;
+  margin: 0 8px;
+}
+.words-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 6px 10px;
+  font-size: 12px;
+}
+.words-grid span {
+  background: rgba(255, 255, 255, 0.08);
+  padding: 4px 6px;
+  border-radius: 4px;
+}
+
 /* 「うらがえす」ボタンの未解放状態 */
 #rev-btn:disabled,
 #rev-btn[disabled] {
@@ -1179,8 +1309,12 @@ body.last .btn-no {
   background: #666 !important;
 }
 
-/* 「うらがえす」ボタンの有効状態 */
-#rev-btn:not(:disabled) {
-  opacity: 1;
-  cursor: pointer;
+/* Footer text */
+.footer-text {
+  text-align: center;
+  color: #666;
+  font-size: 12px;
+  margin: 20px 0;
+  font-family: "しねきゃぷしょん";
+  opacity: 0.7;
 }
