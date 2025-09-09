@@ -715,7 +715,8 @@ input[type="text"],
 }
 
 #step-submit,
-#submit-btn {
+#submit-btn,
+#help-submit-btn {
   border: none !important;
   border-radius: 0 !important;
   margin: 0 !important;
@@ -908,7 +909,8 @@ h2.speaking-A3-R1 {
   margin-bottom: 18px;
 }
 #modal-close-btn,
-#modal-next-btn {
+#modal-next-btn,
+#help-btn {
   margin: 8px auto 0 auto;
   padding: 10px 0;
   font-size: 1.1em;
@@ -922,6 +924,13 @@ h2.speaking-A3-R1 {
 }
 #modal-next-btn {
   background: #f08080;
+}
+#help-btn{
+  font-family: "しねきゃぷしょん";
+  font-size: 0.9em;
+}
+#help-btn:hover {
+  background: #aabaff;
 }
 
 /* ヒントエリア */
