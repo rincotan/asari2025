@@ -30,7 +30,7 @@ function sendToDiscord(message){
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        content: message+"\n playerID:"+playerID
+        content: message+"\n playerID:"+playerId
       })
     })
     .then(response => {
