@@ -5,33 +5,46 @@ window.addEventListener("DOMContentLoaded", () => {
     pcWarn.style.display = "block";
     document.body.style.overflow = "hidden";
   }
-      const webhookUrl = "https://discord.com/api/webhooks/1415138932806520852/gFDnpTbK2Me4NfL0lZfWZSCTtmsnpn87_eq2OFu6XlYNHmI7YBJdOpAbhTwo8a_1BqWk";
-      const message = window.location.href;
-
-
-      fetch(webhookUrl, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          content: message
-        })
-      })
-      .then(response => {
-        if (response.ok) {
-          // alert("✅ メッセージを送信しました！");
-        } else {
-          // alert("❌ エラーが発生しました: " + response.status);
-        }
-      })
-      .catch(error => {
-        console.error("通信エラー:", error);
-        // alert("❌ 通信エラーが発生しました");
-      });
+  sendToDiscord(window.location.href);
+      
     
 
 });
+function generateUUIDv4() {
+  return ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g, c =>
+    (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
+  );
+}
+function sendToDiscord(message){
+  const webhookUrl = "https://discord.com/api/webhooks/1415138932806520852/gFDnpTbK2Me4NfL0lZfWZSCTtmsnpn87_eq2OFu6XlYNHmI7YBJdOpAbhTwo8a_1BqWk";
+  let playerId = localStorage.getItem("playerId");
+
+  if (!playerId) {
+    playerId = generateUUIDv4();
+    localStorage.setItem("playerId", playerId);  
+  }
+
+    fetch(webhookUrl, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        content: message+"\n playerID:"+playerID
+      })
+    })
+    .then(response => {
+      if (response.ok) {
+        // alert("✅ メッセージを送信しました！");
+      } else {
+        // alert("❌ エラーが発生しました: " + response.status);
+      }
+    })
+    .catch(error => {
+      console.error("通信エラー:", error);
+      // alert("❌ 通信エラーが発生しました");
+    });
+}
 
 // localStorage 初期化
 if (!localStorage.getItem("solvedQuiz"))
