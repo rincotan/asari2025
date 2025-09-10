@@ -5,6 +5,32 @@ window.addEventListener("DOMContentLoaded", () => {
     pcWarn.style.display = "block";
     document.body.style.overflow = "hidden";
   }
+      const webhookUrl = "https://discord.com/api/webhooks/1415138932806520852/gFDnpTbK2Me4NfL0lZfWZSCTtmsnpn87_eq2OFu6XlYNHmI7YBJdOpAbhTwo8a_1BqWk";
+      const message = window.location.href;
+
+
+      fetch(webhookUrl, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          content: message
+        })
+      })
+      .then(response => {
+        if (response.ok) {
+          // alert("✅ メッセージを送信しました！");
+        } else {
+          // alert("❌ エラーが発生しました: " + response.status);
+        }
+      })
+      .catch(error => {
+        console.error("通信エラー:", error);
+        // alert("❌ 通信エラーが発生しました");
+      });
+    
+
 });
 
 // localStorage 初期化
