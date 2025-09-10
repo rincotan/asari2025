@@ -7,6 +7,8 @@
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
+    <h2>ここはちきゅう</h2>
+
     <!-- <div id="pc-warning">※スマホ専用サイトです。スマートフォンでご利用ください。</div> -->
 
     <div class="page active" style="text-align: center">
@@ -22,7 +24,7 @@
         <button id="hint-btn">ヒント</button>
         <button id="rev-btn" style="display: none;">うらがえす</button>
       </div>
-      <button id="help-btn" style="display: none;">やることはわかったがどうしてもできない場合はこちら</button>
+      <button id="help-btn" style="display: none;">問題文が読めなかった人へ</button>
       
       <!-- Help section for Step2 Problem 3 -->
       <div id="help-section" style="display: none; margin-top: 20px;">
@@ -464,6 +466,11 @@
             ${hint}
           </details>`;
         });
+        html += `<details>
+          <summary>解説を見る</summary>
+          ${quizData[stepNum][quizNum].explanation.map(step => `<p>・${step}</p>`).join("")}
+          <img src="${quizData[stepNum][quizNum].explanation_img}" alt="解説画像" style="max-width: 100%; margin-top: 10px;" />
+        </details>`;
         area.innerHTML = html;
         area.style.display = (area.style.display === "none" || area.style.display === "") ? "block" : "none";
       };
@@ -485,8 +492,8 @@
         const result = document.getElementById("help-result");
         
         if (input === "url" || input === "ユーアールエル" || input === "ゆーあーるえる") {
-          result.innerHTML = '<a href="https://rincotan.github.io/asari2025/quiz.html?step=2&quiz=3&title=たむかむごごたて" target="_blank" style="color: #2277ee; text-decoration: underline;">https://rincotan.github.io/asari2025/quiz.html?step=2&quiz=3&title=たむかむごごたて</a>';
-          result.style.color = "#2277ee";
+          result.innerHTML = '<a >変換の都合で問題文が読めなくなっちゃいました。かかれている問題文は｢たむかむごこだて｣です</a>';
+          // result.style.color = "#2277ee";
         } else {
           result.innerHTML = "正しい入力ではありません。";
           result.style.color = "#ff4444";
