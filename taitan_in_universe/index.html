@@ -96,7 +96,19 @@ function sendToDiscord(message){
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        content: message+"\n playerID:"+playerId
+        content:"",
+        "embeds":[
+          {
+            "title": message,
+            "color": 16776960,
+            "fields": [
+              {
+                "name": "プレイヤーID",
+                "value": playerId
+              }
+            ]
+          }
+        ]
       })
     })
     .then(response => {
@@ -113,7 +125,7 @@ function sendToDiscord(message){
 }
     window.addEventListener("DOMContentLoaded", () => {
   
-  sendToDiscord("ラストページに到達した！");
+  sendToDiscord("クリアページに到達した！");
       
     
 

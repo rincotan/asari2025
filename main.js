@@ -5,42 +5,57 @@ window.addEventListener("DOMContentLoaded", () => {
     pcWarn.style.display = "block";
     document.body.style.overflow = "hidden";
   }
-  sendToDiscord(window.location.href);
-      
-    
-
 });
 function generateUUIDv4() {
-  return ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g, c =>
-    (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
+  return ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, (c) =>
+    (
+      c ^
+      (crypto.getRandomValues(new Uint8Array(1))[0] & (15 >> (c / 4)))
+    ).toString(16)
   );
 }
-function sendToDiscord(message){
-  const webhookUrl = "https://discord.com/api/webhooks/1415138932806520852/gFDnpTbK2Me4NfL0lZfWZSCTtmsnpn87_eq2OFu6XlYNHmI7YBJdOpAbhTwo8a_1BqWk";
+function sendToDiscord(stepNum) {
+  const webhookUrl =
+    "https://discord.com/api/webhooks/1415138932806520852/gFDnpTbK2Me4NfL0lZfWZSCTtmsnpn87_eq2OFu6XlYNHmI7YBJdOpAbhTwo8a_1BqWk";
   let playerId = localStorage.getItem("playerId");
 
   if (!playerId) {
     playerId = generateUUIDv4();
-    localStorage.setItem("playerId", playerId);  
+    localStorage.setItem("playerId", playerId);
   }
-
-    fetch(webhookUrl, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        content: message+"\n playerID:"+playerId
-      })
-    })
-    .then(response => {
+  let color_ = 5814783;
+  if (stepNum === 1) color_ = 16302023;
+  else if (stepNum === 2) color_ = 11254527;
+  else if (stepNum === 3) color_ = 16774606;
+  fetch(webhookUrl, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      embeds: [
+        {
+          title: `STEP${stepNum}をクリア！`,
+          color: color_,
+          fields: [
+            {
+              name: "プレイヤーID",
+              value: playerId,
+              inline: true,
+            },
+          ],
+        },
+      ],
+    }),
+  })
+    .then((response) => {
       if (response.ok) {
         // alert("✅ メッセージを送信しました！");
       } else {
         // alert("❌ エラーが発生しました: " + response.status);
       }
     })
-    .catch(error => {
+    .catch((error) => {
       console.error("通信エラー:", error);
       // alert("❌ 通信エラーが発生しました");
     });
@@ -367,6 +382,7 @@ function showStepResultModal(isCorrect, stepNum) {
   };
 
   if (isCorrect) {
+    sendToDiscord(stepNum);
     // アンロック処理
     const unlocked = JSON.parse(localStorage.getItem("unlockedStep") || "[1]");
     if (!unlocked.includes(stepNum)) unlocked.push(stepNum);
