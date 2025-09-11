@@ -981,7 +981,7 @@ h2.speaking-A3-R1 {
 .speech {
   text-align: center;
   color: #555;
-  font-size: 16px;
+  font-size: 1em;
   line-height: 1.6;
   flex: 1;
   margin: 0 0 20px 0;
