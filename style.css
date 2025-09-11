@@ -910,7 +910,8 @@ h2.speaking-A3-R1 {
 }
 #modal-close-btn,
 #modal-next-btn,
-#help-btn {
+#help-btn,
+#help-btn2 {
   margin: 8px auto 0 auto;
   padding: 10px 0;
   font-size: 1.1em;
@@ -921,15 +922,14 @@ h2.speaking-A3-R1 {
   cursor: pointer;
   display: block;
   text-align: center;
+  font-family: "しねきゃぷしょん";
+  font-size: 0.9em;
 }
 #modal-next-btn {
   background: #f08080;
 }
-#help-btn{
-  font-family: "しねきゃぷしょん";
-  font-size: 0.9em;
-}
-#help-btn:hover {
+#help-btn:hover,
+#help-btn2:hover {
   background: #aabaff;
 }
 
@@ -1197,7 +1197,7 @@ body.last .btn-no {
 }
 
 .final-title-frame {
-  background-image: url('../images/flame.png');
+  background-image: url("../images/flame.png");
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;

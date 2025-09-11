@@ -25,6 +25,9 @@
         <button id="rev-btn" style="display: none;white-space: nowrap;">うらがえす</button>
       </div>
       <button id="help-btn" style="display: none;">問題文が読めなかった人へ</button>
+      <a id="help-btn2" href="https://www.toinfes.com/" target="_blank" style="display: none;">
+        桐陰祭ホームページはこちら
+      </a>
       
       <!-- Help section for Step2 Problem 3 -->
       <div id="help-section" style="display: none; margin-top: 20px;">
@@ -70,9 +73,9 @@
       //const stepNum = parseInt(params.get("step")) || 1;
       const quizNum = parseInt(params.get("quiz")) || 1;
       if (stepNum === 2 && quizNum === 3 && !params.get("title")) {
-  params.set("title", "たむかむごごたて");
-  window.location.search = params.toString();
-}
+        params.set("title", "たむかむごごたて");
+        window.location.search = params.toString();
+      }
       console.log(stepNum, quizNum);
       
 
@@ -309,8 +312,11 @@
             img: "images/q35.png",
             ans: "ちょき",
             hints:[
-              "「パー」「グー」「チョキ」ではありません",
-              "「かみ」「いし」「はさみ」でもありません",
+              "「パー」「グー」「チョキ」ではありません\n「かみ」「いし」「はさみ」でもありません",
+              "①＝ま、②＝ち、を埋めてみましょう",
+              "手の向きに着目してみましょう",
+              "｢画面外｣を聞かれているということは…？",
+              
               "対戦結果が入ります"
             ],
             explanation:[
@@ -322,7 +328,7 @@
           },
           6: {
             img: "images/q361.png",
-            ans: ["star","すたー","ほし"],
+            ans: ["star","すたー","ほし","Star"],
             hints:[
                "イラストをよく見てみましょう",
                "入れ子構造になっている事がわかります。拡大する方法はなんでしょうか",
@@ -479,6 +485,9 @@
       // Show help button only for Step2 Problem 3
       if (stepNum === 2 && quizNum === 3) {
         document.getElementById("help-btn").style.display = "block";
+      }
+      if(stepNum === 2 && quizNum === 2){
+        document.getElementById("help-btn2").style.display = "block";
       }
 
       // Help button functionality
