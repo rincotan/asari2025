@@ -421,7 +421,7 @@ function showStepResultModal(isCorrect, stepNum) {
         style="background: #000; border: none; color: #fff; font-family: 'しねきゃぷしょん', 'Shin-Caption', sans-serif; opacity: 0.5; cursor: not-allowed;"
         disabled
       >
-        戻る
+        ＜
       </button>
       <img
         id="ans3-img2"
@@ -433,7 +433,7 @@ function showStepResultModal(isCorrect, stepNum) {
         id="ans3-slider-next"
         style="background: #000; border: none; color: #fff; font-family: 'しねきゃぷしょん', 'Shin-Caption', sans-serif; opacity: 1; cursor: pointer;"
       >
-        次へ
+        ＞
       </button>
     </div>
     <div id="ans3-page2" style="margin-top: 8px; font-size: 0.95em; color: #555">
