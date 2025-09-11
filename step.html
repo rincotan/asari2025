@@ -60,12 +60,31 @@
           </details>
           <details>
             <summary>解説</summary>
-            <img src="images/step1-ans.png" onerror="this.style.display='none'" style="width:90%;max-width:300px;margin:10px auto;border:2px solid #ddd;border-radius:8px;">
-            <div style="margin-top:10px;font-size:0.9em;line-height:1.4;text-align:left;padding:10px;background:#f8f9fa;border-radius:4px;">
+            <img
+              src="images/step1-ans.png"
+              onerror="this.style.display='none'"
+              style="
+                width: 90%;
+                max-width: 300px;
+                margin: 10px auto;
+                border: 2px solid #ddd;
+                border-radius: 8px;
+              "
+            />
+            <div
+              style="
+                margin-top: 10px;
+                font-size: 0.9em;
+                line-height: 1.4;
+                text-align: left;
+                padding: 10px;
+                background: #f8f9fa;
+                border-radius: 4px;
+              "
+            >
               問題3から、2重の四角があるので英語で答えを埋めればいいとわかります。問題1～5の答えを英語で埋めて、しりとりとなるように線でつなげると「たいたん」が現れます。
             </div>
           </details>
-          
         </div>
 
         <!-- STEP2のヒント -->
@@ -100,8 +119,28 @@
           </details>
           <details>
             <summary>解説</summary>
-            <img src="images/step2-ans.png" onerror="this.style.display='none'" style="width:90%;max-width:300px;margin:10px auto;border:2px solid #ddd;border-radius:8px;">
-            <div style="margin-top:10px;font-size:0.9em;line-height:1.4;text-align:left;padding:10px;background:#f8f9fa;border-radius:4px;">
+            <img
+              src="images/step2-ans.png"
+              onerror="this.style.display='none'"
+              style="
+                width: 90%;
+                max-width: 300px;
+                margin: 10px auto;
+                border: 2px solid #ddd;
+                border-radius: 8px;
+              "
+            />
+            <div
+              style="
+                margin-top: 10px;
+                font-size: 0.9em;
+                line-height: 1.4;
+                text-align: left;
+                padding: 10px;
+                background: #f8f9fa;
+                border-radius: 4px;
+              "
+            >
               図のようにマスを移動させることで7つ目の謎の答えが現れるので、それがこのクロスワードの答えとなります。
             </div>
           </details>
@@ -135,21 +174,163 @@
           </details>
           <details>
             <summary>解説</summary>
-            <div style="margin-top:10px;font-size:0.9em;line-height:1.4;text-align:left;padding:10px;background:#f8f9fa;border-radius:4px;">
-小問の「うらがえす」というボタン、をおして現れる図形を並べる問題でした。指示通りに図形を並べると、新たな指示がどんどん出てきます。その通りに読むと最終的に「矢印の先下から」があらわれるので、「下」という文字に陰がついていることから重ねた時に下になっているものから順に矢印の先にある文字を読むことで、答えの「こめっと06」にたどり着けます。
+            <div id="ans3-slider" style="text-align: center; margin: 10px 0">
+              <div
+                style="
+                  display: flex;
+                  align-items: center;
+                  justify-content: center;
+                  gap: 10px;
+                "
+              >
+                <button
+                  id="ans3-prev"
+                  style="
+                    background: #000;
+                    border: none;
+                    color: #fff;
+                    font-family: 'しねきゃぷしょん', 'Shin-Caption', sans-serif;
+                    opacity: 1;
+                    cursor: pointer;
+                  "
+                >
+                  戻る
+                </button>
+                <img
+                  id="ans3-img"
+                  src="images/ans3_1.png"
+                  alt="解説画像"
+                  style="
+                    max-width: 90%;
+                    max-height: 220px;
+                    border: 2px solid #ddd;
+                    border-radius: 8px;
+                    vertical-align: middle;
+                  "
+                />
+                <button
+                  id="ans3-next"
+                  style="
+                    background: #000;
+                    border: none;
+                    color: #fff;
+                    font-family: 'しねきゃぷしょん', 'Shin-Caption', sans-serif;
+                    opacity: 1;
+                    cursor: pointer;
+                  "
+                >
+                  次へ
+                </button>
+              </div>
+              <div
+                id="ans3-page"
+                style="margin-top: 8px; font-size: 0.95em; color: #555"
+              ></div>
+            </div>
+            <script>
+              (function () {
+                const images = [
+                  "images/ans3_1.png",
+                  "images/ans3_2.png",
+                  "images/ans3_3.png",
+                  "images/ans3_4.png",
+                ];
+                let idx = 0;
+                const img = document.getElementById("ans3-img");
+                const prev = document.getElementById("ans3-prev");
+                const next = document.getElementById("ans3-next");
+                const page = document.getElementById("ans3-page");
+
+                function update() {
+                  img.src = images[idx];
+                  prev.disabled = idx === 0;
+                  next.disabled = idx === images.length - 1;
+
+                  // グレーアウトとカーソル制御
+                  prev.style.opacity = prev.disabled ? "0.4" : "1";
+                  prev.style.cursor = prev.disabled ? "not-allowed" : "pointer";
+                  next.style.opacity = next.disabled ? "0.4" : "1";
+                  next.style.cursor = next.disabled ? "not-allowed" : "pointer";
+
+                  // ページ数表示
+                  page.textContent = idx + 1 + " / " + images.length;
+                }
+
+                prev.addEventListener("click", function () {
+                  if (idx > 0) {
+                    idx--;
+                    update();
+                  }
+                });
+                next.addEventListener("click", function () {
+                  if (idx < images.length - 1) {
+                    idx++;
+                    update();
+                  }
+                });
+                update();
+              })();
+            </script>
+            <div
+              style="
+                margin-top: 10px;
+                font-size: 0.9em;
+                line-height: 1.4;
+                text-align: left;
+                padding: 10px;
+                background: #f8f9fa;
+                border-radius: 4px;
+              "
+            >
+              「うらがえす」というボタンをおして現れる小問の紙の裏側を並べる問題でした。指示通りに紙を並べると、新たな指示がどんどん出てきます。
+              指示通りにしていくと最終的に「矢印の先下から」が現れます。ここで、「下」という文字が立体的なことに注目すると、｢下｣というのは紙の重なりを考慮した｢下｣ということが分かります。よって、重ねた時に下になっているものから順に矢印の先にある文字を読むと「こめっと06」となり、これが答えのパスワードです。
             </div>
           </details>
         </div>
       </div>
       <button id="hint-btns" class="revBtn">小問の裏一覧</button>
-      <div id="subproblem-images" style="display: none; margin-top: 10px; text-align: center;">
-        <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 10px;">
-          <img src="images/3-1-2.png" alt="3-1-2" style="max-width: 45%; flex: 1 1 45%; display: block;" />
-          <img src="images/3-2-2.png" alt="3-2-2" style="max-width: 45%; flex: 1 1 45%; display: block;" />
-          <img src="images/3-3-2.png" alt="3-3-2" style="max-width: 45%; flex: 1 1 45%; display: block;" />
-          <img src="images/3-4-2.png" alt="3-4-2" style="max-width: 45%; flex: 1 1 45%; display: block;" />
-          <img src="images/3-5-2.png" alt="3-5-2" style="max-width: 45%; flex: 1 1 45%; display: block;" />
-          <img src="images/3-6-2.png" alt="3-6-2" style="max-width: 45%; flex: 1 1 45%; display: block;" />
+      <div
+        id="subproblem-images"
+        style="display: none; margin-top: 10px; text-align: center"
+      >
+        <div
+          style="
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+          "
+        >
+          <img
+            src="images/3-1-2.png"
+            alt="3-1-2"
+            style="max-width: 45%; flex: 1 1 45%; display: block"
+          />
+          <img
+            src="images/3-2-2.png"
+            alt="3-2-2"
+            style="max-width: 45%; flex: 1 1 45%; display: block"
+          />
+          <img
+            src="images/3-3-2.png"
+            alt="3-3-2"
+            style="max-width: 45%; flex: 1 1 45%; display: block"
+          />
+          <img
+            src="images/3-4-2.png"
+            alt="3-4-2"
+            style="max-width: 45%; flex: 1 1 45%; display: block"
+          />
+          <img
+            src="images/3-5-2.png"
+            alt="3-5-2"
+            style="max-width: 45%; flex: 1 1 45%; display: block"
+          />
+          <img
+            src="images/3-6-2.png"
+            alt="3-6-2"
+            style="max-width: 45%; flex: 1 1 45%; display: block"
+          />
         </div>
       </div>
     </div>
@@ -579,18 +760,19 @@
       // 小問の裏一覧ボタンの表示制御
       const subImgBtn = document.querySelector(".revBtn");
       const subImgArea = document.getElementById("subproblem-images");
-      
+
       if (subImgBtn && subImgArea) {
         // Step3の小問1〜6を全て正解した時だけボタンを表示
         if (step === "3") {
           const solved = JSON.parse(localStorage.getItem("solvedQuiz") || "{}");
-          const allStep3Solved = solved["s3q1"] === true && 
-                                solved["s3q2"] === true && 
-                                solved["s3q3"] === true && 
-                                solved["s3q4"] === true && 
-                                solved["s3q5"] === true && 
-                                solved["s3q6"] === true;
-          
+          const allStep3Solved =
+            solved["s3q1"] === true &&
+            solved["s3q2"] === true &&
+            solved["s3q3"] === true &&
+            solved["s3q4"] === true &&
+            solved["s3q5"] === true &&
+            solved["s3q6"] === true;
+
           if (allStep3Solved) {
             subImgBtn.style.display = "block";
           } else {
@@ -605,9 +787,10 @@
           if (subImgBtn.textContent === "小問の裏一覧") {
             e.stopPropagation();
             subImgArea.style.display =
-              subImgArea.style.display === "none" || subImgArea.style.display === ""
-            ? "block"
-            : "none";
+              subImgArea.style.display === "none" ||
+              subImgArea.style.display === ""
+                ? "block"
+                : "none";
           }
         });
       }

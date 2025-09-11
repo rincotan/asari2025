@@ -403,13 +403,96 @@ function showStepResultModal(isCorrect, stepNum) {
     }
 
     const imgPath = `images/step${stepNum}-ans.png`; // あれば表示
-    content.innerHTML = `
-      <div style="color:#f08080;font-size:2em;font-weight:bold;">正解</div>
-      <img src="${imgPath}" onerror="this.style.display='none'" style="width:90%;max-width:300px;margin:10px auto;border:2px solid #ddd;border-radius:8px;">
-      <div style="margin-top:10px;font-size:0.9em;line-height:1.4;text-align:left;padding:10px;background:#f8f9fa;border-radius:4px;">
-        ${stepExplanations[stepNum] || "クリア！次へ進もう。"}
-      </div>
-    `;
+    if (stepNum === 3) {
+      // 画像配列（4枚）
+      const ansImages = [
+        "images/ans3_1.png",
+        "images/ans3_2.png",
+        "images/ans3_3.png",
+        "images/ans3_4.png",
+      ];
+
+      content.innerHTML = `
+  <div style="color:#f08080;font-size:2em;font-weight:bold;">正解</div>
+  <div id="ans3-slider" style="text-align: center; margin: 10px 0">
+    <div style="display: flex; align-items: center; justify-content: center; gap: 10px;">
+      <button
+        id="ans3-slider-prev"
+        style="background: #000; border: none; color: #fff; font-family: 'しねきゃぷしょん', 'Shin-Caption', sans-serif; opacity: 0.5; cursor: not-allowed;"
+        disabled
+      >
+        戻る
+      </button>
+      <img
+        id="ans3-img2"
+        src="${ansImages[0]}"
+        alt="解説画像"
+        style="max-width: 90%; max-height: 220px; border: 2px solid #ddd; border-radius: 8px; vertical-align: middle;"
+      />
+      <button
+        id="ans3-slider-next"
+        style="background: #000; border: none; color: #fff; font-family: 'しねきゃぷしょん', 'Shin-Caption', sans-serif; opacity: 1; cursor: pointer;"
+      >
+        次へ
+      </button>
+    </div>
+    <div id="ans3-page2" style="margin-top: 8px; font-size: 0.95em; color: #555">
+      1 / 4
+    </div>
+  </div>
+  <div style="margin-top:10px;font-size:0.9em;line-height:1.4;text-align:left;padding:10px;background:#f8f9fa;border-radius:4px;">
+    「うらがえす」というボタンをおして現れる小問の紙の裏側を並べる問題でした。指示通りに紙を並べると、新たな指示がどんどん出てきます。
+    指示通りにしていくと最終的に「矢印の先下から」が現れます。ここで、「下」という文字が立体的なことに注目すると、｢下｣というのは紙の重なりを考慮した｢下｣ということが分かります。よって、重ねた時に下になっているものから順に矢印の先にある文字を読むと「こめっと06」となり、これが答えのパスワードです。
+  </div>
+`;
+
+      // スライダーの動作
+      requestAnimationFrame(() => {
+        let idx = 0;
+
+        const prevBtn = document.getElementById("ans3-slider-prev");
+        const nextBtn = document.getElementById("ans3-slider-next");
+        const imgElem = document.getElementById("ans3-img2");
+        const pageElem = document.getElementById("ans3-page2");
+        function updateSlider() {
+          console.log("prevBtn:", prevBtn, "imgElem:", imgElem);
+          imgElem.src = `${ansImages[idx]}?v=${Date.now()}`;
+          pageElem.textContent = `${idx + 1} / ${ansImages.length}`;
+          // ボタン状態
+          prevBtn.disabled = idx === 0;
+          prevBtn.style.opacity = idx === 0 ? "0.5" : "1";
+          prevBtn.style.cursor = idx === 0 ? "not-allowed" : "pointer";
+          nextBtn.disabled = idx === ansImages.length - 1;
+          nextBtn.style.opacity = idx === ansImages.length - 1 ? "0.5" : "1";
+          nextBtn.style.cursor =
+            idx === ansImages.length - 1 ? "not-allowed" : "pointer";
+          // デバッグ
+          console.log("imgElem.src:", imgElem.src, "idx:", idx);
+        }
+
+        prevBtn.onclick = function () {
+          if (idx > 0) {
+            idx--;
+            updateSlider();
+          }
+        };
+        nextBtn.onclick = function () {
+          if (idx < ansImages.length - 1) {
+            idx++;
+            updateSlider();
+          }
+        };
+        updateSlider();
+      });
+    } else {
+      content.innerHTML = `
+        <div style="color:#f08080;font-size:2em;font-weight:bold;">正解</div>
+        <img src="${imgPath}" onerror="this.style.display='none'" style="width:90%;max-width:300px;margin:10px auto;border:2px solid #ddd;border-radius:8px;">
+        <div style="margin-top:10px;font-size:0.9em;line-height:1.4;text-align:left;padding:10px;background:#f8f9fa;border-radius:4px;">
+          ${stepExplanations[stepNum] || "クリア！次へ進もう。"}
+        </div>
+      `;
+    }
     nextBtn.style.display = "";
     nextBtn.innerText = stepNum < 3 ? "次のSTEPへ→" : "Lastへ→";
 
