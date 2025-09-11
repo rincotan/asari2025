@@ -131,33 +131,6 @@
           <img src="images/3-6-2.png" alt="3-6-2" style="max-width: 45%; flex: 1 1 45%; display: block;" />
         </div>
       </div>
-      <script>
-        // 既存のhint-btnsクリックイベントに追加
-        // revBtnクラスを持つボタンを取得
-        const subImgBtn = document.querySelector(".revBtn");
-        const subImgArea = document.getElementById("subproblem-images");
-        const solved = JSON.parse(localStorage.getItem("solvedQuiz") || "{}");
-        if(solved["s3q1"]!=true || solved["s3q2"]!=true || solved["s3q3"]!=true || solved["s3q4"]!=true || solved["s3q5"]!=true || solved["s3q6"]!=true){
-              subImgBtn.style.display = "none";
-            }
-            else{
-              console.log("クリア済み");
-              subImgBtn.style.display = "block";
-            }
-        if (subImgBtn && subImgArea) {
-          subImgBtn.addEventListener("click", function (e) {
-            
-        // 「小問の裏一覧」ボタンのときだけ画像をトグル
-        if (subImgBtn.textContent === "小問の裏一覧") {
-          e.stopPropagation();
-          subImgArea.style.display =
-            subImgArea.style.display === "none" || subImgArea.style.display === ""
-          ? "block"
-          : "none";
-        }
-          });
-        }
-      </script></div>
     </div>
 
     <!-- Storyオーバーレイ -->
@@ -581,7 +554,42 @@
           }
         });
       }
+
+      // 小問の裏一覧ボタンの表示制御
+      const subImgBtn = document.querySelector(".revBtn");
+      const subImgArea = document.getElementById("subproblem-images");
+      
+      if (subImgBtn && subImgArea) {
+        // Step3の小問1〜6を全て正解した時だけボタンを表示
+        if (step === "3") {
+          const solved = JSON.parse(localStorage.getItem("solvedQuiz") || "{}");
+          const allStep3Solved = solved["s3q1"] === true && 
+                                solved["s3q2"] === true && 
+                                solved["s3q3"] === true && 
+                                solved["s3q4"] === true && 
+                                solved["s3q5"] === true && 
+                                solved["s3q6"] === true;
+          
+          if (allStep3Solved) {
+            subImgBtn.style.display = "block";
+          } else {
+            subImgBtn.style.display = "none";
+          }
+        } else {
+          subImgBtn.style.display = "none";
+        }
+
+        subImgBtn.addEventListener("click", function (e) {
+          // 「小問の裏一覧」ボタンのときだけ画像をトグル
+          if (subImgBtn.textContent === "小問の裏一覧") {
+            e.stopPropagation();
+            subImgArea.style.display =
+              subImgArea.style.display === "none" || subImgArea.style.display === ""
+            ? "block"
+            : "none";
+          }
+        });
+      }
     </script>
-    <div class="footer-text">in earth</div>
   </body>
 </html>
