@@ -128,9 +128,9 @@
         left: 0;
         width: 105%;
         height: 105%;
-        border: 5px solid #fff9f9;
+        border: 5px solid #ffffff;
         box-sizing: border-box;
-        background: #fff9f9;
+        background: #ffffff;
         pointer-events: auto; /* これでクリックを受け取る */
         cursor: pointer;
         z-index: 3;
@@ -478,7 +478,7 @@
               showmessage("！！");
             } else {
               showmessage("そこには置かないでください。");
-              showOverlayMessage("だめです");
+              showOverlayMessage("いやです！");
               return;
             }
           }
@@ -652,7 +652,7 @@
         if (winner) resultEl.textContent = winner + " の勝ち！";
         else resultEl.textContent = "ゲーム中...";
         if (winner === "O") {
-          showmessage("お見事");
+          showmessage("（お見事）");
           showOverlayMessage("勝ち");
           successOverlay.classList.add("show");
           // 押下回数はリセット（演出中に次の入力が入らないように）
@@ -763,6 +763,5 @@
         document.getElementsByClassName("message")[0].innerHTML = t;
       }
     </script>
-    <div class="footer-text">in earth</div>
   </body>
 </html>
