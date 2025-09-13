@@ -7,15 +7,6 @@
     <link rel="stylesheet" href="../style.css" />
   </head>
   <body class="no-scroll">
-    <div style="background: #fff; padding: 20px; border-radius: 8px">
-      <h1>お知らせ</h1>
-      <!--最終問題に不具合が発生しており、現在調整中です。
-      調整が完了次第Twitterで告知するので今しばらくお待ちください
-      <a href="https://x.com/bluebery1001"
-        >このアカウントで告知します(https://x.com/bluebery1001)</a
-      >-->
-    <h3>不具合調整が完了しました。</br>小問1つに変更点があります。ご確認ください。</h3>
-    </div>
    
     <!-- <div id="pc-warning">※スマホ専用サイトです。スマートフォンでご利用ください。</div> -->
     <h2 class="story-title">～STORY～</h2>
@@ -73,7 +64,7 @@
     <section id="final-section">
       <div class="final-panel">
         <details class="method-details">
-          <summary class="final-subtitle">帰還のヒント</summary>
+          <summary class="final-subtitle">帰還方法</summary>
           <div class="method-area">
             <div class="method-row">
               <span class="badge">①</span>
@@ -98,8 +89,10 @@
       </div>
     </section>
 
+    <!--ヒント-->
+    <button id="hint" class="hint-btn">ヒント</button>
     <!-- Help button -->
-    <button id="help-btn" style="display: block; margin: 20px auto; max-width: 420px;">やることはわかったがどうしてもできない場合はこちら</button>
+    <button id="help-btn" style="display: block; margin: 20px auto; max-width: 420px;">自力でできない場合はこちら</button>
     
     <!-- Help section -->
     <div id="help-section" style="display: none; margin-top: 20px; max-width: 420px; margin-left: auto; margin-right: auto;">
@@ -180,6 +173,10 @@
         if (e.key === "Enter") {
           document.getElementById("help-submit-btn").click();
         }
+      });
+      // ヒントボタン
+      document.getElementById("hint").addEventListener("click", () => {
+        window.open("../hint.html", "_blank");
       });
     </script>
   </body>

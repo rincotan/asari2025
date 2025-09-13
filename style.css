@@ -1232,9 +1232,6 @@ body.last .btn-no {
   border-radius: 6px;
   box-shadow: 0 3px 12px rgba(0, 0, 0, 0.25);
 }
-.method-details {
-  margin-bottom: 12px;
-}
 .method-details summary {
   cursor: pointer;
   list-style: none;

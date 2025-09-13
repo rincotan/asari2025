@@ -333,7 +333,7 @@
         <div class="hitbox" onclick="mouth_click()"></div>
       </div>
       <div class="message">
-        まだあなたのことは<br />信用できません<br />試させて頂きます<br />勝負してください
+        まだあなたのことは<br />信用できません<br />試させて頂きます<br />
       </div>
     </div>
     <div class="caution">3つ並べたら勝ち</div>
@@ -347,12 +347,17 @@
       <div class="turn-indicator">
         <span class="colon">持ち数</span>
         <span class="colon">:</span>
-        <span class="turn-count" id="x_cnt">3</span>
+        <span class="turn-count" id="x_cnt">4</span>
       </div>
       <button class="retry-btn" onclick="retry()">リトライ</button>
     </div>
     <div id="successOverlay" class="success-overlay" aria-hidden="true">
       <div class="success-text">勝ち</div>
+      
+    </div>
+
+    <div>
+    <button id="hint" class="hint-btn" style="margin-bottom: 50px;">ヒント</button>
     </div>
 
     <script>
@@ -762,6 +767,11 @@
       function showmessage(t) {
         document.getElementsByClassName("message")[0].innerHTML = t;
       }
+
+      // ヒントボタン
+      document.getElementById("hint").addEventListener("click", () => {
+        window.open("../hint.html", "_blank");
+      });
     </script>
   </body>
 </html>
